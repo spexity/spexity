@@ -1,4 +1,4 @@
-package au
+package net
 
 import io.quarkus.test.junit.QuarkusIntegrationTest
 

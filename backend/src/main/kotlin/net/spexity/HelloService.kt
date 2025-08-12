@@ -1,8 +1,8 @@
-package au.alabri.hisham
+package net.spexity
 
-import au.alabri.hisham.proto.Greeter
-import au.alabri.hisham.proto.HelloReply
-import au.alabri.hisham.proto.HelloRequest
+import net.spexity.proto.Greeter
+import net.spexity.proto.HelloReply
+import net.spexity.proto.HelloRequest
 import io.quarkus.grpc.GrpcService
 import io.smallrye.mutiny.Uni
 

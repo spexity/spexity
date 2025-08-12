@@ -2,24 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>au.alabri</groupId>
+    <groupId>net.spexity</groupId>
     <artifactId>backend</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <compiler-plugin.version>3.14.0</compiler-plugin.version>
-        <kotlin.version>2.1.21</kotlin.version>
+        <kotlin.version>2.2.0</kotlin.version>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.24.3</quarkus.platform.version>
+        <quarkus.platform.version>3.25.2</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
         <protobuf.version>4.31.1</protobuf.version>
         <quarkus-jooq.version>2.1.0</quarkus-jooq.version>
-        <jooq.version>3.19.22</jooq.version>
+        <jooq.version>3.19.24</jooq.version>
     </properties>
 
     <dependencyManagement>
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>11.9.2</version>
+            <version>11.11.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -113,7 +113,7 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>11.9.2</version>
+                <version>11.11.0</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -123,7 +123,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <url>jdbc:postgresql://localhost:55432/hisham?currentSchema=hisham</url>
+                    <url>jdbc:postgresql://localhost:55432/spexity?currentSchema=spexity</url>
 <!--                    use public schema. -->
                     <user>myuser</user>
                     <password>mypassword</password>
@@ -147,18 +147,18 @@
                 <configuration>
                     <jdbc>
                         <driver>org.postgresql.Driver</driver>
-                        <url>jdbc:postgresql://localhost:55432/hisham</url>
+                        <url>jdbc:postgresql://localhost:55432/spexity</url>
                         <user>myuser</user>
                         <password>mypassword</password>
                     </jdbc>
                     <generator>
                         <database>
-                            <inputSchema>hisham</inputSchema>
-<!--                            use public shcema. -->
+                            <inputSchema>spexity</inputSchema>
+<!--                            use public schema. -->
                             <includes>.*</includes>
                         </database>
                         <target>
-                            <packageName>au.alabri.hisham.data.model</packageName>
+                            <packageName>net.spexity.data.model</packageName>
                             <directory>${project.build.directory}/generated-sources/jooq</directory>
                         </target>
                     </generator>

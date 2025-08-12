@@ -5,6 +5,6 @@ services:
     environment:
       - POSTGRES_USER=myuser
       - POSTGRES_PASSWORD=mypassword
-      - POSTGRES_DB=hisham
+      - POSTGRES_DB=spexity
     ports:
       - '55432:5432'
