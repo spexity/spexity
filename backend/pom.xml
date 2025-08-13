@@ -1,18 +1,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.spexity</groupId>
-    <artifactId>backend</artifactId>
+    <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>spexity backend (parent)</name>
+    <name>spexity backend parent</name>
     <modules>
+        <module>db-model</module>
         <module>server</module>
     </modules>
 
     <properties>
+        <kotlin.version>2.2.0</kotlin.version>
+        <compiler-plugin.version>3.14.0</compiler-plugin.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.version>3.25.2</quarkus.platform.version>
+        <flyway.version>11.11.0</flyway.version>
+        <quarkus-jooq.version>2.1.0</quarkus-jooq.version>
+        <jooq.version>3.19.24</jooq.version>
+        <protobuf.version>4.31.1</protobuf.version>
+        <surefire-plugin.version>3.5.3</surefire-plugin.version>
     </properties>
 
     <dependencyManagement>
