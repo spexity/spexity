@@ -55,8 +55,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <url>jdbc:postgresql://localhost:55432/spexity?currentSchema=spexity</url>
-                    <!--                    use public schema. -->
+                    <url>jdbc:postgresql://localhost:55432/spexity</url>
                     <user>myuser</user>
                     <password>mypassword</password>
                     <locations>
@@ -84,11 +83,6 @@
                         <password>mypassword</password>
                     </jdbc>
                     <generator>
-                        <database>
-                            <inputSchema>spexity</inputSchema>
-                            <!--                            use public schema. -->
-                            <includes>.*</includes>
-                        </database>
                         <target>
                             <packageName>net.spexity.data.model</packageName>
                             <directory>${project.build.directory}/generated-sources/jooq</directory>

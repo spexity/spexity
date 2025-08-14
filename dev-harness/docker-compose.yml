@@ -1,3 +1,4 @@
+name: spexity-dev-harness
 services:
   db:
     image: postgres
