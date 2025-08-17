@@ -1,0 +1,1 @@
+<!--This file is to enforce bean reflection on native images for JOOQ generated db model classes-->

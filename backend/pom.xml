@@ -6,6 +6,7 @@
     <packaging>pom</packaging>
     <name>spexity backend parent</name>
     <modules>
+        <module>db-model-support</module>
         <module>db-model</module>
         <module>server</module>
     </modules>
