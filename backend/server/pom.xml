@@ -39,15 +39,6 @@
             <artifactId>quarkus-rest</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-kotlin</artifactId>
-            <version>${protobuf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-grpc</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.quarkiverse.jooq</groupId>
             <artifactId>quarkus-jooq</artifactId>
             <version>${quarkus-jooq.version}</version>

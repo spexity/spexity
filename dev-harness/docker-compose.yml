@@ -10,16 +10,3 @@ services:
     ports:
       - '55432:5432'
     restart: unless-stopped
-  envoy:
-    image: envoyproxy/envoy:v1.35.0
-    container_name: envoy
-    environment:
-      BACKEND_ADDR: '${BACKEND_ADDR:-localhost:8080}'
-      CORS_ORIGIN: '${CORS_ORIGIN:-http://localhost:3000}'
-    volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
-    ports:
-      - '58081:8081'
-      - '59901:9901'
-    command: [ "-c", "/etc/envoy/envoy.yaml", "--log-level", "info" ]
-    restart: unless-stopped

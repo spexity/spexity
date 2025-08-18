@@ -23,7 +23,6 @@
         <flyway.version>11.11.0</flyway.version>
         <quarkus-jooq.version>2.1.0</quarkus-jooq.version>
         <jooq.version>3.19.24</jooq.version>
-        <protobuf.version>4.31.1</protobuf.version>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
     </properties>
 
