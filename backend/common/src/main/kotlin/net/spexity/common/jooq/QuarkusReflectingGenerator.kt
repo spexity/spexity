@@ -1,4 +1,4 @@
-package net.spexity.jooq
+package net.spexity.common.jooq
 
 import org.jooq.codegen.GeneratorStrategy
 import org.jooq.codegen.JavaGenerator

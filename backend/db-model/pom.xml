@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>db-model</artifactId>
-    <name>spexity db model</name>
+    <name>database model</name>
     <packaging>jar</packaging>
 
     <properties>
@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>net.spexity</groupId>
-            <artifactId>db-model-support</artifactId>
+            <artifactId>common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -88,7 +88,7 @@
                         <password>mypassword</password>
                     </jdbc>
                     <generator>
-                        <name>net.spexity.jooq.QuarkusReflectingGenerator</name>
+                        <name>net.spexity.common.jooq.QuarkusReflectingGenerator</name>
                         <target>
                             <packageName>net.spexity.data.model</packageName>
                             <directory>${project.build.directory}/generated-sources/jooq</directory>

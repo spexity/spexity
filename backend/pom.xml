@@ -4,9 +4,9 @@
     <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>spexity backend parent</name>
+    <name>parent</name>
     <modules>
-        <module>db-model-support</module>
+        <module>common</module>
         <module>db-model</module>
         <module>server</module>
     </modules>

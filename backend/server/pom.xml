@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>server</artifactId>
-    <name>spexity server</name>
+    <name>server</name>
     <packaging>jar</packaging>
 
     <properties>

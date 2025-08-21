@@ -1,4 +1,4 @@
-To run the generated docker image of spexity
+To run the generated docker image of Spexity
 
 ```shell
  docker run -i --rm -p 8080:8080 \
