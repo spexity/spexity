@@ -10,8 +10,8 @@ import java.time.Instant
 import java.time.ZoneOffset
 
 
-@Path("/web-api/home-page")
-class WebHomePageResource(private val dslContext: DSLContext) {
+@Path("/api/web/home")
+class WebHomeResource(private val dslContext: DSLContext) {
 
     @GET
     @Path("/data")
@@ -25,7 +25,7 @@ class WebHomePageResource(private val dslContext: DSLContext) {
         return WebHomePageData(posts)
     }
 
-    data class PostDto(val id: String, val createdIt: Instant, val subject: String, val body: String)
+    data class PostDto(val id: String, val createdAt: Instant, val subject: String, val body: String)
 
     data class WebHomePageData(val posts: List<PostDto>)
 
