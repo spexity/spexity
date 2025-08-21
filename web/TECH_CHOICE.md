@@ -12,4 +12,3 @@
 - Has grown old to be big and slow
 - Too much ceremony around useSate, useMemo, useCallback
 - Suspense system sucks balls
-- 
