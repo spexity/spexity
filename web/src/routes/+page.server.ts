@@ -1,4 +1,5 @@
 import type { PageServerLoad } from "./$types"
+import { env } from '$env/dynamic/private';
 
 type PageData = {
   posts: Post[]
@@ -11,7 +12,7 @@ type Post = {
 }
 
 export const load: PageServerLoad<PageData> = async () => {
-  const response = await fetch("http://localhost:8080/api/web/home/data")
+  const response = await fetch(`${env.API_URL}/api/web/home/data`)
   const data: PageData = await response.json()
   return data
 }
