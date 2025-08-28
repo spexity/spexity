@@ -20,6 +20,8 @@
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.version>3.25.2</quarkus.platform.version>
+        <postgresql.version>42.7.7</postgresql.version>
+        <org.testcontainers.postgresql.version>1.21.3</org.testcontainers.postgresql.version>
         <flyway.version>11.11.0</flyway.version>
         <quarkus-jooq.version>2.1.0</quarkus-jooq.version>
         <jooq.version>3.19.24</jooq.version>
