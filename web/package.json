@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "checked-build": "npm run check && npm run lint && vite build",
+    "checked-build": "vite build && npm run check && npm run lint",
     "build": "vite build",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
