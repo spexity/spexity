@@ -20,18 +20,17 @@ mvn clean package -Dnative -Dquarkus.native.container-build=true -f pom.xml
 ```shell
 #cd backend/server
 
-docker build -f src/main/docker/Dockerfile.native-micro -t spexity/backend .
+docker build -f src/main/docker/Dockerfile.native-micro -t spexity-backend .
 ```
 
 ### Run docker image
 
 ```shell
 docker run --rm -p 8080:8080 \
-  -e QUARKUS_PROFILE=prod \
   -e QUARKUS_DATASOURCE_JDBC_URL="jdbc:postgresql://host.docker.internal:55432/spexity" \
-  -e QUARKUS_DATASOURCE_USERNAME=myuser \
-  -e QUARKUS_DATASOURCE_PASSWORD=mypassword \
-  spexity/backend
+  -e QUARKUS_DATASOURCE_USERNAME=test \
+  -e QUARKUS_DATASOURCE_PASSWORD=test \
+  spexity-backend
 ```
 modify env variables as needed.
 
@@ -41,7 +40,7 @@ modify env variables as needed.
 ```shell
 #cd web
 
-docker build -t spexity/web .
+docker build -t spexity-web .
 ```
 
 
@@ -50,5 +49,5 @@ docker build -t spexity/web .
 ```shell
 docker run --rm -p 3000:3000 \
   -e API_URL="http://host.docker.internal:8080" \
-  spexity/web
+  spexity-web
 ```
