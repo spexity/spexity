@@ -1,6 +1,5 @@
 import adapter from "@sveltejs/adapter-node"
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte"
-import { getCommitSha } from "./scripts/git-commit-sha.js"
 
 /** @type {import("@sveltejs/kit").Config} */
 const config = {
@@ -10,7 +9,7 @@ const config = {
   kit: {
     adapter: adapter(),
     version: {
-      name: getCommitSha(),
+      name: (process.env.GIT_SHA ?? ""),
       pollInterval: 60000,
     },
   },

@@ -40,7 +40,7 @@ modify env variables as needed.
 ```shell
 #cd web
 
-docker build -t spexity-web .
+docker build --build-arg GIT_SHA=$(git rev-parse HEAD) -t spexity-web .
 ```
 
 

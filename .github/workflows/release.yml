@@ -72,6 +72,8 @@ jobs:
         push: true
         tags: ${{ steps.web-meta.outputs.tags }}
         labels: ${{ steps.web-meta.outputs.labels }}
+        build-args: |
+          GIT_SHA=${{ github.sha }}
     - name: Generate web artifact attestation
       uses: actions/attest-build-provenance@v2
       with:
