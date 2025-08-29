@@ -57,17 +57,16 @@
                         </goals>
                         <configuration>
                             <source>
-                                db = new org.testcontainers.containers.PostgreSQLContainer(
-                                        "postgres:latest")
-                                        .withUsername("myuser")
-                                        .withDatabaseName("postgres")
-                                        .withPassword("mypassword")
+                                import org.testcontainers.containers.PostgreSQLContainer
 
+                                db = new PostgreSQLContainer("postgres:17-alpine")
+                                        .withUsername("test")
+                                        .withDatabaseName("test")
+                                        .withPassword("test")
                                 db.start()
-
-                                // After you've started the container, collect its generated
-                                // JDBC URL (which contains a random port)
                                 project.properties.setProperty('db.url', db.getJdbcUrl())
+                                project.properties.setProperty('db.username', db.getUsername())
+                                project.properties.setProperty('db.password', db.getPassword())
                             </source>
                         </configuration>
                     </execution>
@@ -95,8 +94,8 @@
                 </executions>
                 <configuration>
                     <url>${db.url}</url>
-                    <user>myuser</user>
-                    <password>mypassword</password>
+                    <user>${db.username}</user>
+                    <password>${db.password}</password>
                     <locations>
                         <location>filesystem:src/main/resources/db/migration</location>
                     </locations>
@@ -118,8 +117,8 @@
                     <jdbc>
                         <driver>org.postgresql.Driver</driver>
                         <url>${db.url}</url>
-                        <user>myuser</user>
-                        <password>mypassword</password>
+                        <user>${db.username}</user>
+                        <password>${db.password}</password>
                     </jdbc>
                     <generator>
                         <database>
