@@ -49,7 +49,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: backend/server
-        file: src/main/docker/Dockerfile.native-micro
+        file: backend/server/src/main/docker/Dockerfile.native-micro
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
