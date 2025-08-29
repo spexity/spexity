@@ -27,6 +27,9 @@ jobs:
         distribution: 'graalvm'
         java-version: '21'
         cache: 'maven'
+        cache-dependency-path: |
+          backend/pom.xml
+          backend/server/pom.xml
     - name: Build backend dependencies
       working-directory: backend
       run: mvn -B clean install -pl '!server' -am
