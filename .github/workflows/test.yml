@@ -1,0 +1,50 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - "web/**"
+      - "e2e-tests/**"
+      - ".github/workflows/test.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - "web/**"
+      - "e2e-tests/**"
+      - ".github/workflows/test.yml"
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'graalvm'
+          java-version: '21'
+          cache: 'maven'
+          cache-dependency-path: |
+            backend/pom.xml
+            backend/server/pom.xml
+      - name: Test backend
+        working-directory: backend
+        run: mvn -B clean test -f pom.xml
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Test web
+        working-directory: web
+        run: |
+          npm ci
+          npm run checked-build
