@@ -6,7 +6,7 @@ Make sure all modules have been installed in the local maven repo.
 ```shell
 #cd backend
 
-mvn clean install
+mvn clean install -pl '!server' -am
 ```
 
 Build the native quarkus application 
@@ -20,10 +20,7 @@ mvn clean package -Dnative -Dquarkus.native.container-build=true -f pom.xml
 ```shell
 #cd backend/server
 
-#for amd64 arch
-docker buildx build --platform linux/amd64 -f src/main/docker/Dockerfile.native-micro -t spexity/backend .
-#for arm64 arch
-docker buildx build --platform linux/arm64 -f src/main/docker/Dockerfile.native-micro -t spexity/backend .
+docker build -f src/main/docker/Dockerfile.native-micro -t spexity/backend .
 ```
 
 ### Run docker image
@@ -44,10 +41,7 @@ modify env variables as needed.
 ```shell
 #cd web
 
-#for amd64 arch
-docker buildx build --platform linux/amd64 -t spexity/web .
-#for arm64 arch
-docker buildx build --platform linux/arm64 -t spexity/web .
+docker build -t spexity/web .
 ```
 
 
