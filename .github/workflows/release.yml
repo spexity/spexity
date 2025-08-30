@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        architecture: [ 'linux/amd64', 'linux/arm64' ]
+        architecture: [ 'linux/amd64','linux/arm64' ]
     permissions:
       contents: read
       packages: write
@@ -55,7 +55,7 @@ jobs:
         with:
           context: backend/server
           file: backend/server/src/main/docker/Dockerfile.jvm
-          platforms: linux/${{ matrix.architecture }}
+          platforms: ${{ matrix.architecture }}
           push: true
           tags: ${{ steps.backend-meta.outputs.tags }}
           labels: ${{ steps.backend-meta.outputs.labels }}
