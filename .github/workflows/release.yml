@@ -15,73 +15,79 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        architecture: [ amd64, arm64 ]
+        architecture: [ 'linux/amd64', 'linux/arm64' ]
     permissions:
       contents: read
       packages: write
       attestations: write
       id-token: write
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v5
-    - name: Set up JDK
-      uses: actions/setup-java@v5
-      with:
-        distribution: 'temurin'
-        java-version: '21'
-        cache: 'maven'
-        cache-dependency-path: backend/pom.xml
-    - name: Build backend
-      working-directory: backend
-      run: mvn -B clean package
-    - name: Log in to the container registry
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Extract backend metadata (tags, labels) for Docker
-      id: backend-meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend
-    - name: Setup Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    - name: Build and push backend Docker image
-      id: backend-push
-      uses: docker/build-push-action@v6
-      with:
-        context: backend/server
-        file: backend/server/src/main/docker/Dockerfile.jvm
-        push: true
-        tags: ${{ steps.backend-meta.outputs.tags }}
-        labels: ${{ steps.backend-meta.outputs.labels }}
-        platforms: linux/${{ matrix.architecture }}
-    - name: Generate backend artifact attestation
-      uses: actions/attest-build-provenance@v2
-      with:
-        subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-backend
-        subject-digest: ${{ steps.backend-push.outputs.digest }}
-        push-to-registry: true
-    - name: Extract web metadata (tags, labels) for Docker
-      id: web-meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-web
-    - name: Build and push web Docker image
-      id: web-push
-      uses: docker/build-push-action@v6
-      with:
-        context: web
-        push: true
-        tags: ${{ steps.web-meta.outputs.tags }}
-        labels: ${{ steps.web-meta.outputs.labels }}
-        platforms: linux/${{ matrix.architecture }}
-        build-args: |
-          GIT_SHA=${{ github.sha }}
-    - name: Generate web artifact attestation
-      uses: actions/attest-build-provenance@v2
-      with:
-        subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-web
-        subject-digest: ${{ steps.web-push.outputs.digest }}
-        push-to-registry: true
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+          cache-dependency-path: backend/pom.xml
+      - name: Build backend
+        working-directory: backend
+        run: mvn -B clean package
+      - name: Log in to the container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract backend metadata (tags, labels) for Docker
+        id: backend-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push backend Docker image
+        id: backend-push
+        uses: docker/build-push-action@v6
+        with:
+          context: backend/server
+          file: backend/server/src/main/docker/Dockerfile.jvm
+          platforms: linux/${{ matrix.architecture }}
+          push: true
+          tags: ${{ steps.backend-meta.outputs.tags }}
+          labels: ${{ steps.backend-meta.outputs.labels }}
+          annotations: ${{ steps.backend-meta.outputs.annotations }}
+      - name: Generate backend artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-backend
+          subject-digest: ${{ steps.backend-push.outputs.digest }}
+          push-to-registry: true
+      - name: Extract web metadata (tags, labels) for Docker
+        id: web-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-web
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+      - name: Build and push web Docker image
+        id: web-push
+        uses: docker/build-push-action@v6
+        with:
+          context: web
+          platforms: ${{ matrix.architecture }}
+          push: true
+          tags: ${{ steps.web-meta.outputs.tags }}
+          labels: ${{ steps.web-meta.outputs.labels }}
+          annotations: ${{ steps.web-meta.outputs.annotations }}
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+      - name: Generate web artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-web
+          subject-digest: ${{ steps.web-push.outputs.digest }}
+          push-to-registry: true
