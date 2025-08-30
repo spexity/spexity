@@ -57,6 +57,7 @@ jobs:
           file: backend/server/src/main/docker/Dockerfile.jvm
           platforms: ${{ matrix.architecture }}
           push: true
+          provenance: false
           tags: ${{ steps.backend-meta.outputs.tags }}
           labels: ${{ steps.backend-meta.outputs.labels }}
           annotations: ${{ steps.backend-meta.outputs.annotations }}
@@ -80,6 +81,7 @@ jobs:
           context: web
           platforms: ${{ matrix.architecture }}
           push: true
+          provenance: false
           tags: ${{ steps.web-meta.outputs.tags }}
           labels: ${{ steps.web-meta.outputs.labels }}
           annotations: ${{ steps.web-meta.outputs.annotations }}
