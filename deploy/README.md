@@ -2,25 +2,18 @@
 
 ### Build application
 
-Make sure all modules have been installed in the local maven repo.
+Build the quarkus application 
 ```shell
 #cd backend
 
-mvn clean install -pl '!server' -am
-```
-
-Build the native quarkus application 
-```shell
-#cd backend/server
-
-mvn clean package -Dnative -Dquarkus.native.container-build=true -f pom.xml
+mvn clean package
 ```
 
 ### Build docker image
 ```shell
 #cd backend/server
 
-docker build -f src/main/docker/Dockerfile.native-micro -t spexity-backend .
+docker build -f src/main/docker/Dockerfile.jvm -t spexity-backend .
 ```
 
 ### Run docker image

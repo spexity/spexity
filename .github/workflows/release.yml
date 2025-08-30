@@ -13,6 +13,9 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: [ amd64, arm64 ]
     permissions:
       contents: read
       packages: write
@@ -24,18 +27,13 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v5
       with:
-        distribution: 'graalvm'
+        distribution: 'temurin'
         java-version: '21'
         cache: 'maven'
-        cache-dependency-path: |
-          backend/pom.xml
-          backend/server/pom.xml
-    - name: Build backend dependencies
+        cache-dependency-path: backend/pom.xml
+    - name: Build backend
       working-directory: backend
-      run: mvn -B clean install -pl '!server' -am
-    - name: Build backend server
-      working-directory: backend/server
-      run: mvn -B clean package -Dnative -Dquarkus.native.container-build=true -f pom.xml
+      run: mvn -B clean package
     - name: Log in to the container registry
       uses: docker/login-action@v3
       with:
@@ -47,15 +45,18 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build and push backend Docker image
       id: backend-push
       uses: docker/build-push-action@v6
       with:
         context: backend/server
-        file: backend/server/src/main/docker/Dockerfile.native-micro
+        file: backend/server/src/main/docker/Dockerfile.jvm
         push: true
         tags: ${{ steps.backend-meta.outputs.tags }}
         labels: ${{ steps.backend-meta.outputs.labels }}
+        platforms: linux/${{ matrix.architecture }}
     - name: Generate backend artifact attestation
       uses: actions/attest-build-provenance@v2
       with:
@@ -75,6 +76,7 @@ jobs:
         push: true
         tags: ${{ steps.web-meta.outputs.tags }}
         labels: ${{ steps.web-meta.outputs.labels }}
+        platforms: linux/${{ matrix.architecture }}
         build-args: |
           GIT_SHA=${{ github.sha }}
     - name: Generate web artifact attestation
