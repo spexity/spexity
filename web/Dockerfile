@@ -1,5 +1,5 @@
 # Use a Node.js Alpine image for the builder stage
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 ARG GIT_SHA
 ENV GIT_SHA=$GIT_SHA
 WORKDIR /app
@@ -10,7 +10,7 @@ RUN npm run build
 RUN npm prune --production
 
 # Use another Node.js Alpine image for the final stage
-FROM node:22-alpine
+FROM node:24-alpine
 ARG GIT_SHA
 ENV GIT_SHA=$GIT_SHA
 WORKDIR /app

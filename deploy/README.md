@@ -25,7 +25,7 @@ docker run --rm -p 8080:8080 \
   -e QUARKUS_DATASOURCE_PASSWORD=test \
   spexity-backend
 ```
-modify env variables as needed.
+
 
 ## Web
 

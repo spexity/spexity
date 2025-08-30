@@ -57,7 +57,7 @@ jobs:
           labels: ${{ steps.backend-meta.outputs.labels }}
           annotations: ${{ steps.backend-meta.outputs.annotations }}
       - name: Generate backend artifact attestation
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-backend
           subject-digest: ${{ steps.backend-push.outputs.digest }}
@@ -81,7 +81,7 @@ jobs:
           build-args: |
             GIT_SHA=${{ github.sha }}
       - name: Generate web artifact attestation
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-web
           subject-digest: ${{ steps.web-push.outputs.digest }}

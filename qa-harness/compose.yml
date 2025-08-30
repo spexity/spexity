@@ -1,0 +1,33 @@
+name: spexity-qa-harness
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: 'test'
+      POSTGRES_PASSWORD: 'test'
+      POSTGRES_DB: 'spexity'
+    ports:
+      - '45432:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d spexity -U test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  backend:
+    image: ghcr.io/spexity/spexity-backend:latest
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: 'jdbc:postgresql://db:5432/spexity'
+      QUARKUS_DATASOURCE_USERNAME: 'test'
+      QUARKUS_DATASOURCE_PASSWORD: 'test'
+    ports:
+      - '48080:8080'
+    depends_on:
+      db:
+        condition: service_healthy
+  web:
+    image: ghcr.io/spexity/spexity-web:latest
+    environment:
+      API_URL: 'http://backend:8080'
+      PUBLIC_API_URL: 'http://localhost:48080'
+    ports:
+      - '43000:3000'
