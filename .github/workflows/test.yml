@@ -7,7 +7,7 @@ on:
     paths:
       - "backend/**"
       - "web/**"
-      - "e2e-tests/**"
+      - "web2end-tests/**"
       - ".github/workflows/test.yml"
   push:
     branches:
@@ -15,7 +15,7 @@ on:
     paths:
       - "backend/**"
       - "web/**"
-      - "e2e-tests/**"
+      - "web2end-tests/**"
       - ".github/workflows/test.yml"
 
 jobs:
@@ -28,12 +28,10 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          distribution: 'graalvm'
+          distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
-          cache-dependency-path: |
-            backend/pom.xml
-            backend/server/pom.xml
+          cache-dependency-path: backend/pom.xml
       - name: Test backend
         working-directory: backend
         run: mvn -B clean test -f pom.xml
