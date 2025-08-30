@@ -45,8 +45,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend
-        env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push backend Docker image
@@ -72,8 +70,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-web
-        env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
       - name: Build and push web Docker image
         id: web-push
         uses: docker/build-push-action@v6
