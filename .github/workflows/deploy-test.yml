@@ -1,0 +1,66 @@
+name: Deploy to test.spexity.net
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Container image tag to deploy"
+        required: true
+        type: string
+      dry_run:
+        description: "Helm dry-run"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: "latest"
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: "latest"
+      - name: Configure kubeconfig
+        env:
+          KUBE_CONFIG: ${{ secrets.TEST_KUBE_CONFIG }}
+        run: |
+          mkdir -p ~/.kube
+          printf "%s" "$KUBE_CONFIG" > ~/.kube/config
+          kubectl config current-context
+      - name: Helm upgrade/install
+        run: |
+          set -euo pipefail
+          DRY=""
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            DRY="--dry-run --debug"
+          fi
+          helm upgrade --install spexity do/deploy \
+            -n spexity-test \
+            -f do/deploy/values-test.yaml \
+            --set backend.tag="${{ inputs.tag }}" \
+            --set web.tag="${{ inputs.tag }}" \
+            --atomic --timeout 10m $DRY
+      - name: Post-deploy status
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          echo "Helm status:"
+          helm -n spexity-test status spexity || true
+          echo
+          echo "Workload summary:"
+          kubectl -n spexity-test get deploy,sts,ds,svc,ingress,pods -o wide
+          echo
+          echo "Rollout status (deployments):"
+          for d in $(kubectl -n spexity-test get deploy -o jsonpath='{.items[*].metadata.name}'); do
+            echo ">> $d"
+            kubectl -n spexity-test rollout status deploy/$d --timeout=120s || true
+          done
