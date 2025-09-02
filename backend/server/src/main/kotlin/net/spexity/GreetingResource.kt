@@ -6,13 +6,13 @@ import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
 
 
-@Path("/hello")
+@Path("/api/hello")
 class GreetingResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     fun hello(): String {
-        return "Hello from Quarkus REST"
+        return "Hello from Spexity"
     }
 
 }
