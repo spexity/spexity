@@ -1,4 +1,4 @@
-# QA or Preview Spexity
+# Preview Spexity
 
 ## Run Spexity 
 

@@ -1,0 +1,7 @@
+host: "spexity.net"
+
+backend:
+  tag: "changeme"
+
+web:
+  tag: "changeme"

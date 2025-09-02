@@ -1,0 +1,7 @@
+host: "staging.spexity.net"
+
+backend:
+  tag: "changeme"
+
+web:
+  tag: "changeme"

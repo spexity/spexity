@@ -46,7 +46,7 @@ printf '\n%.0s' {1..10}
 
 echo "Setup complete."
 echo "To start developing, setup your dev harness:"
-echo "  run 'docker compose up' in ./dev-harness"
+echo "  run 'docker compose up' in ./do/develop"
 echo "For the backend:"
 echo "  run 'mvn quarkus:dev' in ./backend/server"
 echo "For the web application:"

@@ -1,0 +1,7 @@
+host: "test.spexity.net"
+
+backend:
+  tag: "latest"
+
+web:
+  tag: "latest"

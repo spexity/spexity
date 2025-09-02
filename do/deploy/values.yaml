@@ -1,0 +1,9 @@
+host: "changeme.spexity.net"
+
+backend:
+  tag: "changeme"
+  datasource:
+    secretName: "spexity-backend-db"
+
+web:
+  tag: "changeme"

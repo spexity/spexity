@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spexity.fullname" . }}-backend
+  labels:
+    app.kubernetes.io/name: spexity-backend
+    app.kubernetes.io/part-of: spexity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spexity-backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: spexity-backend
+    spec:
+      containers:
+        - name: backend
+          image: "ghcr.io/spexity/spexity-backend:{{ .Values.backend.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.datasource.secretName }}
+                  key: jdbcUrl
+            - name: QUARKUS_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.datasource.secretName }}
+                  key: username
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.datasource.secretName }}
+                  key: password
+          readinessProbe:
+            httpGet:
+              path: /q/health/ready
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /q/health/live
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
