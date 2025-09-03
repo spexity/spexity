@@ -4,14 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Container image tag to deploy"
+        description: "Container image tag"
         required: true
         type: string
-      dry_run:
-        description: "Helm dry-run"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: read
@@ -38,21 +33,17 @@ jobs:
           printf "%s" "$KUBE_CONFIG" > ~/.kube/config
           kubectl config current-context
       - name: Helm upgrade/install
+        env:
+          HELM_DRIVER: configmap
         run: |
           set -euo pipefail
-          DRY=""
-          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
-            DRY="--dry-run --debug"
-          fi
           helm upgrade --install spexity do/deploy \
             -n spexity-test \
             -f do/deploy/values-test.yaml \
             --set backend.tag="${{ inputs.tag }}" \
             --set web.tag="${{ inputs.tag }}" \
-            --storage-type=configmaps \
-            --atomic --timeout 10m $DRY
+            --atomic --timeout 10m
       - name: Post-deploy status
-        if: ${{ inputs.dry_run != true }}
         run: |
           echo "Helm status:"
           helm -n spexity-test status spexity || true
