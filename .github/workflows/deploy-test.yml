@@ -44,6 +44,8 @@ jobs:
             --set web.tag="${{ inputs.tag }}" \
             --atomic --timeout 10m
       - name: Post-deploy status
+        env:
+          HELM_DRIVER: configmap
         run: |
           echo "Helm status:"
           helm -n spexity-test status spexity || true
