@@ -67,6 +67,14 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-web
+      - name: Build web application
+        working-directory: web
+        env:
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          npm ci
+          npm run build
+          npm prune --production
       - name: Build and push web Docker image
         id: web-push
         uses: docker/build-push-action@v6
@@ -78,8 +86,6 @@ jobs:
           tags: ${{ steps.web-meta.outputs.tags }}
           labels: ${{ steps.web-meta.outputs.labels }}
           annotations: ${{ steps.web-meta.outputs.annotations }}
-          build-args: |
-            GIT_SHA=${{ github.sha }}
       - name: Generate web artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
