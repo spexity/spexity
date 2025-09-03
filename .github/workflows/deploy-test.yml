@@ -49,6 +49,7 @@ jobs:
             -f do/deploy/values-test.yaml \
             --set backend.tag="${{ inputs.tag }}" \
             --set web.tag="${{ inputs.tag }}" \
+            --storage-type=configmaps \
             --atomic --timeout 10m $DRY
       - name: Post-deploy status
         if: ${{ inputs.dry_run != true }}
