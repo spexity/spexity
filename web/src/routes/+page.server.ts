@@ -9,6 +9,7 @@ type Post = {
   id: string
   subject: string
   body: string
+  createdAt: string
 }
 
 export const load: PageServerLoad<PageData> = async () => {
