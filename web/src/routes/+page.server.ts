@@ -2,14 +2,17 @@ import type { PageServerLoad } from "./$types"
 import { env } from "$env/dynamic/private"
 
 type PageData = {
-  posts: Post[]
+  posts: PostPreview[]
 }
 
-type Post = {
+type PostPreview = {
   id: string
   subject: string
   body: string
   createdAt: string
+  contributorHandle: string
+  communityName: string
+  communitySlug: string
 }
 
 export const load: PageServerLoad<PageData> = async () => {

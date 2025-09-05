@@ -3,10 +3,29 @@
   import { updated } from "$app/state"
   import { onMount } from "svelte"
   import favicon from "$lib/assets/favicon.svg"
+  import { APP_THEME } from "../app-theme"
 
   let { children } = $props()
   onMount(() => {
-    document.body.dataset["theme"] = "cupcake"
+    let currentlyDark =
+      window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+    document.documentElement.setAttribute(
+      "data-theme",
+      currentlyDark ? APP_THEME.dark : APP_THEME.light,
+    )
+
+    if (window.matchMedia) {
+      let listener = (e: MediaQueryListEvent) => {
+        document.documentElement.setAttribute(
+          "data-theme",
+          e.matches ? APP_THEME.dark : APP_THEME.light,
+        )
+      }
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", listener)
+      return window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .removeEventListener("change", listener)
+    }
   })
 </script>
 
