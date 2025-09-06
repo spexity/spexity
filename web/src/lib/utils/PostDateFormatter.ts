@@ -21,10 +21,7 @@ export class PostDateFormatter {
     } else if (diffMs < DAY_MS) {
       const diffHours = Math.round(diffMs / HOUR_MS)
       return rtf.format(diffHours, "hour")
-    } else if (diffMs < WEEK_MS) {
-      const diffDays = Math.round(diffMs / DAY_MS)
-      return rtf.format(diffDays, "day")
-    } else if (diffMs < WEEK_MS) {
+    } else if (diffMs < 4 * WEEK_MS) {
       const diffDays = Math.round(diffMs / DAY_MS)
       return rtf.format(diffDays, "day")
     } else if (diffMs < 52 * WEEK_MS) {
