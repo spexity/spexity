@@ -7,7 +7,6 @@ const TIME_ONLY_CUTOFF_MS = 18 * HOUR_MS
 const DATE_TIME_CUTOFF_MS = WEEK_MS
 
 export class PostDateFormatter {
-
   static formatUtcIsoRelative(utcIso: string): string {
     const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" })
 
