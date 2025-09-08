@@ -5,6 +5,9 @@
   let { data }: PageProps = $props()
 </script>
 
-{#each data.posts as post (post.id)}
-  <PostPreview {post} />
-{/each}
+<div class="flex w-full flex-col px-4">
+  {#each data.posts as post (post.id)}
+    <PostPreview {post} />
+    <div class="divider m-0"></div>
+  {/each}
+</div>

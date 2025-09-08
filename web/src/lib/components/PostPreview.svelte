@@ -9,17 +9,24 @@
   const props: PostPreviewProps = $props()
   const post = props.post
   const formattedDateTime = PostDateFormatter.formatUtcIsoAbsolute(post.createdAt)
+  const contributorName = post.contributorHandle.substring(0, post.contributorHandle.indexOf("#"))
+  const contributorDiscriminator = post.contributorHandle.substring(contributorName.length)
 </script>
 
-<div class="card-s card m-3 bg-base-200 shadow-sm">
-  <div class="card-body">
-    <span class="text-xs">
-      {post.contributorHandle} to {post.communityName} - {formattedDateTime}
+<div class="flex flex-col">
+  <div class="flex flex-row justify-between">
+    <span class="text-xs font-medium">
+      {post.communityName}
     </span>
-    <h2 class="card-title">{post.subject}</h2>
-    <p>{post.body}</p>
-    <div class="card-actions justify-end">
-      <a href="/p/{post.id}">View</a>
+    <div class="text-xs">
+      {contributorName}<span class="text-base-content/50">{contributorDiscriminator}</span> - {formattedDateTime}
     </div>
+  </div>
+  <div>
+    <h2 class="font-medium">{post.subject}</h2>
+    <p class="text-sm">{post.body}</p>
+  </div>
+  <div class="flex flex-row justify-end">
+    <a class="btn btn-sm" href="/p/{post.id}">View</a>
   </div>
 </div>
