@@ -44,5 +44,6 @@ jobs:
       - name: Test web
         working-directory: web
         run: |
+          cp .env.example .env
           npm ci
           npm run checked-build

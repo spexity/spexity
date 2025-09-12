@@ -12,16 +12,6 @@ else
   exit 1
 fi
 
-pushd server/src/main/resources || exit 1
-
-if [ -f "application-dev.properties" ]; then
-  echo "backend server application-dev.properties file already exists"
-else
-  cp application-dev.properties.example application-dev.properties
-  echo "copied application-dev.properties.example as application-dev.properties"
-fi
-
-popd || exit 1
 popd || exit 1
 
 # Web setup

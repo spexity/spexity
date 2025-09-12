@@ -1,12 +1,16 @@
 package net.spexity
 
+import io.quarkus.security.identity.SecurityIdentity
+import jakarta.annotation.security.PermitAll
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.Produces
+import jakarta.ws.rs.core.Context
 import jakarta.ws.rs.core.MediaType
-import net.spexity.data.model.public_.tables.Post.POST
-import net.spexity.data.model.public_.tables.Contributor.CONTRIBUTOR
 import net.spexity.data.model.public_.tables.Community.COMMUNITY
+import net.spexity.data.model.public_.tables.Contributor.CONTRIBUTOR
+import net.spexity.data.model.public_.tables.Post.POST
+import net.spexity.security.optionalTokenSubject
 import org.jooq.DSLContext
 import java.time.Instant
 import java.time.ZoneOffset
@@ -18,7 +22,9 @@ class WebHomeResource(private val dslContext: DSLContext) {
     @GET
     @Path("/data")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getWebHomePageData(): WebHomePageData {
+    @PermitAll
+    fun getWebHomePageData(@Context securityIdentity: SecurityIdentity): WebHomePageData {
+        val userSubjectId = optionalTokenSubject(securityIdentity)
         val selected = dslContext.select(
             POST.ID,
             POST.CREATED_AT,

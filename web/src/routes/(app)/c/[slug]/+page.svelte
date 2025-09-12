@@ -2,8 +2,9 @@
   import type { PageProps } from "./$types"
 
   let props: PageProps = $props()
+  let community = props.data.community
 </script>
 
 <div>
-  this is the user {props.data.bio} and the {props.data.username}
+  this is the community {community.name}
 </div>

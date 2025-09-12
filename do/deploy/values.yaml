@@ -1,5 +1,9 @@
 host: "changeme.spexity.net"
 
+oidc:
+  clientId: 'spexity-non-prod'
+  authServerUrl: 'https://id.spexity.net/realms/spexity-non-prod'
+
 backend:
   tag: "changeme"
   datasource:
