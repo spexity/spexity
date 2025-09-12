@@ -5,9 +5,9 @@ export const load: PageServerLoad = ({ params }) => {
   if (!params || !params.slug) {
     error(404)
   }
-  const username = params.slug
   return {
-    bio: "Hisham",
-    username: username,
+    community: {
+      name: "Toyota 86",
+    },
   }
 }

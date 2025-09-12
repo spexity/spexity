@@ -38,6 +38,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.backend.datasource.secretName }}
                   key: password
+            - name: QUARKUS_OIDC_AUTH_SERVER_URL
+              value: "{{ .Values.oidc.authServerUrl }}"
+            - name: QUARKUS_OIDC_CLIENT_ID
+              value: "{{ .Values.oidc.clientId }}"
           readinessProbe:
             httpGet:
               path: /q/health/ready

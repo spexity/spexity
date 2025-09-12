@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/backend/web-protos/db-model.iml" filepath="$PROJECT_DIR$/backend/web-protos/db-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/do/do.iml" filepath="$PROJECT_DIR$/do/do.iml" />
+      <module fileurl="file://$PROJECT_DIR$/documentation/documentation.iml" filepath="$PROJECT_DIR$/documentation/documentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/web/web.iml" filepath="$PROJECT_DIR$/web/web.iml" />
     </modules>
   </component>

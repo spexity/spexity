@@ -7,5 +7,25 @@ services:
       POSTGRES_PASSWORD: 'test'
       POSTGRES_DB: 'spexity'
     ports:
-      - '55432:5432'
+      - '45432:5432'
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3
+    command: start
+    environment:
+      KC_PROXY_ADDRESS_FORWARDING: true
+      KC_HOSTNAME: 'host.docker.internal'
+      KC_PROXY: 'edge'
+      KC_HTTP_ENABLED: true
+      KC_DB: 'postgres'
+      KC_DB_USERNAME: 'test'
+      KC_DB_PASSWORD: 'test'
+      KC_DB_URL: 'jdbc:postgresql://db:5432/spexity'
+      KC_DB_SCHEMA: 'keycloak'
+      KC_BOOTSTRAP_ADMIN_USERNAME: 'admin'
+      KC_BOOTSTRAP_ADMIN_PASSWORD: 'admin'
+    ports:
+      - '48080:8080'
     restart: unless-stopped

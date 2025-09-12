@@ -2,7 +2,7 @@ import { APP_THEME } from "../../app-theme"
 
 export class ThemeHandler {
   static handle() {
-    let currentlyDark =
+    const currentlyDark =
       window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
     document.documentElement.setAttribute(
       "data-theme",
@@ -10,7 +10,7 @@ export class ThemeHandler {
     )
 
     if (window.matchMedia) {
-      let listener = (e: MediaQueryListEvent) => {
+      const listener = (e: MediaQueryListEvent) => {
         document.documentElement.setAttribute(
           "data-theme",
           e.matches ? APP_THEME.dark : APP_THEME.light,
