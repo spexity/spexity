@@ -28,6 +28,6 @@
     <p class="text-sm">{post.body}</p>
   </div>
   <div class="flex flex-row justify-end">
-    <a class="btn btn-sm" href="/p/{post.id}">View</a>
+    <a class="btn btn-sm" href="/posts/{post.id}">View</a>
   </div>
 </div>

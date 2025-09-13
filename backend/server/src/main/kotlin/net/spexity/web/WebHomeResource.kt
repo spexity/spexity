@@ -1,4 +1,4 @@
-package net.spexity
+package net.spexity.web
 
 import io.quarkus.security.identity.SecurityIdentity
 import jakarta.annotation.security.PermitAll
@@ -7,14 +7,13 @@ import jakarta.ws.rs.Path
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.Context
 import jakarta.ws.rs.core.MediaType
-import net.spexity.data.model.public_.tables.Community.COMMUNITY
-import net.spexity.data.model.public_.tables.Contributor.CONTRIBUTOR
-import net.spexity.data.model.public_.tables.Post.POST
-import net.spexity.security.optionalTokenSubject
+import net.spexity.data.model.public_.tables.Community
+import net.spexity.data.model.public_.tables.Contributor
+import net.spexity.data.model.public_.tables.Post
+import net.spexity.security.optionalAuthCorrelationId
 import org.jooq.DSLContext
 import java.time.Instant
 import java.time.ZoneOffset
-
 
 @Path("/api/web/home")
 class WebHomeResource(private val dslContext: DSLContext) {
@@ -24,27 +23,27 @@ class WebHomeResource(private val dslContext: DSLContext) {
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
     fun getWebHomePageData(@Context securityIdentity: SecurityIdentity): WebHomePageData {
-        val userSubjectId = optionalTokenSubject(securityIdentity)
+        val authCorrelationId = optionalAuthCorrelationId(securityIdentity)
         val selected = dslContext.select(
-            POST.ID,
-            POST.CREATED_AT,
-            POST.SUBJECT,
-            POST.BODY,
-            POST.contributor().HANDLE,
-            POST.community().NAME,
-            POST.community().SLUG
+            Post.POST.ID,
+            Post.POST.CREATED_AT,
+            Post.POST.SUBJECT,
+            Post.POST.BODY,
+            Post.POST.contributor().HANDLE,
+            Post.POST.community().NAME,
+            Post.POST.community().SLUG
         )
-            .from(POST)
+            .from(Post.POST)
             .fetch {
-                val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
+                val instant = it.get(Post.POST.CREATED_AT).toInstant(ZoneOffset.UTC)
                 PostPreview(
-                    it.get(POST.ID).toString(),
+                    it.get(Post.POST.ID).toString(),
                     instant,
-                    it.get(POST.SUBJECT),
-                    it.get(POST.BODY),
-                    it.get(CONTRIBUTOR.HANDLE),
-                    it.get(COMMUNITY.NAME),
-                    it.get(COMMUNITY.SLUG)
+                    it.get(Post.POST.SUBJECT),
+                    it.get(Post.POST.BODY),
+                    it.get(Contributor.CONTRIBUTOR.HANDLE),
+                    it.get(Community.COMMUNITY.NAME),
+                    it.get(Community.COMMUNITY.SLUG)
                 )
             }
         return WebHomePageData(selected)
