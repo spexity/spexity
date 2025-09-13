@@ -14,7 +14,6 @@ import org.jooq.DSLContext
 class WebTopicsResource(private val dslContext: DSLContext) {
 
     @GET
-    @Path("/data")
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
     fun getWebTopicsPageData(@Context securityIdentity: SecurityIdentity): WebTopicsPageData {

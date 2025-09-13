@@ -1,12 +1,25 @@
 <script lang="ts">
-  import { updated } from "$app/state"
+  import { page, updated } from "$app/state"
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
   import favicon from "$lib/assets/favicon.svg"
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
 
+  type MenuItem = "home" | "communities" | "topics"
+
   const { children } = $props()
+
+  const determineActiveMenuItem = (): MenuItem => {
+    if (page.url.pathname.startsWith("/communities") || page.url.pathname.startsWith("/posts")) {
+      return "communities"
+    } else if (page.url.pathname.startsWith("/topics")) {
+      return "topics"
+    }
+    return "home"
+  }
+
+  const active = $derived<MenuItem>(determineActiveMenuItem())
 
   onMount(async () => {
     if (authManager.userAccountState === AuthUserAccountState.NOT_REGISTERED) {
@@ -37,9 +50,13 @@
     </div>
     <div class="flex-none">
       <ul class="menu menu-horizontal px-1">
-        <li><a href="/" class="menu-active">Home</a></li>
-        <li><a href="/communities">Communities</a></li>
-        <li><a href="/topics">Topics</a></li>
+        <li><a href="/" class={active === "home" ? "menu-active" : ""}>Home</a></li>
+        <li>
+          <a href="/communities" class={active === "communities" ? "menu-active" : ""}
+            >Communities</a
+          >
+        </li>
+        <li><a href="/topics" class={active === "topics" ? "menu-active" : ""}>Topics</a></li>
       </ul>
       <div class="dropdown dropdown-end">
         <div

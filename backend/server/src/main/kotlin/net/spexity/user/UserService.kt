@@ -3,7 +3,7 @@ package net.spexity.user
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.ws.rs.BadRequestException
 import net.spexity.data.model.public_.Tables.CONTRIBUTOR
-import net.spexity.data.model.public_.tables.UserAccount.USER_ACCOUNT
+import net.spexity.data.model.public_.Tables.USER_ACCOUNT
 import org.jooq.DSLContext
 
 @ApplicationScoped
