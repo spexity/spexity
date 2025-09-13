@@ -38,8 +38,8 @@
     <div class="flex-none">
       <ul class="menu menu-horizontal px-1">
         <li><a href="/" class="menu-active">Home</a></li>
-        <li><a href="/c">Communities</a></li>
-        <li><a href="/t">Topics</a></li>
+        <li><a href="/communities">Communities</a></li>
+        <li><a href="/topics">Topics</a></li>
       </ul>
       <div class="dropdown dropdown-end">
         <div

@@ -10,7 +10,7 @@ import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.core.Context
 import net.spexity.security.tokenEmail
-import net.spexity.security.tokenSubject
+import net.spexity.security.authCorrelationId
 import org.jboss.logging.Logger
 
 @Path("/api/current-user")
@@ -19,7 +19,7 @@ class UserResource(private val userService: UserService, private val logger: Log
     @GET
     @Authenticated
     fun getCurrentUser(@Context securityIdentity: SecurityIdentity): UserService.RegResponse {
-        return userService.getUser(tokenSubject(securityIdentity)) ?: throw NotFoundException("Please register first")
+        return userService.getUser(authCorrelationId(securityIdentity)) ?: throw NotFoundException("Please register first")
     }
 
     @POST
@@ -29,7 +29,7 @@ class UserResource(private val userService: UserService, private val logger: Log
     ): UserService.RegResponse {
         return userService.register(
             UserService.RegRequest(
-                tokenSubject(securityIdentity), tokenEmail(securityIdentity), request.alias
+                authCorrelationId(securityIdentity), tokenEmail(securityIdentity), request.alias
             )
         )
     }

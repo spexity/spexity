@@ -3,11 +3,14 @@ package net.spexity.security
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal
 import io.quarkus.security.identity.SecurityIdentity
 
-fun tokenSubject(securityIdentity: SecurityIdentity): String {
+fun authCorrelationId(securityIdentity: SecurityIdentity): String {
     return securityIdentity.principal.name
 }
 
-fun optionalTokenSubject(securityIdentity: SecurityIdentity): String? {
+fun optionalAuthCorrelationId(securityIdentity: SecurityIdentity): String? {
+    if (securityIdentity.isAnonymous) {
+        return null
+    }
     return securityIdentity.principal?.name
 }
 
