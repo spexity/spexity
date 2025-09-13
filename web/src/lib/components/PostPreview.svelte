@@ -4,11 +4,12 @@
 
   interface PostPreviewProps {
     post: PostPreview
+    timezone: string
   }
 
   const props: PostPreviewProps = $props()
   const post = props.post
-  const formattedDateTime = PostDateFormatter.formatUtcIsoAbsolute(post.createdAt)
+  const formattedDateTime = PostDateFormatter.formatUtcIsoAbsolute(post.createdAt, props.timezone)
   const contributorName = post.contributorHandle.substring(0, post.contributorHandle.indexOf("#"))
   const contributorDiscriminator = post.contributorHandle.substring(contributorName.length)
 </script>

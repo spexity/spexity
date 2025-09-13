@@ -7,6 +7,7 @@ const TIME_ONLY_CUTOFF_MS = 18 * HOUR_MS
 const DATE_TIME_CUTOFF_MS = WEEK_MS
 
 export class PostDateFormatter {
+  //Format from an iso string to a relative time representation (as opposed to a specific date or time)
   static formatUtcIsoRelative(utcIso: string): string {
     const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" })
 
@@ -32,23 +33,27 @@ export class PostDateFormatter {
     return rtf.format(diffYears, "year")
   }
 
-  static formatUtcIsoAbsolute(utcIso: string): string {
+  //Format from an iso string to an absolute representation (at a specific date or time, as opposed to 1d ago)
+  static formatUtcIsoAbsolute(utcIso: string, timezone: string): string {
     const date = new Date(utcIso)
     const now = Date.now()
     const diffMs = now - date.getTime()
     if (diffMs <= TIME_ONLY_CUTOFF_MS) {
       return date.toLocaleTimeString(undefined, {
         timeStyle: "short",
+        timeZone: timezone,
       })
     }
     if (diffMs <= DATE_TIME_CUTOFF_MS) {
       return date.toLocaleString(undefined, {
         dateStyle: "medium",
         timeStyle: "short",
+        timeZone: timezone,
       })
     }
     return date.toLocaleDateString(undefined, {
       dateStyle: "medium",
+      timeZone: timezone,
     })
   }
 }

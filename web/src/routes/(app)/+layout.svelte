@@ -14,11 +14,13 @@
     }
   })
 
-  const signIn = async () => {
+  const signIn = async (event: MouseEvent) => {
+    event.preventDefault()
     await authManager.signIn()
   }
 
-  const signOut = async () => {
+  const signOut = async (event: MouseEvent) => {
+    event.preventDefault()
     await authManager.signOut()
   }
 </script>

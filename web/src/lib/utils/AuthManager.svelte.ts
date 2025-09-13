@@ -5,6 +5,7 @@ import { type CurrentUserAccount, CurrentUserStorage } from "$lib/utils/CurrentU
 import { HttpClient } from "$lib/utils/HttpClient"
 import { goto } from "$app/navigation"
 import { authManager } from "$lib/auth"
+import { Cookies } from "$lib/cookies"
 
 export enum AuthUserAccountState {
   INIT,
@@ -82,7 +83,7 @@ export class AuthManager {
       if (oidcUser) {
         await this.getRemoteCurrentUserAccount(oidcUser, true)
       } else {
-        await this.clearDocumentAuthCookie()
+        this.clearCurrentUserAccount()
         await goto("/")
       }
     } catch (err) {
@@ -159,6 +160,7 @@ export class AuthManager {
 
   private clearCurrentUserAccount() {
     this.setUserAccountNotLoggedIn()
+    this.clearDocumentAuthCookie()
     this.currentUserStorage?.clear()
   }
 
@@ -169,13 +171,12 @@ export class AuthManager {
     //called by oidc-ts everytime the user access token is loaded
     console.log("user loaded")
     this.oidcUser = oidcUser
-    await this.setDocumentAuthCookie(oidcUser)
+    this.setDocumentAuthCookie(oidcUser)
   }
 
   private async handleOidcUserUnloaded() {
     console.log("user unloaded")
     this.clearCurrentUserAccount()
-    await this.clearDocumentAuthCookie()
   }
 
   private async handleOidcAccessTokenExpired() {
@@ -185,20 +186,23 @@ export class AuthManager {
     } catch (err) {
       console.error("Could not silently login user", err)
       this.clearCurrentUserAccount()
-      await this.clearDocumentAuthCookie()
     }
   }
 
-  private async setDocumentAuthCookie(user: User) {
-    await fetch("/auth/set-cookie", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ access_token: user.access_token, expires_at: user.expires_at }),
-    })
+  private setDocumentAuthCookie(user: User) {
+    const now = Math.floor(Date.now() / 1000)
+    const expiresAt = user.expires_at ?? now + 15 * 60
+    const maxAge = Math.max(0, Math.floor(expiresAt - now))
+    document.cookie =
+      `${Cookies.accessToken}=${encodeURIComponent(user.access_token)}; ` +
+      `path=/; ` +
+      `max-age=${maxAge}; ` +
+      `SameSite=Strict; ` +
+      `Secure`
   }
 
-  private async clearDocumentAuthCookie() {
-    await fetch("/auth/clear-cookie", { method: "POST" })
+  private clearDocumentAuthCookie() {
+    document.cookie = `${Cookies.accessToken}=; path=/; max-age=0; SameSite=Strict; Secure`
   }
 
   //Auth State Manipulation
