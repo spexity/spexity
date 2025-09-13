@@ -7,9 +7,7 @@ import jakarta.ws.rs.Path
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.Context
 import jakarta.ws.rs.core.MediaType
-import net.spexity.data.model.public_.tables.Community
-import net.spexity.data.model.public_.tables.Contributor
-import net.spexity.data.model.public_.tables.Post
+import net.spexity.data.model.public_.Tables.*
 import net.spexity.security.optionalAuthCorrelationId
 import org.jooq.DSLContext
 import java.time.Instant
@@ -19,31 +17,30 @@ import java.time.ZoneOffset
 class WebHomeResource(private val dslContext: DSLContext) {
 
     @GET
-    @Path("/data")
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
     fun getWebHomePageData(@Context securityIdentity: SecurityIdentity): WebHomePageData {
         val authCorrelationId = optionalAuthCorrelationId(securityIdentity)
         val selected = dslContext.select(
-            Post.POST.ID,
-            Post.POST.CREATED_AT,
-            Post.POST.SUBJECT,
-            Post.POST.BODY,
-            Post.POST.contributor().HANDLE,
-            Post.POST.community().NAME,
-            Post.POST.community().SLUG
+            POST.ID,
+            POST.CREATED_AT,
+            POST.SUBJECT,
+            POST.BODY,
+            POST.contributor().HANDLE,
+            POST.community().NAME,
+            POST.community().SLUG
         )
-            .from(Post.POST)
+            .from(POST)
             .fetch {
-                val instant = it.get(Post.POST.CREATED_AT).toInstant(ZoneOffset.UTC)
+                val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
                 PostPreview(
-                    it.get(Post.POST.ID).toString(),
+                    it.get(POST.ID).toString(),
                     instant,
-                    it.get(Post.POST.SUBJECT),
-                    it.get(Post.POST.BODY),
-                    it.get(Contributor.CONTRIBUTOR.HANDLE),
-                    it.get(Community.COMMUNITY.NAME),
-                    it.get(Community.COMMUNITY.SLUG)
+                    it.get(POST.SUBJECT),
+                    it.get(POST.BODY),
+                    it.get(CONTRIBUTOR.HANDLE),
+                    it.get(COMMUNITY.NAME),
+                    it.get(COMMUNITY.SLUG)
                 )
             }
         return WebHomePageData(selected)
