@@ -152,6 +152,9 @@ export class AuthManager {
     } else if (currentUserResponse.status === 404) {
       this.setUserAccountNotRegistered()
       await goto("/auth/register")
+    } else if (currentUserResponse.status === 401) {
+      this.clearCurrentUserAccount()
+      this.authManager?.signoutSilent()
     } else {
       console.error("Failed to assess current user status.")
       //TODO: what to do on unknown error?

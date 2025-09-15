@@ -2,7 +2,7 @@
   import { page, updated } from "$app/state"
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
-  import favicon from "$lib/assets/favicon.svg"
+  import logo from "$lib/assets/logo.svg"
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
 
@@ -38,14 +38,11 @@
   }
 </script>
 
-<svelte:head>
-  <link rel="icon" href={favicon} />
-</svelte:head>
 <div class="app-body">
   <div class="navbar bg-base-100 shadow-sm">
     <div class="h-full flex-1">
       <a href="/">
-        <img src={favicon} alt="Spexity logo" class="h-full" />
+        <img width="40px" src={logo} alt="Spexity logo" class="h-full" />
       </a>
     </div>
     <div class="flex-none">
