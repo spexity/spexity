@@ -4,7 +4,7 @@ import { Cookies } from "$lib/cookies"
 
 export class SsrLoadFromApi {
   static async loadAuthLenient<T>(event: ServerLoadEvent, path: string): Promise<T | null> {
-    const accessToken = event.cookies.get(Cookies.accessToken)
+    const accessToken = this.getValidAccessToken(event)
     const data = await this.load<T>(event, path, accessToken)
     if (data == null && accessToken) {
       return (await this.load(event, path)) as T
@@ -28,5 +28,17 @@ export class SsrLoadFromApi {
       console.log("Error fetching data", err)
     }
     return null
+  }
+
+  private static getValidAccessToken(event: ServerLoadEvent): string | undefined {
+    const accessToken = event.cookies.get(Cookies.accessToken)
+    if (accessToken) {
+      const expiry: number = JSON.parse(atob(accessToken.split(".")[1])).exp
+      if (Date.now() >= expiry * 1000) {
+        return undefined
+      }
+      return accessToken
+    }
+    return undefined
   }
 }

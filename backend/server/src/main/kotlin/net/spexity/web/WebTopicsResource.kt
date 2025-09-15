@@ -8,6 +8,7 @@ import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.Context
 import jakarta.ws.rs.core.MediaType
 import net.spexity.security.optionalAuthCorrelationId
+import net.spexity.web.model.TopicPreview
 import org.jooq.DSLContext
 
 @Path("/api/web/topics")
@@ -16,13 +17,11 @@ class WebTopicsResource(private val dslContext: DSLContext) {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
-    fun getWebTopicsPageData(@Context securityIdentity: SecurityIdentity): WebTopicsPageData {
+    fun getTopicsPageData(@Context securityIdentity: SecurityIdentity): TopicsPageData {
         val authCorrelationId = optionalAuthCorrelationId(securityIdentity)
-        return WebTopicsPageData(listOf())
+        return TopicsPageData(listOf())
     }
 
-    data class TopicPreview(val id: String, val name: String)
-
-    data class WebTopicsPageData(val topics: List<TopicPreview>)
+    data class TopicsPageData(val topics: List<TopicPreview>)
 
 }

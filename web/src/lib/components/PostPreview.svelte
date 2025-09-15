@@ -1,26 +1,28 @@
 <script lang="ts">
-  import type { PostPreview } from "$lib/components/PostPreview"
-  import { PostDateFormatter } from "$lib/utils/PostDateFormatter"
+  import type { CommunityRef } from "$lib/model/types"
+  import { DateFormatter } from "$lib/utils/DateFormatter"
+  import ContributorHandle from "$lib/components/ContributorHandle.svelte"
+  import CommunityName from "$lib/components/CommunityName.svelte"
+  import type { CommunityPreviewPost } from "$lib/model/types.js"
 
   interface PostPreviewProps {
-    post: PostPreview
+    post: CommunityPreviewPost
+    community?: CommunityRef
     timezone: string
   }
 
-  const props: PostPreviewProps = $props()
-  const post = props.post
-  const formattedDateTime = PostDateFormatter.formatUtcIsoAbsolute(post.createdAt, props.timezone)
-  const contributorName = post.contributorHandle.substring(0, post.contributorHandle.indexOf("#"))
-  const contributorDiscriminator = post.contributorHandle.substring(contributorName.length)
+  const { post, community, timezone }: PostPreviewProps = $props()
+  const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(post.createdAt, timezone)
 </script>
 
 <div class="flex flex-col">
   <div class="flex flex-row justify-between">
     <span class="text-xs font-medium">
-      {post.communityName}
+      {#if community}<CommunityName {community} />{/if}
     </span>
     <div class="text-xs">
-      {contributorName}<span class="text-base-content/50">{contributorDiscriminator}</span> - {formattedDateTime}
+      <ContributorHandle contributor={post.contributor} />
+      - {formattedDateTime}
     </div>
   </div>
   <div>

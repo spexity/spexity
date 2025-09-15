@@ -460,6 +460,7 @@
   "webAuthnPolicyPasswordlessExtraOrigins": [],
   "users": [
     {
+      "id": "3561bd91-89f0-4bb3-bf2f-b745fc415b41",
       "username": "test1@example.com",
       "email": "test1@example.com",
       "emailVerified": false,

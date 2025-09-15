@@ -1,10 +1,18 @@
 <script lang="ts">
   import type { PageProps } from "./$types"
+  import PostPreview from "$lib/components/PostPreview.svelte"
 
-  let props: PageProps = $props()
-  let community = props.data.community
+  const { data }: PageProps = $props()
+  const community = data.community
 </script>
 
-<div>
-  this is the community {community.name}
+<div class="mb-4 flex flex-row justify-between">
+  <div class="text-2xl">
+    {community.name}
+  </div>
+  <a class="btn btn-sm" href="/communities/{community.id}/posts/new">Start a Post</a>
 </div>
+{#each data.posts as post (post.id)}
+  <PostPreview {post} timezone={data.timezone} />
+  <div class="divider m-0"></div>
+{/each}

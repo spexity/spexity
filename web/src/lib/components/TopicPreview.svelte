@@ -1,12 +1,11 @@
 <script lang="ts">
-  import type { TopicPreview } from "$lib/components/TopicPreview"
+  import type { TopicPreview } from "$lib/model/types"
 
   interface TopicPreviewProps {
     topic: TopicPreview
   }
 
-  const props: TopicPreviewProps = $props()
-  const topic = props.topic
+  const { topic }: TopicPreviewProps = $props()
 </script>
 
 <div class="flex flex-col">

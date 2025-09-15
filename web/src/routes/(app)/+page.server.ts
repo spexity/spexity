@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types"
-import type { PostPreview } from "$lib/components/PostPreview"
+import type { PostPreview } from "$lib/model/types"
 import { SsrLoadFromApi } from "$lib/utils/SsrLoadFromApi"
 
 type PageData = {

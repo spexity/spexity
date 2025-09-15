@@ -1,28 +1,24 @@
 package net.spexity.web
 
-import io.quarkus.security.identity.SecurityIdentity
 import jakarta.annotation.security.PermitAll
-import jakarta.ws.rs.GET
-import jakarta.ws.rs.Path
-import jakarta.ws.rs.Produces
-import jakarta.ws.rs.core.Context
+import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import net.spexity.data.model.public_.Tables.*
-import net.spexity.security.optionalAuthCorrelationId
 import net.spexity.web.model.CommunityRef
 import net.spexity.web.model.ContributorRef
-import net.spexity.web.model.PostPreview
+import net.spexity.web.model.PostView
 import org.jooq.DSLContext
 import java.time.ZoneOffset
+import java.util.*
 
-@Path("/api/web/home")
-class WebHomeResource(private val dslContext: DSLContext) {
+@Path("/api/web/posts")
+class WebPostsResource(private val dslContext: DSLContext) {
 
     @GET
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
-    fun getHomePageData(@Context securityIdentity: SecurityIdentity): HomePageData {
-        val authCorrelationId = optionalAuthCorrelationId(securityIdentity)
+    fun getPostPageData(@PathParam("id") id: UUID): PostPageData {
         val selected = dslContext.select(
             POST.ID,
             POST.CREATED_AT,
@@ -31,23 +27,27 @@ class WebHomeResource(private val dslContext: DSLContext) {
             POST.contributor().ID,
             POST.contributor().HANDLE,
             POST.community().ID,
-            POST.community().NAME,
+            POST.community().NAME
         )
             .from(POST)
-            .fetch {
+            .where(POST.ID.eq(id))
+            .fetchOne {
                 val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
-                PostPreview(
+                PostView(
                     it.get(POST.ID),
                     instant,
                     it.get(POST.SUBJECT),
-                    it.get(POST.BODY), //TODO; how to trim to only preview
+                    it.get(POST.BODY),
                     ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
                     CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME))
                 )
             }
-        return HomePageData(selected)
+        if (selected == null) {
+            throw NotFoundException("Post not found")
+        }
+        return PostPageData(selected)
     }
 
-    data class HomePageData(val posts: List<PostPreview>)
+    data class PostPageData(val post: PostView)
 
 }

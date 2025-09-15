@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types"
-import type { CommunityPreview } from "$lib/components/CommunityPreview"
+import type { CommunityPreview } from "$lib/model/types"
 import { SsrLoadFromApi } from "$lib/utils/SsrLoadFromApi"
 
 type PageData = {
