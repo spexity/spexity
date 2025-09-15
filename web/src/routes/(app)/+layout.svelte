@@ -89,7 +89,9 @@
       </div>
     </div>
   </div>
-  {@render children?.()}
+  <div class="px-4">
+    {@render children?.()}
+  </div>
   {#if updated.current}
     <div class="toast">
       <div class="alert alert-info">

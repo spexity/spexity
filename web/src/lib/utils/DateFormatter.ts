@@ -6,7 +6,7 @@ const YEAR_MS = 365 * DAY_MS
 const TIME_ONLY_CUTOFF_MS = 18 * HOUR_MS
 const DATE_TIME_CUTOFF_MS = WEEK_MS
 
-export class PostDateFormatter {
+export class DateFormatter {
   //Format from an iso string to a relative time representation (as opposed to a specific date or time)
   static formatUtcIsoRelative(utcIso: string): string {
     const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" })

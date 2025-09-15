@@ -6,5 +6,5 @@
 </script>
 
 <div>
-  this is the community {topic.name}
+  this is the topic {topic.name}
 </div>

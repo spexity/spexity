@@ -5,9 +5,7 @@
   let { data }: PageProps = $props()
 </script>
 
-<div class="flex w-full flex-col px-4">
-  {#each data.posts as post (post.id)}
-    <PostPreview {post} timezone={data.timezone} />
-    <div class="divider m-0"></div>
-  {/each}
-</div>
+{#each data.posts as post (post.id)}
+  <PostPreview {post} community={post.community} timezone={data.timezone} />
+  <div class="divider m-0"></div>
+{/each}

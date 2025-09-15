@@ -1,12 +1,11 @@
 <script lang="ts">
-  import type { CommunityPreview } from "$lib/components/CommunityPreview"
+  import type { CommunityPreview } from "$lib/model/types"
 
   interface CommunityPreviewProps {
     community: CommunityPreview
   }
 
-  const props: CommunityPreviewProps = $props()
-  const community = props.community
+  const { community }: CommunityPreviewProps = $props()
 </script>
 
 <div class="flex flex-col">

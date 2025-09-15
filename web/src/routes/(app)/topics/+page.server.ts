@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types"
 import { SsrLoadFromApi } from "$lib/utils/SsrLoadFromApi"
-import type { TopicPreview } from "$lib/components/TopicPreview"
+import type { TopicPreview } from "$lib/model/types"
 
 type PageData = {
   topics: TopicPreview[]

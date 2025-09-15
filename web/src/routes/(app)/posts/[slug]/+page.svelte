@@ -1,9 +1,8 @@
 <script lang="ts">
   import type { PageProps } from "./$types"
+  import PostView from "$lib/components/PostView.svelte"
 
-  let props: PageProps = $props()
+  let { data }: PageProps = $props()
 </script>
 
-<div>
-  You are viewing post {props.data.id}
-</div>
+<PostView post={data.post} timezone={data.timezone} />
