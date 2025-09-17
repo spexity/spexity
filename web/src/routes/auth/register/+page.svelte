@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation"
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
+  import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
 
   let submitting = $state<boolean>(false)
   let errorMessage = $state<string>()
@@ -21,11 +22,9 @@
 
   const handleSubmit = async (event: SubmitEvent) => {
     try {
-      event.preventDefault()
       submitting = true
       errorMessage = undefined
-      const form = event.currentTarget as HTMLFormElement
-      const data = new FormData(form)
+      const data = CsrFormHandler.onsubmit(event)
       const alias = data.get("alias") as string
       await authManager.registerUserAccount(alias)
       await goto("/")
@@ -42,7 +41,7 @@
     <span class="loading loading-lg loading-spinner"></span>
     <p class="mt-4">Redirecting...</p>
   {:else}
-    <form onsubmit={handleSubmit}>
+    <form onsubmit={handleSubmit} autocomplete="off">
       <fieldset class="fieldset w-sm rounded-box border border-base-300 bg-base-200 p-4">
         <legend class="fieldset-legend text-lg">Profile</legend>
 

@@ -55,7 +55,7 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
             POST.ID,
             POST.CREATED_AT,
             POST.SUBJECT,
-            POST.BODY,
+            POST.BODY_TEXT,
             POST.contributor().ID,
             POST.contributor().HANDLE,
             POST.community().ID,
@@ -69,7 +69,7 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
                     it.get(POST.ID),
                     instant,
                     it.get(POST.SUBJECT),
-                    it.get(POST.BODY), //TODO; how to trim to only preview
+                    it.get(POST.BODY_TEXT).take(512),
                     ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE))
                 )
             }

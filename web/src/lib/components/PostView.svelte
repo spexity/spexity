@@ -9,25 +9,26 @@
     timezone: string
   }
 
-  let submitting = $state<boolean>(false)
-
   const { post, timezone }: PostViewProps = $props()
   const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(post.createdAt, timezone)
+
+  let submitting = $state<boolean>(false)
 </script>
 
 <div class="flex flex-col">
   <div class="flex flex-row justify-between">
-    <span class="text-sm font-medium">
+    <span class="text-xs font-medium">
       <CommunityName community={post.community} />
     </span>
-    <div class="text-sm">
+    <div class="text-xs">
       <ContributorHandle contributor={post.contributor} />
       - {formattedDateTime}
     </div>
   </div>
   <div class="mt-4">
-    <h2 class="text-xl font-medium">{post.subject}</h2>
-    <p>{post.body}</p>
+    <h2 class="text-2xl font-medium">{post.subject}</h2>
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+    <div class="tiptap my-4">{@html post.body}</div>
   </div>
   <div class="divider"></div>
   <div class="text-sm">0 Comments</div>

@@ -92,7 +92,16 @@ CREATE TABLE post
     id             UUID               DEFAULT uuid_generate_v4() PRIMARY KEY,
     created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     subject        TEXT      NOT NULL,
-    body           TEXT      NOT NULL,
+    body_json      JSONB     NOT NULL,
+    body_text      TEXT      NOT NULL,
+    search_tsv     TSVECTOR
+        GENERATED ALWAYS AS (
+            setweight(to_tsvector('english', coalesce(subject, '')), 'A') ||
+            setweight(to_tsvector('english', coalesce(body_text, '')), 'B')
+            ) STORED,
     community_id   UUID      NOT NULL REFERENCES community (id),
     contributor_id UUID      NOT NULL REFERENCES contributor (id)
 );
+
+CREATE INDEX post_search_tsv_gin ON post USING GIN (search_tsv);
+

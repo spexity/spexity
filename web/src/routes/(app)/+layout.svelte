@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "$lib/components/Editor.css"
   import { page, updated } from "$app/state"
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
@@ -39,6 +40,9 @@
 </script>
 
 <div class="app-body">
+  <div class="w-full px-4">
+    {@render children?.()}
+  </div>
   <div class="navbar bg-base-100 shadow-sm">
     <div class="h-full flex-1">
       <a href="/">
@@ -88,9 +92,6 @@
         </ul>
       </div>
     </div>
-  </div>
-  <div class="px-4">
-    {@render children?.()}
   </div>
   {#if updated.current}
     <div class="toast">

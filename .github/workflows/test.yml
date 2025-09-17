@@ -18,6 +18,9 @@ on:
       - "web2end-tests/**"
       - ".github/workflows/test.yml"
 
+permissions:
+  contents: read
+
 jobs:
 
   test:
