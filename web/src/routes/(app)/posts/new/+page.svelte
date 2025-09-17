@@ -5,6 +5,7 @@
   import { goto } from "$app/navigation"
   import { type PostPreview } from "$lib/model/types"
   import Editor from "$lib/components/Editor.svelte"
+  import { EditorUtils } from "$lib/utils/EditorUtils"
 
   const { data }: PageProps = $props()
   const community = data.community
@@ -20,13 +21,18 @@
       const data = CsrFormHandler.onsubmit(event)
       const subject = data.get("subject") as string
       const body = editorRef?.getValue()
+      if (!EditorUtils.hasMeaningfulText(body)) {
+        errorMessage = "Please write something"
+        return
+      }
       const post = await authManager.httpClient.post<PostPreview>("/api/posts", {
         communityId: community.id,
         subject,
         body,
       })
       await goto(`/posts/${post.id}`)
-    } catch {
+    } catch (err) {
+      console.error("error posting", err)
       errorMessage = "Could not post"
     } finally {
       submitting = false
