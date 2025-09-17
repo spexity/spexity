@@ -15,7 +15,7 @@ export enum AuthUserAccountState {
 }
 
 interface SignInState {
-  locationPathname?: string
+  locationUri?: string
 }
 
 export class AuthManager {
@@ -72,7 +72,7 @@ export class AuthManager {
     }
     return this.authManager.signinRedirect({
       state: {
-        locationPathname: window.location.pathname,
+        locationUri: window.location.pathname + window.location.search + window.location.hash,
       } as SignInState,
     })
   }
@@ -143,8 +143,8 @@ export class AuthManager {
       this.currentUserStorage?.set(userAccount)
       if (followState) {
         const state = oidcUser.state as SignInState | undefined
-        if (state?.locationPathname) {
-          await goto(state.locationPathname)
+        if (state?.locationUri) {
+          await goto(state.locationUri)
         } else {
           await goto("/")
         }

@@ -24,6 +24,7 @@
         <org.testcontainers.postgresql.version>1.21.3</org.testcontainers.postgresql.version>
         <flyway.version>11.11.0</flyway.version>
         <quarkus-jooq.version>2.1.0</quarkus-jooq.version>
+        <owasp-sanitizer.version>20240325.1</owasp-sanitizer.version>
         <jooq.version>3.19.24</jooq.version>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
     </properties>

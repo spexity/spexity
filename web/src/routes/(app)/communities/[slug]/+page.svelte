@@ -10,7 +10,7 @@
   <div class="text-2xl">
     {community.name}
   </div>
-  <a class="btn btn-sm" href="/communities/{community.id}/posts/new">Start a Post</a>
+  <a class="btn btn-sm" href="/posts/new?communityId={community.id}">Start a Post</a>
 </div>
 {#each data.posts as post (post.id)}
   <PostPreview {post} timezone={data.timezone} />

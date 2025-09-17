@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Container image tag"
+        description: "Release image tag"
         required: true
         type: string
 
@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  deployment:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -32,7 +32,7 @@ jobs:
           mkdir -p ~/.kube
           printf "%s" "$KUBE_CONFIG" > ~/.kube/config
           kubectl config current-context
-      - name: Helm upgrade/install
+      - name: Deploy
         env:
           HELM_DRIVER: configmap
         run: |

@@ -5,6 +5,7 @@ import jakarta.ws.rs.BadRequestException
 import net.spexity.data.model.public_.Tables.CONTRIBUTOR
 import net.spexity.data.model.public_.Tables.USER_ACCOUNT
 import org.jooq.DSLContext
+import java.util.*
 
 @ApplicationScoped
 class UserService(private val dslContext: DSLContext, private val contributorService: ContributorService) {
@@ -20,7 +21,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 .returning()
                 .fetchOne()!!
             val contributor = contributorService.register(ContributorService.RegRequest(account.id, request.alias))
-            RegResponse(account.id.toString(), request.authCorrelationId, contributor.id, contributor.handle)
+            RegResponse(account.id, request.authCorrelationId, contributor.id, contributor.handle)
         }
     }
 
@@ -34,12 +35,16 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
         }
         return result[0].map {
             RegResponse(
-                it.get(CONTRIBUTOR.userAccount().ID).toString(),
+                it.get(CONTRIBUTOR.userAccount().ID),
                 authCorrelationId,
-                it.get(CONTRIBUTOR.ID).toString(),
+                it.get(CONTRIBUTOR.ID),
                 it.get(CONTRIBUTOR.HANDLE),
             )
         }
+    }
+
+    fun registeredAndVerified(authCorrelationId: String): Boolean {
+        return hasRegistered(authCorrelationId) //TODO: verification of humanity
     }
 
     fun hasRegistered(authCorrelationId: String): Boolean {
@@ -54,9 +59,9 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
     data class RegRequest(val authCorrelationId: String, val emailAddress: String, val alias: String)
 
     data class RegResponse(
-        val id: String,
+        val id: UUID,
         val authCorrelationId: String,
-        val contributorId: String,
+        val contributorId: UUID,
         val contributorHandle: String
     )
 

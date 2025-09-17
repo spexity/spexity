@@ -28,7 +28,7 @@ class ContributorService(private val dslContext: DSLContext, private val logger:
             val candidate = randomInRange(digits)
             val inserted = tryInsertContributor(request, candidate)
             if (inserted != null) {
-                return RegResponse(inserted.get(CONTRIBUTOR.ID).toString(), inserted.get(CONTRIBUTOR.HANDLE))
+                return RegResponse(inserted.get(CONTRIBUTOR.ID), inserted.get(CONTRIBUTOR.HANDLE))
             }
         }
         // Stage 2: deterministic db-side selection under an advisory lock
@@ -36,7 +36,7 @@ class ContributorService(private val dslContext: DSLContext, private val logger:
         if (candidate != null) {
             val inserted = tryInsertContributor(request, candidate)
             if (inserted != null) {
-                return RegResponse(inserted.get(CONTRIBUTOR.ID).toString(), inserted.get(CONTRIBUTOR.HANDLE))
+                return RegResponse(inserted.get(CONTRIBUTOR.ID), inserted.get(CONTRIBUTOR.HANDLE))
             }
         }
         val nextDigits = digits + 1
@@ -83,6 +83,6 @@ class ContributorService(private val dslContext: DSLContext, private val logger:
 
     data class RegRequest(val userAccountId: UUID, val alias: String)
 
-    data class RegResponse(val id: String, val handle: String)
+    data class RegResponse(val id: UUID, val handle: String)
 
 }

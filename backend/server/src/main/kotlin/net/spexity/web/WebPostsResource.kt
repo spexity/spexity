@@ -1,9 +1,13 @@
 package net.spexity.web
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.security.PermitAll
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import net.spexity.data.model.public_.Tables.*
+import net.spexity.post.BodyHtmlSerializer
+import net.spexity.post.Doc
+import net.spexity.post.HtmlSanitizer
 import net.spexity.web.model.CommunityRef
 import net.spexity.web.model.ContributorRef
 import net.spexity.web.model.PostView
@@ -12,7 +16,7 @@ import java.time.ZoneOffset
 import java.util.*
 
 @Path("/api/web/posts")
-class WebPostsResource(private val dslContext: DSLContext) {
+class WebPostsResource(private val dslContext: DSLContext, private val objectMapper: ObjectMapper) {
 
     @GET
     @Path("/{id}")
@@ -23,7 +27,7 @@ class WebPostsResource(private val dslContext: DSLContext) {
             POST.ID,
             POST.CREATED_AT,
             POST.SUBJECT,
-            POST.BODY,
+            POST.BODY_JSON,
             POST.contributor().ID,
             POST.contributor().HANDLE,
             POST.community().ID,
@@ -33,11 +37,12 @@ class WebPostsResource(private val dslContext: DSLContext) {
             .where(POST.ID.eq(id))
             .fetchOne {
                 val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
+                val body: Doc = objectMapper.readValue(it.get(POST.BODY_JSON).data(), Doc::class.java)
                 PostView(
                     it.get(POST.ID),
                     instant,
                     it.get(POST.SUBJECT),
-                    it.get(POST.BODY),
+                    HtmlSanitizer.sanitize(BodyHtmlSerializer.render(body)),
                     ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
                     CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME))
                 )
