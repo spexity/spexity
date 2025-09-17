@@ -27,6 +27,7 @@
   </div>
   <div class="mt-4">
     <h2 class="text-2xl font-medium">{post.subject}</h2>
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     <div class="tiptap my-4">{@html post.body}</div>
   </div>
   <div class="divider"></div>

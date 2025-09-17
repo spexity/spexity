@@ -139,14 +139,13 @@
     CsrFormHandler.onsubmit(event)
     try {
       if (currentLinkState) {
-        editor?.chain().focus().extendMarkRange("link")
-          .setLink({ href: currentLinkState }).run()
+        editor?.chain().focus().extendMarkRange("link").setLink({ href: currentLinkState }).run()
       } else {
         editor?.chain().focus().extendMarkRange("link").unsetLink().run()
       }
       linkModalRef?.close()
     } catch {
-
+      console.error("Could not set link")
     }
   }
 
@@ -161,13 +160,13 @@
   <dialog bind:this={linkModalRef} class="modal">
     <div class="modal-box">
       <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        <button class="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">✕</button>
       </form>
       <form onsubmit={setLink}>
         <fieldset class="fieldset">
           <label class="label" for="editor-link-url">URL</label>
           <input
-            class="input validator w-full"
+            class="validator input w-full"
             id="editor-link-url"
             type="url"
             required
@@ -177,12 +176,8 @@
           />
           <div class="validator-hint">Enter a valid URL</div>
         </fieldset>
-        <button type="submit" class="btn btn-primary btn-sm">
-          Save
-        </button>
-        <button type="button" class="btn btn-sm" onclick={deleteLink}>
-          Delete Link
-        </button>
+        <button type="submit" class="btn btn-sm btn-primary"> Save </button>
+        <button type="button" class="btn btn-sm" onclick={deleteLink}> Delete Link </button>
       </form>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -283,7 +278,7 @@
     <div class="divider m-0 divider-horizontal"></div>
     <button
       onclick={() => editor?.chain().focus().setHorizontalRule().run()}
-      class={"btn btn-soft btn-xs btn-primary"}
+      class="btn btn-soft btn-xs btn-primary"
     >
       Horizontal rule
     </button>
@@ -292,14 +287,14 @@
       <button
         onclick={() => editor?.chain().focus().undo().run()}
         disabled={!editorState.undo}
-        class={"btn join-item btn-soft btn-xs btn-primary"}
+        class="btn join-item btn-soft btn-xs btn-primary"
       >
         Undo
       </button>
       <button
         onclick={() => editor?.chain().focus().redo().run()}
         disabled={!editorState.redo}
-        class={"btn join-item btn-soft btn-xs btn-primary"}
+        class="btn join-item btn-soft btn-xs btn-primary"
       >
         Redo
       </button>
