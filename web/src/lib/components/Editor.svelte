@@ -1,5 +1,4 @@
 <script lang="ts">
-  import "./editor.css"
   import { Editor } from "@tiptap/core"
   import StarterKit from "@tiptap/starter-kit"
   import { Placeholder } from "@tiptap/extensions"
