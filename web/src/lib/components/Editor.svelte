@@ -4,6 +4,7 @@
   import { Placeholder } from "@tiptap/extensions"
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
   import { onDestroy } from "svelte"
+  import type { EditorContent } from "$lib/utils/EditorUtils"
 
   interface EditorStateItem {
     can: boolean
@@ -62,8 +63,8 @@
   let linkModalRef = $state<HTMLDialogElement>()
   let currentLinkState = $state<string>()
 
-  export const getValue = () => {
-    return editor?.getJSON() ?? {}
+  export const getValue = (): EditorContent => {
+    return editor?.getJSON() ?? { type: "doc", content: [] }
   }
 
   const createEditor = (element: HTMLDivElement) => {
@@ -175,8 +176,8 @@
           />
           <div class="validator-hint">Enter a valid URL</div>
         </fieldset>
-        <button type="submit" class="btn btn-sm btn-primary"> Save </button>
-        <button type="button" class="btn btn-sm" onclick={deleteLink}> Delete Link </button>
+        <button type="submit" class="btn btn-sm btn-primary"> Save</button>
+        <button type="button" class="btn btn-sm" onclick={deleteLink}> Delete Link</button>
       </form>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -184,98 +185,119 @@
     </form>
   </dialog>
   <div class="mb-1 flex w-full flex-wrap gap-1">
+    <div class="join">
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().setParagraph().run()}
+        class={["btn join-item btn-xs btn-primary", !editorState.paragraph && "btn-soft"]}
+      >
+        Normal text
+      </button>
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
+        class={["btn join-item btn-xs btn-primary", !editorState.heading[1] && "btn-soft"]}
+      >
+        H1
+      </button>
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+        class={["btn join-item btn-xs btn-primary", !editorState.heading[2] && "btn-soft"]}
+      >
+        H2
+      </button>
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+        class={["btn join-item btn-xs btn-primary", !editorState.heading[3] && "btn-soft"]}
+      >
+        H3
+      </button>
+    </div>
+    <div class="join">
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleBulletList().run()}
+        class={["btn join-item btn-xs btn-primary", !editorState.bulletList && "btn-soft"]}
+      >
+        Bullet list
+      </button>
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleOrderedList().run()}
+        class={["btn join-item btn-xs btn-primary", !editorState.orderedList && "btn-soft"]}
+      >
+        Ordered list
+      </button>
+    </div>
     <button
-      onclick={() => editor?.chain().focus().setParagraph().run()}
-      class={["btn btn-xs btn-primary", editorState.paragraph ? "" : "btn-soft"]}
-    >
-      Normal text
-    </button>
-    <button
-      onclick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-      class={["btn btn-xs btn-primary", editorState.heading[1] ? "" : "btn-soft"]}
-    >
-      H1
-    </button>
-    <button
-      onclick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-      class={["btn btn-xs btn-primary", editorState.heading[2] ? "" : "btn-soft"]}
-    >
-      H2
-    </button>
-    <button
-      onclick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-      class={["btn btn-xs btn-primary", editorState.heading[3] ? "" : "btn-soft"]}
-    >
-      H3
-    </button>
-    <button
-      onclick={() => editor?.chain().focus().toggleBulletList().run()}
-      class={["btn btn-xs btn-primary", editorState.bulletList ? "" : "btn-soft"]}
-    >
-      Bullet list
-    </button>
-    <button
-      onclick={() => editor?.chain().focus().toggleOrderedList().run()}
-      class={["btn btn-xs btn-primary", editorState.orderedList ? "" : "btn-soft"]}
-    >
-      Ordered list
-    </button>
-    <button
+      type="button"
       onclick={() => editor?.chain().focus().toggleCodeBlock().run()}
-      class={["btn btn-xs btn-primary", editorState.codeBlock ? "" : "btn-soft"]}
+      class={["btn btn-xs btn-primary", !editorState.codeBlock && "btn-soft"]}
     >
       Code block
     </button>
     <button
+      type="button"
       onclick={() => editor?.chain().focus().toggleBlockquote().run()}
-      class={["btn btn-xs btn-primary", editorState.blockquote ? "" : "btn-soft"]}
+      class={["btn btn-xs btn-primary", !editorState.blockquote && "btn-soft"]}
     >
       Quote
     </button>
     <div class="divider m-0 divider-horizontal"></div>
+    <div class="join">
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleBold().run()}
+        disabled={!editorState.bold.can}
+        class={["btn join-item btn-xs btn-primary", !editorState.bold.active && "btn-soft"]}
+      >
+        Bold
+      </button>
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleItalic().run()}
+        disabled={!editorState.italic.can}
+        class={["btn join-item btn-xs btn-primary", !editorState.italic.active && "btn-soft"]}
+      >
+        Italic
+      </button>
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleUnderline().run()}
+        disabled={!editorState.underline.can}
+        class={["btn join-item btn-xs btn-primary", !editorState.underline.active && "btn-soft"]}
+      >
+        Underline
+      </button>
+      <button
+        type="button"
+        onclick={() => editor?.chain().focus().toggleStrike().run()}
+        disabled={!editorState.strike.can}
+        class={["btn join-item btn-xs btn-primary", !editorState.strike.active && "btn-soft"]}
+      >
+        Strike
+      </button>
+    </div>
     <button
-      onclick={() => editor?.chain().focus().toggleBold().run()}
-      disabled={!editorState.bold.can}
-      class={["btn btn-xs btn-primary", editorState.bold.active ? "" : "btn-soft"]}
-    >
-      Bold
-    </button>
-    <button
-      onclick={() => editor?.chain().focus().toggleItalic().run()}
-      disabled={!editorState.italic.can}
-      class={["btn btn-xs btn-primary", editorState.italic.active ? "" : "btn-soft"]}
-    >
-      Italic
-    </button>
-    <button
-      onclick={() => editor?.chain().focus().toggleUnderline().run()}
-      disabled={!editorState.underline.can}
-      class={["btn btn-xs btn-primary", editorState.underline.active ? "" : "btn-soft"]}
-    >
-      Underline
-    </button>
-    <button
-      onclick={() => editor?.chain().focus().toggleStrike().run()}
-      disabled={!editorState.strike.can}
-      class={["btn btn-xs btn-primary", editorState.strike.active ? "" : "btn-soft"]}
-    >
-      Strike
-    </button>
-    <button
+      type="button"
       onclick={showLinkModal}
-      class={["btn btn-xs btn-primary", editorState.link ? "" : "btn-soft"]}
+      class={["btn btn-xs btn-primary", !editorState.link && "btn-soft"]}
     >
       Link
     </button>
     <button
+      type="button"
       onclick={() => editor?.chain().focus().toggleCode().run()}
       disabled={!editorState.code.can}
-      class={["btn btn-xs btn-primary", editorState.code.active ? "" : "btn-soft"]}
+      class={["btn btn-xs btn-primary", !editorState.code.active && "btn-soft"]}
     >
       Code
     </button>
     <div class="divider m-0 divider-horizontal"></div>
     <button
+      type="button"
       onclick={() => editor?.chain().focus().setHorizontalRule().run()}
       class="btn btn-soft btn-xs btn-primary"
     >
@@ -284,6 +306,7 @@
     <div class="divider m-0 divider-horizontal"></div>
     <div class="join">
       <button
+        type="button"
         onclick={() => editor?.chain().focus().undo().run()}
         disabled={!editorState.undo}
         class="btn join-item btn-soft btn-xs btn-primary"
@@ -291,6 +314,7 @@
         Undo
       </button>
       <button
+        type="button"
         onclick={() => editor?.chain().focus().redo().run()}
         disabled={!editorState.redo}
         class="btn join-item btn-soft btn-xs btn-primary"
@@ -300,4 +324,4 @@
     </div>
   </div>
 {/if}
-<div class="textarea w-full" use:createEditor></div>
+<div class="textarea w-full text-base" use:createEditor></div>

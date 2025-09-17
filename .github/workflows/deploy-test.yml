@@ -10,10 +10,14 @@ on:
 
 permissions:
   contents: read
+  deployments: write
 
 jobs:
   deployment:
     runs-on: ubuntu-latest
+    environment:
+      name: test
+      url: https://test.spexity.net
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
