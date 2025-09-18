@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test"
+import { type Page } from "@playwright/test"
 import { AccountMenu } from "./AccountMenu"
 
 export class App {
@@ -28,7 +28,11 @@ export class App {
   }
 
   async awaitAppPage() {
-    await this.page.getByAltText("Spexity logo").waitFor({ state: "visible" });
+    await this.getLogo().waitFor({ state: "visible" })
+  }
+
+  getLogo() {
+    return this.page.getByAltText("Spexity logo")
   }
 
 }

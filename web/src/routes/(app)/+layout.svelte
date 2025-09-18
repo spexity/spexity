@@ -62,7 +62,7 @@
         <div
           tabindex="0"
           role="button"
-          aria-label="Account menu"
+          aria-label="Account menu button"
           class="btn avatar btn-circle {authManager.userAccountState ===
           AuthUserAccountState.LOGGED_IN
             ? 'btn-outline btn-primary'
@@ -76,7 +76,10 @@
             👀
           {/if}
         </div>
-        <ul class="dropdown-content menu mt-3 w-50 rounded-box bg-base-100 shadow">
+        <ul
+          aria-label="Account menu content"
+          class="dropdown-content menu mt-3 w-50 rounded-box bg-base-100 shadow"
+        >
           {#if authManager.userAccount}
             <li>
               <a aria-label="Account profile" href="/account"
