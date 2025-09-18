@@ -79,7 +79,9 @@
         <ul class="dropdown-content menu mt-3 w-50 rounded-box bg-base-100 shadow">
           {#if authManager.userAccount}
             <li>
-              <a aria-label="Account profile" href="/account">{authManager.userAccount.contributorHandle}</a>
+              <a aria-label="Account profile" href="/account"
+                >{authManager.userAccount.contributorHandle}</a
+              >
             </li>
             <div class="divider m-0"></div>
             <li>
