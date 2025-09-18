@@ -293,25 +293,300 @@ VALUES ('8032dd4e-1abd-434d-b92c-7c39f8ca359d', '2025-09-17 16:13:27.162757', 'A
       "content": null
     }
   ]
-}', e'A bit of everything
-Twice
-Three
+}',
+        'A bit of everything Twice Three   Here is a list: - one 1 - two Remember bold italic underline strikenothing Another one iamchosen - random dude { "format": "json" } - Mohicans - Of - Last ',
+        '2ea5c4a6-dc9a-4da0-bc95-7e9e147bc0e7', 'afb0f543-c454-4f6e-853b-dbfbbd65c005')
+ON CONFLICT DO NOTHING;
 
 
-Here is a list:
-- one
-1
-- two
-Remember
-bold
-italic
-underline
-strikenothing
-Another one
-iamchosen
-- random dude
-{ "format": "json" }
-- Mohicans
-- Of
-- Last
-', '2ea5c4a6-dc9a-4da0-bc95-7e9e147bc0e7', 'afb0f543-c454-4f6e-853b-dbfbbd65c005') ON CONFLICT DO NOTHING;
+
+INSERT INTO public.post (id, created_at, subject, body_json, body_text, community_id, contributor_id)
+VALUES ('85200022-1089-44c6-8a08-610ce321fa9f', '2025-09-18 10:38:05.745539', 'Headers Post', '{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "text": "This is the header",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "Then we talk about what''s inside. There are 2 section",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "As the leader of headers said",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "blockquote",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "text": "You should not play with headers if you don''t know your sections",
+              "type": "text",
+              "marks": null
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "text": "- The leader of headers",
+              "type": "text",
+              "marks": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "So ",
+          "type": "text",
+          "marks": null
+        },
+        {
+          "text": "be",
+          "type": "text",
+          "marks": [
+            {
+              "type": "code"
+            }
+          ]
+        },
+        {
+          "text": " prepared to be headless.",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "text": "1 you want to do this",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "Ok so to do this you need to do this and this",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "this",
+                  "type": "text",
+                  "marks": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "this",
+                  "type": "text",
+                  "marks": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "And then you can finish it off with some code:",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "attrs": {
+        "language": null
+      },
+      "content": [
+        {
+          "text": "This is the code you need.",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "And that should be that.",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "text": "2 You also want to do that",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "Ok so to do that you need to do this and that",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "orderedList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "this",
+                  "type": "text",
+                  "marks": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "that",
+                  "type": "text",
+                  "marks": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "text": "This",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "this is important",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "text": "That",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "text": "this is also important",
+          "type": "text",
+          "marks": null
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": null
+    }
+  ]
+}',
+        'This is the header Then we talk about what''s inside. There are 2 section As the leader of headers said You should not play with headers if you don''t know your sections - The leader of headers So  be  prepared to be headless. 1 you want to do this Ok so to do this you need to do this and this - this - this And then you can finish it off with some code: This is the code you need. And that should be that. 2 You also want to do that Ok so to do that you need to do this and that - this - that This this is important That this is also important ',
+        '2ea5c4a6-dc9a-4da0-bc95-7e9e147bc0e7', 'afb0f543-c454-4f6e-853b-dbfbbd65c005')
+ON CONFLICT DO NOTHING;

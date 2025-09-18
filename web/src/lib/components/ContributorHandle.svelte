@@ -12,5 +12,5 @@
 </script>
 
 <a href="/contributors/{contributor.id}">
-  {contributorName}<span class="text-base-content/50">{contributorDiscriminator}</span>
+  {contributorName}<span class="text-base-content/66">{contributorDiscriminator}</span>
 </a>

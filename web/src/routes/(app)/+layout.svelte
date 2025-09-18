@@ -3,7 +3,6 @@
   import { page, updated } from "$app/state"
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
-  import logo from "$lib/assets/logo.svg"
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
 
@@ -44,9 +43,9 @@
     {@render children?.()}
   </div>
   <div class="navbar bg-base-100 shadow-sm">
-    <div class="h-full flex-1">
+    <div class="flex h-full flex-1 flex-col justify-center">
       <a href="/">
-        <img width="40px" src={logo} alt="Spexity logo" class="h-full" />
+        <img width="40px" height="40px" src="/logo.png" alt="Spexity logo" />
       </a>
     </div>
     <div class="flex-none">
