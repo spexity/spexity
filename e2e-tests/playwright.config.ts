@@ -39,7 +39,7 @@ export default defineConfig({
     },
     {
       cwd: "../backend/server",
-      command: "mvn -Dquarkus.live-reload.enabled=false -Dquarkus.test.continuous-testing=disabled quarkus:dev",
+      command: "mvn quarkus:run",
       url: "http://localhost:8080/q/health/ready",
       reuseExistingServer: !process.env.CI,
     },
