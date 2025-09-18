@@ -10,6 +10,6 @@ test("can login", async ({ page }) => {
   const app = new App(page)
   await app.launch()
   await app.login()
-  const accountMenu = await app.accountMenu()
-  expect(await accountMenu.contributorHandle()).toEqual("Ham#1001")
+  await app.accountMenu.open()
+  expect(await app.accountMenu.contributorHandle()).toEqual("Ham#1001")
 })

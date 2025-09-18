@@ -15,7 +15,11 @@ export class AccountMenu {
   }
 
   async clickSignIn() {
-    await this.page.getByRole("link", { name: "Sign In" }).click()
+    const signInLink = this.page.getByRole("link", { name: "Sign In" });
+    await signInLink.waitFor({ state: "visible" });
+    const accountMenu = this.page.getByRole("button", { name: "Account menu" })
+    await accountMenu.locator(".loading.loading-spinner").waitFor({ state: "detached" })
+    await signInLink.click()
   }
 
   async contributorHandle(): Promise<string | null> {
