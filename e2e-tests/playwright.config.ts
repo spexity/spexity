@@ -38,11 +38,11 @@ export default defineConfig({
       url: "http://localhost:5173",
       reuseExistingServer: !process.env.CI,
     },
-    {
+    /*{
       cwd: "../backend/server",
       command: "mvn -Dquarkus.live-reload.enabled=false -Dquarkus.test.continuous-testing=disabled quarkus:dev",
       url: "http://localhost:8080/q/health/ready",
       reuseExistingServer: !process.env.CI,
-    },
+    },*/
   ],
 })
