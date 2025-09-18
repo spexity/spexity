@@ -41,6 +41,7 @@ export default defineConfig({
       cwd: "../backend/server",
       command: "mvn quarkus:run",
       url: "http://localhost:8080/q/health/ready",
+      timeout: 180000,
       reuseExistingServer: !process.env.CI,
     },
   ],
