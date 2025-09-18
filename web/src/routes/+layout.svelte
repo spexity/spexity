@@ -1,7 +1,6 @@
 <script lang="ts">
   import "../app.css"
   import { onMount } from "svelte"
-  import favicon from "$lib/assets/favicon.svg"
   import { ThemeHandler } from "$lib/utils/ThemeHandler"
   import { ClientEnv } from "$lib/utils/ClientEnv"
   import NavProgress from "$lib/components/NavProgress.svelte"
@@ -15,7 +14,7 @@
 </script>
 
 <svelte:head>
-  <link rel="icon" href={favicon} />
+  <link rel="icon" href="/logo.png" />
 </svelte:head>
 {@render children?.()}
 <NavProgress />
