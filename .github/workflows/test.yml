@@ -37,7 +37,7 @@ jobs:
           cache-dependency-path: backend/pom.xml
       - name: Test backend
         working-directory: backend
-        run: mvn -B clean test
+        run: mvn -B clean test package
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
