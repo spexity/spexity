@@ -8,7 +8,6 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
     baseURL: "http://localhost:5173",
@@ -38,11 +37,11 @@ export default defineConfig({
       url: "http://localhost:5173",
       reuseExistingServer: !process.env.CI,
     },
-    /*{
+    {
       cwd: "../backend/server",
-      command: "mvn -Dquarkus.live-reload.enabled=false -Dquarkus.test.continuous-testing=disabled quarkus:dev",
+      command: "mvn quarkus:run",
       url: "http://localhost:8080/q/health/ready",
       reuseExistingServer: !process.env.CI,
-    },*/
+    },
   ],
 })
