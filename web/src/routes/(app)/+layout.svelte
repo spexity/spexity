@@ -62,6 +62,7 @@
         <div
           tabindex="0"
           role="button"
+          aria-label="Account menu"
           class="btn avatar btn-circle {authManager.userAccountState ===
           AuthUserAccountState.LOGGED_IN
             ? 'btn-outline btn-primary'
@@ -78,7 +79,7 @@
         <ul class="dropdown-content menu mt-3 w-50 rounded-box bg-base-100 shadow">
           {#if authManager.userAccount}
             <li>
-              <a href="/account">{authManager.userAccount.contributorHandle}</a>
+              <a aria-label="Account profile" href="/account">{authManager.userAccount.contributorHandle}</a>
             </li>
             <div class="divider m-0"></div>
             <li>

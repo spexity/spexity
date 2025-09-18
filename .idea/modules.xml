@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/backend/web-protos/db-model.iml" filepath="$PROJECT_DIR$/backend/web-protos/db-model.iml" />
       <module fileurl="file://$PROJECT_DIR$/do/do.iml" filepath="$PROJECT_DIR$/do/do.iml" />
       <module fileurl="file://$PROJECT_DIR$/documentation/documentation.iml" filepath="$PROJECT_DIR$/documentation/documentation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/e2e-tests/e2e-tests.iml" filepath="$PROJECT_DIR$/e2e-tests/e2e-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/web/web.iml" filepath="$PROJECT_DIR$/web/web.iml" />
     </modules>
   </component>
