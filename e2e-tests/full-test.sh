@@ -6,7 +6,7 @@ pushd ../backend || exit 1
 
 if command -v mvn >/dev/null 2>&1; then
   echo "running mvn clean install"
-  mvn clean install -Dquarkus.profile=e2e-tests
+  mvn -B clean install -Dquarkus.profile=e2e-tests
 else
   echo "Error: Maven is not installed. Please install Maven first."
   exit 1
