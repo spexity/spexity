@@ -7,7 +7,7 @@
     "build": "vite build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "checked-build": "vite build && npm run check && npm run lint",
+    "checked-build": "npm run test && npm run build && npm run check && npm run lint",
     "dev": "vite dev",
     "dev-host": "vite dev --host",
     "format": "prettier --write .",
