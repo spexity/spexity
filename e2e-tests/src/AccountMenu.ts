@@ -20,12 +20,22 @@ export class AccountMenu {
     await signInLink.click()
   }
 
+  async clickSignOut() {
+    const signOutLink = this.getSignOutLink()
+    await signOutLink.waitFor({ state: "visible" })
+    await signOutLink.click()
+  }
+
   async contributorHandle(): Promise<string | null> {
     return await this.page.getByRole("link", { name: "Account profile" }).innerText()
   }
 
   getSignInLink() {
     return this.page.getByRole("link", { name: "Sign In" })
+  }
+
+  getSignOutLink() {
+    return this.page.getByRole("link", { name: "Sign Out" })
   }
 
   getMenuButton() {

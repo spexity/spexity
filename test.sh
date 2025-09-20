@@ -1,12 +1,12 @@
 #!/bin/bash
+set -euo pipefail
 
-
-# Backend setup
-pushd ../backend || exit 1
+# Backend
+pushd backend || exit 1
 
 if command -v mvn >/dev/null 2>&1; then
-  echo "running mvn clean install"
-  mvn clean install -Dquarkus.profile=e2e-tests
+  echo "Running backend tests"
+  mvn -B clean install -Dquarkus.profile=e2e-tests
 else
   echo "Error: Maven is not installed. Please install Maven first."
   exit 1
@@ -14,8 +14,10 @@ fi
 
 popd || exit 1
 
-# Web setup
-pushd ../web || exit 1
+# Web
+printf '\n%.0s' {1..10}
+
+pushd web || exit 1
 
 if [ -f ".env" ]; then
   echo "web .env file already exists"
@@ -25,7 +27,7 @@ else
 fi
 
 if command -v node >/dev/null 2>&1; then
-  echo "Testing web"
+  echo "Running web tests"
   if [ -n "$CI" ]; then
     npm ci
   else
@@ -39,6 +41,8 @@ fi
 
 popd || exit 1
 
+pushd e2e-tests || exit 1
+
 printf '\n%.0s' {1..10}
 echo "Running e2e-tests"
 if [ -n "$CI" ]; then
@@ -49,3 +53,8 @@ fi
 npx playwright install --with-deps
 npx playwright test
 
+
+popd || exit 1
+
+printf '\n%.0s' {1..10}
+echo "Finished all testing"
