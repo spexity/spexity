@@ -1,4 +1,4 @@
-import { type Page } from "@playwright/test"
+import test, { type Page } from "@playwright/test"
 import { AccountMenu } from "./AccountMenu"
 
 export class App {
@@ -16,15 +16,25 @@ export class App {
     await this.awaitAppPage()
   }
 
-  async login(username: string = "test1@example.com", password: string = "test1") {
-    await this.accountMenu.open()
-    await this.accountMenu.clickSignIn()
-    await this.page.getByRole("textbox", { name: "Email" }).fill(username)
-    await this.page.getByRole("textbox", { name: "Password" }).fill(password)
-    await this.page.getByRole("checkbox", { name: "Remember me" }).check()
-    await this.page.getByRole("button", { name: "Sign In" }).click()
-    await this.awaitAppPage()
-    return this
+  async signIn(username: string = "test1@example.com", password: string = "test1") {
+    await test.step("Sign in", async () => {
+      await this.accountMenu.open()
+      await this.accountMenu.clickSignIn()
+      await this.page.getByRole("textbox", { name: "Email" }).fill(username)
+      await this.page.getByRole("textbox", { name: "Password" }).fill(password)
+      await this.page.getByRole("checkbox", { name: "Remember me" }).check()
+      await this.page.getByRole("button", { name: "Sign In" }).click()
+      await this.awaitAppPage()
+    })
+  }
+
+  async signOut() {
+    await test.step("Sign out", async () => {
+      await this.accountMenu.open()
+      await this.accountMenu.clickSignOut()
+      await this.page.waitForTimeout(250)
+      await this.awaitAppPage()
+    })
   }
 
   async awaitAppPage() {
