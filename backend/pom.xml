@@ -12,15 +12,14 @@
     </modules>
 
     <properties>
-        <kotlin.version>2.2.0</kotlin.version>
+        <kotlin.version>2.2.20</kotlin.version>
         <compiler-plugin.version>3.14.0</compiler-plugin.version>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.25.2</quarkus.platform.version>
-        <postgresql.version>42.7.7</postgresql.version>
+        <quarkus.platform.version>3.26.4</quarkus.platform.version>
         <org.testcontainers.postgresql.version>1.21.3</org.testcontainers.postgresql.version>
         <flyway.version>11.11.0</flyway.version>
         <quarkus-jooq.version>2.1.0</quarkus-jooq.version>
