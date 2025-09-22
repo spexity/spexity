@@ -38,8 +38,3 @@ export interface ContributorRef {
   id: string
   handle: string
 }
-
-export interface TopicPreview {
-  id: string
-  name: string
-}

@@ -24,5 +24,3 @@ data class CommunityPreviewPost(
 data class CommunityRef(val id: UUID, val name: String)
 
 data class ContributorRef(val id: UUID, val handle: String)
-
-data class TopicPreview(val id: UUID, val name: String)
