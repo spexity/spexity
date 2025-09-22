@@ -1,5 +1,6 @@
-INSERT INTO public.user_account (id, created_at, auth_correlation_id, email_address)
-VALUES ('9c77ce56-4d3e-4622-aa54-32a4b63755a1', '2025-09-15 11:51:12.777617', '3561bd91-89f0-4bb3-bf2f-b745fc415b41',
+INSERT INTO public.user_account (id, created_at, is_verified_human, auth_correlation_id, email_address)
+VALUES ('9c77ce56-4d3e-4622-aa54-32a4b63755a1', '2025-09-15 11:51:12.777617', true,
+        '3561bd91-89f0-4bb3-bf2f-b745fc415b41',
         'test1@example.com')
 ON CONFLICT DO NOTHING;
 
@@ -8,10 +9,10 @@ VALUES ('afb0f543-c454-4f6e-853b-dbfbbd65c005', '2025-09-15 11:51:12.777617', '9
         'Ham', 1001)
 ON CONFLICT DO NOTHING;
 
-INSERT INTO public.community (id, name, slug)
-values ('2ea5c4a6-dc9a-4da0-bc95-7e9e147bc0e7', 'Toyota 86', 't86'),
-       ('d9cfb3f4-c0e6-4f06-9106-8fe22a2a2284', 'Dentistry', 'dt'),
-       ('4a1a64be-960f-458d-a93b-9dd182960c3f', 'Togetherness', 'tog')
+INSERT INTO public.community (id, name)
+values ('2ea5c4a6-dc9a-4da0-bc95-7e9e147bc0e7', 'Toyota 86'),
+       ('d9cfb3f4-c0e6-4f06-9106-8fe22a2a2284', 'Dentistry'),
+       ('4a1a64be-960f-458d-a93b-9dd182960c3f', 'Togetherness')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.post (id, created_at, subject, body_json, body_text, community_id, contributor_id)

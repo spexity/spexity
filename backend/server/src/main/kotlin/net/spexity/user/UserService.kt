@@ -17,16 +17,26 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
         return dslContext.transactionResult { _ ->
             val account = dslContext.insertInto(USER_ACCOUNT)
                 .set(USER_ACCOUNT.AUTH_CORRELATION_ID, request.authCorrelationId)
+                .set(USER_ACCOUNT.IS_VERIFIED_HUMAN, false)
                 .set(USER_ACCOUNT.EMAIL_ADDRESS, request.emailAddress)
                 .returning()
                 .fetchOne()!!
             val contributor = contributorService.register(ContributorService.RegRequest(account.id, request.alias))
-            RegResponse(account.id, request.authCorrelationId, contributor.id, contributor.handle)
+            RegResponse(
+                account.id,
+                account.isVerifiedHuman,
+                request.authCorrelationId,
+                contributor.id,
+                contributor.handle
+            )
         }
     }
 
     fun getUser(authCorrelationId: String): RegResponse? {
-        val result = dslContext.select(CONTRIBUTOR.userAccount().ID, CONTRIBUTOR.ID, CONTRIBUTOR.HANDLE)
+        val result = dslContext.select(
+            CONTRIBUTOR.userAccount().ID, CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN,
+            CONTRIBUTOR.ID, CONTRIBUTOR.HANDLE
+        )
             .from(CONTRIBUTOR)
             .where(CONTRIBUTOR.userAccount().AUTH_CORRELATION_ID.eq(authCorrelationId))
             .fetch()
@@ -36,6 +46,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
         return result[0].map {
             RegResponse(
                 it.get(CONTRIBUTOR.userAccount().ID),
+                it.get(CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN),
                 authCorrelationId,
                 it.get(CONTRIBUTOR.ID),
                 it.get(CONTRIBUTOR.HANDLE),
@@ -44,7 +55,13 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
     }
 
     fun registeredAndVerified(authCorrelationId: String): Boolean {
-        return hasRegistered(authCorrelationId) //TODO: verification of humanity
+        val count = dslContext
+            .selectCount()
+            .from(USER_ACCOUNT)
+            .where(USER_ACCOUNT.AUTH_CORRELATION_ID.eq(authCorrelationId))
+            .and(USER_ACCOUNT.IS_VERIFIED_HUMAN.eq(true))
+            .fetchOne(0, Int::class.java)!!
+        return count > 0
     }
 
     fun hasRegistered(authCorrelationId: String): Boolean {
@@ -60,6 +77,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
 
     data class RegResponse(
         val id: UUID,
+        val isVerifiedHuman: Boolean,
         val authCorrelationId: String,
         val contributorId: UUID,
         val contributorHandle: String
