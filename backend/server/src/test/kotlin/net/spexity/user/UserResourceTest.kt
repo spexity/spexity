@@ -33,6 +33,18 @@ class UserResourceTest {
             .`when`()
             .post("/api/current-user")
             .then()
+            .statusCode(400)
+        given()
+            .header("Content-Type", MediaType.APPLICATION_JSON)
+            .body(
+                mapOf(
+                    "alias" to "TEST",
+                    "acceptTermsAndConditions" to true
+                )
+            )
+            .`when`()
+            .post("/api/current-user")
+            .then()
             .statusCode(200)
             .body("contributorHandle", startsWith("TEST#"))
         given()

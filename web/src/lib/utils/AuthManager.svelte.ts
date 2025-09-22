@@ -101,10 +101,10 @@ export class AuthManager {
     this.ignoreOidcUserLoaded = false
   }
 
-  async registerUserAccount(alias: string) {
+  async registerUserAccount(alias: string, acceptTermsAndConditions: boolean) {
     const registerResponse = await authManager.httpClient.post<CurrentUserAccount>(
       "/api/current-user",
-      { alias },
+      { alias, acceptTermsAndConditions },
     )
     this.setUserAccountLoggedIn(registerResponse)
     this.currentUserStorage?.set(registerResponse)

@@ -6,15 +6,13 @@
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
 
-  type MenuItem = "home" | "communities" | "topics"
+  type MenuItem = "home" | "communities"
 
   const { children } = $props()
 
   const determineActiveMenuItem = (): MenuItem => {
     if (page.url.pathname.startsWith("/communities") || page.url.pathname.startsWith("/posts")) {
       return "communities"
-    } else if (page.url.pathname.startsWith("/topics")) {
-      return "topics"
     }
     return "home"
   }
@@ -56,7 +54,6 @@
             >Communities</a
           >
         </li>
-        <li><a href="/topics" class={active === "topics" ? "menu-active" : ""}>Topics</a></li>
       </ul>
       <div class="dropdown dropdown-end">
         <div

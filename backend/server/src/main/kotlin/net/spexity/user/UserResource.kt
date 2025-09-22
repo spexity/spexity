@@ -3,6 +3,7 @@ package net.spexity.user
 import io.quarkus.security.Authenticated
 import io.quarkus.security.identity.SecurityIdentity
 import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.Size
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.NotFoundException
@@ -36,7 +37,8 @@ class UserResource(private val userService: UserService, private val logger: Log
     }
 
     data class UserRegisterRequest(
-        @field:Size(min = 3, max = 20) val alias: String
+        @field:Size(min = 3, max = 20) val alias: String,
+        @field:AssertTrue(message = "Terms and conditions must be accepted") val acceptTermsAndConditions: Boolean
     )
 
 }
