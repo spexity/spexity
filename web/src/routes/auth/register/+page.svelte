@@ -26,7 +26,8 @@
       errorMessage = undefined
       const data = CsrFormHandler.onsubmit(event)
       const alias = data.get("alias") as string
-      await authManager.registerUserAccount(alias)
+      const acceptTermsAndConditions = data.get("acceptTermsAndConditions") as string
+      await authManager.registerUserAccount(alias, acceptTermsAndConditions === "on")
       await goto("/")
     } catch {
       errorMessage = "Could not register"
@@ -58,19 +59,41 @@
           />
         </div>
         <p class="label">Your publicly visible name</p>
+        <div class="form-control mt-4">
+          <label class="label" for="acceptTermsAndConditions">
+            <input
+              id="acceptTermsAndConditions"
+              name="acceptTermsAndConditions"
+              type="checkbox"
+              class="checkbox"
+              required
+            />
+            <span class="label-text">
+              I am a human and I accept the
+              <a
+                class="link"
+                href="/terms-and-conditions"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                terms and conditions
+              </a>.
+            </span>
+          </label>
+        </div>
         {#if errorMessage}
           <div role="alert" class="alert-soft alert alert-error">
             <span>{errorMessage}</span>
           </div>
         {/if}
-        <button type="submit" class="btn mt-4 btn-primary" disabled={submitting}>
-          {#if submitting}
-            <span class="loading loading-spinner"></span>
-          {:else}
-            Save
-          {/if}
-        </button>
       </fieldset>
+      <button type="submit" class="btn mt-4 btn-primary" disabled={submitting}>
+        {#if submitting}
+          <span class="loading loading-spinner"></span>
+        {:else}
+          Save
+        {/if}
+      </button>
     </form>
   {/if}
 </div>

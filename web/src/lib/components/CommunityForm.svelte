@@ -13,8 +13,10 @@
       errorMessage = undefined
       const data = CsrFormHandler.onsubmit(event)
       const name = data.get("name") as string
+      const conformToTermsAndConditions = data.get("conformToTermsAndConditions") === "on"
       const community = await authManager.httpClient.post<CommunityPreview>("/api/communities", {
         name,
+        conformToTermsAndConditions,
       })
       await goto(`/communities/${community.id}`)
     } catch (err) {
@@ -38,6 +40,21 @@
       minlength="3"
       maxlength="64"
     />
+    <div class="form-control">
+      <label class="label" for="conformToTermsAndConditions">
+        <input
+          id="conformToTermsAndConditions"
+          name="conformToTermsAndConditions"
+          type="checkbox"
+          class="checkbox"
+          required
+        />
+        <span class="label-text">
+          This community details conform to Spexity
+          <a href="/terms-and-conditions" class="link" target="_blank">terms and conditions</a>.
+        </span>
+      </label>
+    </div>
   </fieldset>
   {#if errorMessage}
     <div role="alert" class="alert-soft alert alert-error">

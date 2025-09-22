@@ -3,6 +3,7 @@ package net.spexity.post
 import io.quarkus.security.Authenticated
 import io.quarkus.security.identity.SecurityIdentity
 import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.Size
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
@@ -29,7 +30,8 @@ class PostResource(private val postService: PostService) {
     data class PostCreateRequest(
         val communityId: UUID,
         @field:Size(min = 10, max = 512) val subject: String,
-        val body: Doc
+        val body: Doc,
+        @field:AssertTrue(message = "Conform to terms and conditions must be accepted") val conformToTermsAndConditions: Boolean
     )
 
 }

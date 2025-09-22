@@ -22,6 +22,7 @@
       errorMessage = undefined
       const data = CsrFormHandler.onsubmit(event)
       const subject = data.get("subject") as string
+      const conformToTermsAndConditions = data.get("conformToTermsAndConditions") as string
       const body = editorRef?.getValue()
       if (!EditorUtils.hasMeaningfulText(body)) {
         errorMessage = "Please write something"
@@ -31,6 +32,7 @@
         communityId,
         subject,
         body,
+        conformToTermsAndConditions: conformToTermsAndConditions === "on",
       })
       await goto(`/posts/${post.id}`)
     } catch (err) {
@@ -57,6 +59,22 @@
 
     <label class="label" for="body">Body</label>
     <Editor bind:this={editorRef} />
+    <div class="form-control">
+      <label class="label" for="conformToTermsAndConditions">
+        <input
+          id="conformToTermsAndConditions"
+          name="conformToTermsAndConditions"
+          type="checkbox"
+          class="checkbox"
+          required
+        />
+        <span class="label-text">
+          This post conforms to Spexity
+          <a href="/terms-and-conditions" class="link" target="_blank">terms and conditions</a>
+          and this community guidelines.
+        </span>
+      </label>
+    </div>
   </fieldset>
   {#if errorMessage}
     <div role="alert" class="alert-soft alert alert-error">
