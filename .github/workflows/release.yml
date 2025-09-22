@@ -28,6 +28,14 @@ jobs:
           java-version: '21'
           cache: 'maven'
           cache-dependency-path: backend/pom.xml
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            e2e-tests/package-lock.json
       - name: Build backend
         working-directory: backend
         run: mvn -B clean package
