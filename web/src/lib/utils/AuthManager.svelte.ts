@@ -123,11 +123,9 @@ export class AuthManager {
           this.setUserAccountLoggedIn(userAccount)
         } else {
           this.currentUserStorage.clear()
-          await this.getRemoteCurrentUserAccount(oidcUser, false)
         }
-      } else {
-        await this.getRemoteCurrentUserAccount(oidcUser, false)
       }
+      await this.getRemoteCurrentUserAccount(oidcUser, false)
     } else {
       this.clearCurrentUserAccount()
     }

@@ -4,6 +4,7 @@ CREATE TABLE user_account
 (
     id                  UUID               DEFAULT uuid_generate_v4() PRIMARY KEY,
     created_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_verified_human   BOOLEAN   NOT NULL,
     auth_correlation_id TEXT      NOT NULL UNIQUE,
     email_address       TEXT      NOT NULL
 );
@@ -83,8 +84,7 @@ CREATE TABLE community
 (
     id         UUID               DEFAULT uuid_generate_v4() PRIMARY KEY,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    name       TEXT      NOT NULL UNIQUE,
-    slug       TEXT      NOT NULL UNIQUE
+    name       TEXT      NOT NULL UNIQUE
 );
 
 CREATE TABLE post

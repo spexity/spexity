@@ -59,7 +59,7 @@
                             <source>
                                 import org.testcontainers.containers.PostgreSQLContainer
 
-                                db = new PostgreSQLContainer("postgres:17-alpine")
+                                db = new PostgreSQLContainer("postgres:17")
                                         .withUsername("test")
                                         .withDatabaseName("test")
                                         .withPassword("test")

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -euo pipefail
 
 # Backend setup
 pushd backend || exit 1

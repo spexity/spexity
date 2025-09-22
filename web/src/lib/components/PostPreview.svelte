@@ -25,10 +25,10 @@
       - {formattedDateTime}
     </div>
   </div>
-  <div>
+  <a href="/posts/{post.id}">
     <h2 class="font-medium">{post.subject}</h2>
     <p class="text-sm">{post.body}</p>
-  </div>
+  </a>
   <div class="flex flex-row justify-end">
     <a class="btn btn-sm" href="/posts/{post.id}">View</a>
   </div>

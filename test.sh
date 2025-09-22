@@ -28,7 +28,7 @@ fi
 
 if command -v node >/dev/null 2>&1; then
   echo "Running web tests"
-  if [ -n "$CI" ]; then
+  if [ -n "${CI-}" ]; then
     npm ci
   else
     npm install
@@ -45,7 +45,7 @@ pushd e2e-tests || exit 1
 
 printf '\n%.0s' {1..10}
 echo "Running e2e-tests"
-if [ -n "$CI" ]; then
+if [ -n "${CI-}" ]; then
   npm ci
 else
   npm install
@@ -53,8 +53,6 @@ fi
 npx playwright install --with-deps
 npx playwright test
 
-
-popd || exit 1
 
 printf '\n%.0s' {1..10}
 echo "Finished all testing"
