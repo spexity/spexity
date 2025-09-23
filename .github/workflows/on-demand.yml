@@ -22,5 +22,4 @@ jobs:
           mkdir -p ~/.kube
           printf "%s" "$KUBE_CONFIG" > ~/.kube/config
           kubectl config current-context
-          kubectl config view
-          cat ~/.kube/config | grep -E "server|name|cluster|user|context"
+          kubectl config view | grep -E "server|name|cluster|user|context"
