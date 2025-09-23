@@ -1,0 +1,25 @@
+name: On Demand
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment:
+      name: test
+      url: https://test.spexity.net
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Configure kubeconfig
+        env:
+          KUBE_CONFIG: ${{ secrets.TEST_KUBE_CONFIG }}
+        run: |
+          mkdir -p ~/.kube
+          printf "%s" "$KUBE_CONFIG" > ~/.kube/config
+          kubectl config current-context
+          kubectl config view
