@@ -2,7 +2,7 @@
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
   import { authManager } from "$lib/auth"
   import { goto } from "$app/navigation"
-  import { type CommunityPreview } from "$lib/model/types"
+  import { type CommunityRef } from "$lib/model/types"
 
   let submitting = $state<boolean>(false)
   let errorMessage = $state<string>()
@@ -14,7 +14,7 @@
       const data = CsrFormHandler.onsubmit(event)
       const name = data.get("name") as string
       const conformToTermsAndConditions = data.get("conformToTermsAndConditions") === "on"
-      const community = await authManager.httpClient.post<CommunityPreview>("/api/communities", {
+      const community = await authManager.httpClient.post<CommunityRef>("/api/communities", {
         name,
         conformToTermsAndConditions,
       })

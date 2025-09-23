@@ -1,4 +1,11 @@
 # Spexity
+> The antidote for the doom-scrolling era.
+
+
+Version 1 production release is still unavailable. 
+
+## Latest env
+Go to [https://test.spexity.net](https://test.spexity.net)
 
 ## Goals
 

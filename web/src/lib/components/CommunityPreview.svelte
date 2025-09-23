@@ -14,7 +14,10 @@
       {community.name}
     </span>
   </div>
-  <div class="flex flex-row justify-end">
+  <div class="flex flex-row justify-between">
+    <div class="flex flex-row items-center gap-2 text-xs">
+      <span>0 Posts</span>
+    </div>
     <a class="btn btn-sm" href="/communities/{community.id}">View</a>
   </div>
 </div>

@@ -1,11 +1,10 @@
 import { error } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { SsrLoadFromApi } from "$lib/utils/SsrLoadFromApi"
-import type { CommunityPreview, CommunityPreviewPost } from "$lib/model/types"
+import type { CommunityPreview } from "$lib/model/types"
 
 interface PageData {
   community: CommunityPreview
-  posts: CommunityPreviewPost[]
 }
 
 export const load: PageServerLoad = async (event) => {
@@ -14,6 +13,7 @@ export const load: PageServerLoad = async (event) => {
   if (!communityId) {
     error(404)
   }
+  //TODO: this shouldn't load the community data. we just need the name?
   const data = await SsrLoadFromApi.loadAuthLenient<PageData>(
     event,
     `/api/web/communities/${communityId}`,

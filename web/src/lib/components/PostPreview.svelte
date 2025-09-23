@@ -15,7 +15,7 @@
   const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(post.createdAt, timezone)
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col gap-1">
   <div class="flex flex-row justify-between">
     <span class="text-xs font-medium">
       {#if community}<CommunityName {community} />{/if}
@@ -29,7 +29,10 @@
     <h2 class="font-medium">{post.subject}</h2>
     <p class="text-sm">{post.body}</p>
   </a>
-  <div class="flex flex-row justify-end">
+  <div class="flex flex-row justify-between">
+    <div class="flex flex-row items-center gap-2 text-xs">
+      <span>0 Comments</span>
+    </div>
     <a class="btn btn-sm" href="/posts/{post.id}">View</a>
   </div>
 </div>
