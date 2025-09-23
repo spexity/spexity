@@ -30,7 +30,7 @@
     <p class="text-sm">{post.body}</p>
   </a>
   <div class="flex flex-row justify-between">
-    <div class="text-xs flex flex-row items-center gap-2">
+    <div class="flex flex-row items-center gap-2 text-xs">
       <span>0 Comments</span>
     </div>
     <a class="btn btn-sm" href="/posts/{post.id}">View</a>
