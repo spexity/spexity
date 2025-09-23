@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 jobs:
-  deployment:
+  build:
     runs-on: ubuntu-latest
     environment:
       name: test
@@ -23,3 +23,4 @@ jobs:
           printf "%s" "$KUBE_CONFIG" > ~/.kube/config
           kubectl config current-context
           kubectl config view
+          cat ~/.kube/config
