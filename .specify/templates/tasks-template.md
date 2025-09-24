@@ -63,6 +63,8 @@
 - [ ] T013 Input validation
 - [ ] T014 Error handling and logging
 - [ ] T014.1 Commit (Conventional Commits) summarizing intent, not diffs
+- [ ] T014.2 [P] Externalize all user-visible strings to i18n keys (web/) and reference via i18n utilities
+- [ ] T014.3 [P] Add translations for configured locales under web/messages/*.json for new strings
 
 ## Phase 3.4: Integration
 - [ ] T015 Connect UserService to DB
@@ -76,6 +78,7 @@
 - [ ] T021 [P] Update docs/api.md
 - [ ] T022 Remove duplication
 - [ ] T023 Run manual-testing.md
+- [ ] T024 [P] RTL verification for Arabic: layout, alignment, icon mirroring for affected components
 
 ## Dependencies
 - Tests (T004-T007) before implementation (T008-T014)
@@ -127,4 +130,5 @@ Task: "Integration test auth in tests/integration/test_auth.py"
 - [ ] Each task specifies exact file path
 - [ ] No task modifies same file as another [P] task
 - [ ] Constitution gates considered for tasks that might affect privacy/UX/accessibility/performance
+- [ ] Internationalization: No hard-coded strings; translations added for configured locales; RTL verified where needed
 - [ ] After implementation tasks, a Conventional Commit with an intent-based message is required
