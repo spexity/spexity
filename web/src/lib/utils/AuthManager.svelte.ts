@@ -12,6 +12,7 @@ export enum AuthUserAccountState {
   NOT_LOGGED_IN,
   NOT_REGISTERED,
   LOGGED_IN,
+  LOGGED_IN_VERIFIED,
 }
 
 interface SignInState {
@@ -114,7 +115,14 @@ export class AuthManager {
     if (!this.authManager || !this.currentUserStorage) {
       return
     }
-    const oidcUser = await this.authManager.getUser()
+    // FIXME: there is a bug here. when the user has been out for a while and access token is expired.
+    // When they come back to the app, the first get remote user fails, because of 401, which clears the current user and logs out.
+    // We need to do some waiting a bit before.
+    let oidcUser = await this.authManager.getUser()
+    if (oidcUser && oidcUser.expired) {
+      console.log("Loaded user expired, trying to reload")
+      oidcUser = await this.authManager.signinSilent()
+    }
     this.oidcUser = oidcUser
     if (oidcUser) {
       const userAccount = this.currentUserStorage.get()
@@ -215,7 +223,11 @@ export class AuthManager {
 
   private setUserAccountLoggedIn(userAccount: CurrentUserAccount) {
     this.userAccount = userAccount
-    this.userAccountState = AuthUserAccountState.LOGGED_IN
+    if (userAccount.verifiedHuman) {
+      this.userAccountState = AuthUserAccountState.LOGGED_IN_VERIFIED
+    } else {
+      this.userAccountState = AuthUserAccountState.LOGGED_IN
+    }
   }
 
   private setUserAccountNotRegistered() {

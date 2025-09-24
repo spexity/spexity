@@ -66,9 +66,11 @@
             : 'btn-ghost'}"
         >
           {#if authManager.userAccountState === AuthUserAccountState.INIT}
-            <span class="loading loading-spinner"></span>
+            💭
           {:else if authManager.userAccountState === AuthUserAccountState.LOGGED_IN}
-            ✍️
+            🍯
+          {:else if authManager.userAccountState === AuthUserAccountState.LOGGED_IN_VERIFIED}
+            ✨
           {:else}
             👀
           {/if}
