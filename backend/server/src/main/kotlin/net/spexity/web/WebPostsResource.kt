@@ -32,27 +32,40 @@ class WebPostsResource(private val dslContext: DSLContext, private val objectMap
             POST.contributor().HANDLE,
             POST.community().ID,
             POST.community().NAME
-        )
-            .from(POST)
-            .where(POST.ID.eq(id))
-            .fetchOne {
-                val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
-                val body: Doc = objectMapper.readValue(it.get(POST.BODY_JSON).data(), Doc::class.java)
-                PostView(
-                    it.get(POST.ID),
-                    instant,
-                    it.get(POST.SUBJECT),
-                    HtmlSanitizer.sanitize(BodyHtmlSerializer.render(body)),
-                    ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
-                    CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME))
-                )
-            }
+        ).from(POST).where(POST.ID.eq(id)).fetchOne {
+            val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
+            val body: Doc = objectMapper.readValue(it.get(POST.BODY_JSON).data(), Doc::class.java)
+            PostView(
+                it.get(POST.ID),
+                instant,
+                it.get(POST.SUBJECT),
+                HtmlSanitizer.sanitize(BodyHtmlSerializer.render(body)),
+                ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
+                CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME))
+            )
+        }
         if (selected == null) {
             throw NotFoundException("Post not found")
         }
         return PostPageData(selected)
     }
 
+    @GET
+    @Path("/new")
+    @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
+    fun getNewPostData(@QueryParam("communityId") id: UUID): NewPostPageData {
+        val selected = dslContext.select(
+            COMMUNITY.NAME,
+        ).from(COMMUNITY).where(COMMUNITY.ID.eq(id)).fetchOne(COMMUNITY.NAME)
+        if (selected == null) {
+            throw NotFoundException("Community not found")
+        }
+        return NewPostPageData(selected)
+    }
+
     data class PostPageData(val post: PostView)
+
+    data class NewPostPageData(val communityName: String)
 
 }
