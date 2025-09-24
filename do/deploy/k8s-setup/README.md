@@ -47,3 +47,9 @@ To retrieve the token:
 ```shell
 kubectl -n spexity-cicd get secret gh-deployer-token -o jsonpath='{.data.token}' | base64 -d
 ```
+
+### Deploy using Kubectl and Helm
+Fill in the config template file [kube_config_template.yaml](kube_config_template.yaml)
+Most importantly, the server url, server certificate and user token for the deployment user.
+
+You can use this as a secret in your GitHub Actions and deploy from there.
