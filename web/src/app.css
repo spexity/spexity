@@ -71,6 +71,10 @@
   --noise: 0;
 }
 
+.label {
+  text-wrap: auto;
+}
+
 .navbar {
   height: 4rem;
   @apply fixed top-0 mx-auto sm:container;
