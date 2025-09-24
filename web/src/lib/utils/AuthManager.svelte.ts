@@ -115,9 +115,6 @@ export class AuthManager {
     if (!this.authManager || !this.currentUserStorage) {
       return
     }
-    // FIXME: there is a bug here. when the user has been out for a while and access token is expired.
-    // When they come back to the app, the first get remote user fails, because of 401, which clears the current user and logs out.
-    // We need to do some waiting a bit before.
     let oidcUser = await this.authManager.getUser()
     if (oidcUser && oidcUser.expired) {
       console.log("Loaded user expired, trying to reload")
