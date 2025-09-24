@@ -62,6 +62,7 @@
 - [ ] T012 GET /api/users/{id} endpoint
 - [ ] T013 Input validation
 - [ ] T014 Error handling and logging
+- [ ] T014.1 Commit (Conventional Commits) summarizing intent, not diffs
 
 ## Phase 3.4: Integration
 - [ ] T015 Connect UserService to DB
@@ -125,4 +126,5 @@ Task: "Integration test auth in tests/integration/test_auth.py"
 - [ ] Parallel tasks truly independent
 - [ ] Each task specifies exact file path
 - [ ] No task modifies same file as another [P] task
- - [ ] Constitution gates considered for tasks that might affect privacy/UX/accessibility/performance
+- [ ] Constitution gates considered for tasks that might affect privacy/UX/accessibility/performance
+- [ ] After implementation tasks, a Conventional Commit with an intent-based message is required
