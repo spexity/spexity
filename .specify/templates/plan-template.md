@@ -55,6 +55,8 @@ Validate feature design against `/.specify/memory/constitution.md`:
    an approved waiver with rationale.
 - Simplicity/Dependencies: Avoid new/immature frameworks; justify any dependency.
 - Testing: E2E for primary flows, contract tests for public endpoints planned.
+ - Internationalization: All user-visible strings externalized; translations present for
+   locales in `web/project.inlang/settings.json`; RTL behavior validated where applicable.
 
 ## Project Structure
 
@@ -216,4 +218,4 @@ ios/ or android/
 - [ ] Complexity deviations documented
 
 ---
-*Based on Spexity Constitution v1.0.0 - See `/.specify/memory/constitution.md`*
+*Based on Spexity Constitution v1.3.0 - See `/.specify/memory/constitution.md`*

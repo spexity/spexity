@@ -92,7 +92,7 @@ When creating this spec from a user prompt:
 - [ ] Focused on user value and business needs
 - [ ] Written for non-technical stakeholders
 - [ ] All mandatory sections completed
- - [ ] Constitution considerations addressed (privacy, ethics, accessibility, performance)
+ - [ ] Constitution considerations addressed (privacy, ethics, accessibility, performance, i18n)
 
 ### Requirement Completeness
 - [ ] No [NEEDS CLARIFICATION] markers remain
