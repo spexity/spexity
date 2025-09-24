@@ -17,4 +17,20 @@ const handleLocals: Handle = ({ event, resolve }) => {
   return resolve(event)
 }
 
-export const handle: Handle = sequence(handleParaglide, handleLocals)
+const handleSecurityHeaders: Handle = ({ event, resolve }) => {
+  if (!event.isDataRequest) {
+    event.setHeaders({
+      "X-Frame-Options": "DENY",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+      "X-Content-Type-Options": "nosniff",
+      "Permissions-Policy": "geolocation=(), microphone=(), camera=(self)",
+      "Referrer-Policy": "no-referrer",
+      "Cross-Origin-Embedder-Policy": "require-corp",
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Resource-Policy": "same-origin",
+    })
+  }
+  return resolve(event)
+}
+
+export const handle: Handle = sequence(handleParaglide, handleLocals, handleSecurityHeaders)
