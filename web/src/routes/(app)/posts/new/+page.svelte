@@ -5,14 +5,13 @@
   import GatedFeature from "$lib/components/GatedFeature.svelte"
 
   const { data }: PageProps = $props()
-  const community = data.community
 </script>
 
 {#if authManager.userAccount?.verifiedHuman}
   <div class="text-2xl">
-    New Post to {community.name}
+    New Post to {data.communityName}
   </div>
-  <PostForm communityId={community.id} />
+  <PostForm communityId={data.communityId} />
 {:else}
   <GatedFeature />
 {/if}
