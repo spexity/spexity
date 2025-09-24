@@ -60,8 +60,10 @@
           tabindex="0"
           role="button"
           aria-label="Account menu button"
-          class="btn avatar btn-circle {authManager.userAccountState ===
-          AuthUserAccountState.LOGGED_IN
+          class="btn avatar btn-circle {[
+            AuthUserAccountState.LOGGED_IN,
+            AuthUserAccountState.LOGGED_IN_VERIFIED,
+          ].includes(authManager.userAccountState)
             ? 'btn-outline btn-primary'
             : 'btn-ghost'}"
         >
