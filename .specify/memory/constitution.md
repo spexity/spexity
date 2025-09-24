@@ -1,11 +1,12 @@
 # Spexity Constitution
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 1.1.0
+- Version change: 1.1.0 → 1.2.0
 - Modified principles: None
-- Added sections: AI Agent Conduct
+- Added sections: Commit Practices
 - Removed sections: None
-- Templates requiring updates: ✅ No changes required
+- Templates requiring updates:
+	✅ Updated: .specify/templates/tasks-template.md
 - Follow-up TODOs: None
 -->
 -->
@@ -86,6 +87,13 @@ Rationale: We codify quality to keep speed without regressions.
 - No filler or speculative content; ask a single clarifying question only if blocked.
 - Default to minimal formatting; expand only when explicitly requested.
 
+### Commit Practices
+
+- After finishing implementation, the agent MUST create a git commit using Conventional
+	Commits (e.g., feat:, fix:, docs:, refactor:, chore:, perf:).
+- Commit messages MUST describe the overall intent and outcome, not restate literal code
+	diffs (avoid "update code"; prefer "feat: add moderation queue for posts").
+
 ## Governance
 
 - Supremacy: This Constitution supersedes style guides and team preferences when in
@@ -101,4 +109,4 @@ Rationale: We codify quality to keep speed without regressions.
 	spec. CI MUST verify gates where automated. Manual verification MUST be recorded in the
 	PR description for the remaining gates.
 
-**Version**: 1.1.0 | **Ratified**: 2025-09-24 | **Last Amended**: 2025-09-24
+**Version**: 1.2.0 | **Ratified**: 2025-09-24 | **Last Amended**: 2025-09-24
