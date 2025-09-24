@@ -57,8 +57,8 @@
       maxlength="512"
     />
 
-    <label class="label" for="body">Body</label>
-    <Editor bind:this={editorRef} />
+    <label id="bodyLabel" class="label" for="body">Body</label>
+    <Editor bind:this={editorRef} id="body" labelledBy="bodyLabel" />
     <div class="form-control">
       <label class="label" for="conformToTermsAndConditions">
         <input
