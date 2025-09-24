@@ -1,22 +1,21 @@
 ## Backend
 
-### Build application
+### Build applications
 
-Build the quarkus application 
 ```shell
-#cd backend
-
-mvn clean package
+#From project root
+./build.sh
 ```
 
-### Build docker image
+### Build backend docker image
+
 ```shell
 #cd backend/server
 
 docker build -f src/main/docker/Dockerfile.jvm -t spexity-backend .
 ```
 
-### Run docker image
+### Run backend docker image
 
 ```shell
 docker run --rm -p 48080:8080 \
@@ -30,21 +29,14 @@ docker run --rm -p 48080:8080 \
   spexity-backend
 ```
 
+### Build web docker image
 
-## Web
-
-### Build application and docker image
 ```shell
 #cd web
-export GIT_SHA=$(git rev-parse HEAD)
-npm install
-npm run build
-npm prune --production
 docker build -t spexity-web .
 ```
 
-
-### Run docker image
+### Run web docker image
 
 ```shell
 docker run --rm -p 4173:3000 \
