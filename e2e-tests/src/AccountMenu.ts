@@ -9,26 +9,12 @@ export class AccountMenu {
   }
 
   async open() {
-    const btn = this.getMenuButton()
-    await btn.waitFor({ state: "visible" })
-    // Use keyboard interaction to avoid pointer interception by surrounding container
-    await btn.focus()
-    await btn.press("Enter")
+    await this.getMenuButton().click()
     await this.getMenuContent().waitFor({ state: "visible" })
   }
 
   async close() {
-    const content = this.getMenuContent()
-    // Try clicking outside to close
-    try {
-      await this.page.mouse.click(5, 5)
-    } catch {}
-    // Fallback: press Escape
-    try {
-      await this.page.keyboard.press("Escape")
-    } catch {}
-    // Best effort small delay; don't block on visibility as DaisyUI dropdown may not toggle aria-hidden
-    await this.page.waitForTimeout(100)
+    await this.getMenuButton().blur()
   }
 
   async isLoggedInMenu(): Promise<boolean> {
@@ -38,11 +24,6 @@ export class AccountMenu {
   async clickSignIn() {
     const signInLink = this.getSignInLink()
     await signInLink.waitFor({ state: "visible" })
-    // If a spinner exists, wait for it to finish, otherwise continue
-    const spinner = this.getMenuButton().locator(".loading.loading-spinner")
-    if (await spinner.count()) {
-      await spinner.first().waitFor({ state: "detached" })
-    }
     await signInLink.click()
   }
 
@@ -57,11 +38,11 @@ export class AccountMenu {
   }
 
   getSignInLink() {
-    return this.page.getByRole("link", { name: "Sign In" })
+    return this.page.getByTestId("sign-in-link")
   }
 
   getSignOutLink() {
-    return this.page.getByRole("link", { name: "Sign Out" })
+    return this.page.getByTestId("sign-out-link")
   }
 
   getMenuButton() {

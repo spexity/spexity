@@ -89,8 +89,8 @@
     <div class="flex h-full flex-1 flex-col justify-center">
       <a href="/">
         <img
-          width="40px"
-          height="40px"
+          width="40"
+          height="40"
           src="/logo.png"
           alt={m.brand_logo_alt()}
           data-testid="brand-logo"
@@ -144,9 +144,11 @@
             <li>
               <a href="/account">{m.nav_account_title()}</a>
             </li>
-            <li><a href="/#" onclick={signOut}>{m.auth_signOut()}</a></li>
+            <li>
+              <a href="/#" data-testid="sign-out-link" onclick={signOut}>{m.auth_signOut()}</a>
+            </li>
           {:else}
-            <li><a href="/#" onclick={signIn}>{m.auth_signIn()}</a></li>
+            <li><a href="/#" data-testid="sign-in-link" onclick={signIn}>{m.auth_signIn()}</a></li>
           {/if}
           <li>
             <a href="/#" data-testid="account-language-link" onclick={showChangeLanguageModal}>
@@ -167,7 +169,10 @@
       </div>
     </div>
   {/if}
-
+  <!--Auth testing helper-->
+  {#if authManager.userAccountState === AuthUserAccountState.INIT}
+    <div data-testid="auth-init-in-progress"></div>
+  {/if}
   <!-- ARIA live region for language change announcements -->
   <div id="language-live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 </div>
