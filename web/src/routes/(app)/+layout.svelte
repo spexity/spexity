@@ -6,11 +6,13 @@
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
   import { m } from "$lib/paraglide/messages.js"
-  import { setLocale, locales } from "$lib/paraglide/runtime"
+  import { setLocale, locales, type Locale } from "$lib/paraglide/runtime"
+  import { LOCALES_MAP } from "$lib/locales"
 
   type MenuItem = "home" | "communities"
 
   const { children, data } = $props()
+  let langModalRef = $state<HTMLDialogElement>()
 
   const determineActiveMenuItem = (): MenuItem => {
     if (page.url.pathname.startsWith("/communities") || page.url.pathname.startsWith("/posts")) {
@@ -37,11 +39,14 @@
     await authManager.signOut()
   }
 
-  const switchLanguage = (event: MouseEvent, locale: string) => {
+  const showChangeLanguageModal = () => {
+    langModalRef?.showModal()
+  }
+
+  const switchLanguage = (event: MouseEvent, locale: Locale) => {
     event.preventDefault()
     setLocale(locale)
-    // Announce language change to screen readers
-    const announcement = m.i18n_languageChanged({ language: m[`i18n_locales_${locale}`]() })
+    const announcement = m.i18n_languageChanged()
     announceToScreenReader(announcement)
   }
 
@@ -53,6 +58,27 @@
   }
 </script>
 
+<dialog bind:this={langModalRef} class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">✕</button>
+    </form>
+    <div class="flex flex-col gap-2 py-6">
+      {#each locales as locale (locale)}
+        <button
+          class="btn btn-ghost btn-sm {data.locale === locale ? 'btn-active' : ''}"
+          onclick={(e) => switchLanguage(e, locale)}
+          type="button"
+        >
+          {LOCALES_MAP[locale]?.label}
+        </button>
+      {/each}
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
 <div class="app-body">
   <div class="w-full px-4">
     {@render children?.()}
@@ -112,26 +138,7 @@
           {:else}
             <li><a href="/#" onclick={signIn}>{m.auth_signIn()}</a></li>
           {/if}
-          <li>
-            <details class="dropdown-nested dropdown">
-              <summary class="flex cursor-pointer items-center" role="menuitem" tabindex="0">
-                <span>{m.i18n_language()}</span>
-              </summary>
-            </details>
-          </li>
-          {#each locales as locale (locale)}
-            <li>
-              <button
-                class="btn justify-start btn-ghost btn-sm {data.locale === locale
-                  ? 'btn-active'
-                  : ''}"
-                onclick={(e) => switchLanguage(e, locale)}
-                type="button"
-              >
-                {m[`i18n_locales_${locale}`]()}
-              </button>
-            </li>
-          {/each}
+          <li><a href="/#" onclick={showChangeLanguageModal}>{m.i18n_language()} 🌐</a></li>
         </ul>
       </div>
     </div>
