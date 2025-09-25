@@ -3,6 +3,7 @@
   import type { PostView } from "$lib/model/types"
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import CommunityName from "$lib/components/CommunityName.svelte"
+  import { m } from "$lib/paraglide/messages.js"
 
   interface PostViewProps {
     post: PostView
@@ -31,17 +32,17 @@
     <div class="tiptap my-4">{@html post.body}</div>
   </div>
   <div class="divider"></div>
-  <div class="text-sm">0 Comments</div>
+  <div class="text-sm">{m.comments_count({ count: 0 })}</div>
   <form class="mt-4">
     <fieldset class="fieldset">
-      <legend class="fieldset-legend">Add comment</legend>
-      <textarea class="textarea h-24" placeholder="Start typing"></textarea>
+      <legend class="fieldset-legend">{m.comment_add_legend()}</legend>
+      <textarea class="textarea h-24" placeholder={m.comment_placeholder()}></textarea>
     </fieldset>
     <button type="submit" class="btn mt-4 btn-sm btn-primary" disabled={submitting}>
       {#if submitting}
         <span class="loading loading-spinner"></span>
       {:else}
-        Post Comment
+        {m.comment_submit()}
       {/if}
     </button>
   </form>

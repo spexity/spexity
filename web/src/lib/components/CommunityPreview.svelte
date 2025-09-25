@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { CommunityPreview } from "$lib/model/types"
+  import { m } from "$lib/paraglide/messages.js"
 
   interface CommunityPreviewProps {
     community: CommunityPreview
@@ -16,8 +17,8 @@
   </div>
   <div class="flex flex-row justify-between">
     <div class="flex flex-row items-center gap-2 text-xs">
-      <span>0 Posts</span>
+      <span>{m.community_posts_count({ count: 0 })}</span>
     </div>
-    <a class="btn btn-sm" href="/communities/{community.id}">View</a>
+    <a class="btn btn-sm" href="/communities/{community.id}">{m.button_view()}</a>
   </div>
 </div>

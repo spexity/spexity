@@ -39,7 +39,8 @@
     await authManager.signOut()
   }
 
-  const showChangeLanguageModal = () => {
+  const showChangeLanguageModal = (event: MouseEvent) => {
+    event.preventDefault()
     langModalRef?.showModal()
   }
 

@@ -4,6 +4,7 @@
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import CommunityName from "$lib/components/CommunityName.svelte"
   import type { CommunityPreviewPost } from "$lib/model/types.js"
+  import { m } from "$lib/paraglide/messages.js"
 
   interface PostPreviewProps {
     post: CommunityPreviewPost
@@ -31,8 +32,8 @@
   </a>
   <div class="flex flex-row justify-between">
     <div class="flex flex-row items-center gap-2 text-xs">
-      <span>0 Comments</span>
+      <span>{m.post_comments_count({ count: 0 })}</span>
     </div>
-    <a class="btn btn-sm" href="/posts/{post.id}">View</a>
+    <a class="btn btn-sm" href="/posts/{post.id}">{m.button_view()}</a>
   </div>
 </div>

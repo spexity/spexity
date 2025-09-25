@@ -3,6 +3,7 @@
   import { authManager } from "$lib/auth"
   import { goto } from "$app/navigation"
   import { type CommunityRef } from "$lib/model/types"
+  import { m } from "$lib/paraglide/messages.js"
 
   let submitting = $state<boolean>(false)
   let errorMessage = $state<string>()
@@ -21,7 +22,7 @@
       await goto(`/communities/${community.id}`)
     } catch (err) {
       console.error("error create", err)
-      errorMessage = "Could not create community"
+      errorMessage = m.community_form_error_failed()
     } finally {
       submitting = false
     }
@@ -30,7 +31,7 @@
 
 <form class="w-full" onsubmit={handleSubmit} autocomplete="off">
   <fieldset class="fieldset">
-    <label class="label" for="name">Name</label>
+    <label class="label" for="name">{m.community_form_name_label()}</label>
     <input
       id="name"
       name="name"
@@ -50,8 +51,8 @@
           required
         />
         <span class="label-text">
-          This community details conform to Spexity
-          <a href="/terms-and-conditions" class="link" target="_blank">terms and conditions</a>.
+          {m.community_form_terms_prefix()}
+          <a href="/terms-and-conditions" class="link" target="_blank">{m.legal_terms_link()}</a>.
         </span>
       </label>
     </div>
@@ -65,7 +66,7 @@
     {#if submitting}
       <span class="loading loading-spinner"></span>
     {:else}
-      Start Community
+      {m.community_form_submit()}
     {/if}
   </button>
 </form>
