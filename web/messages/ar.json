@@ -1,109 +1,47 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "hello_world": "مرحباً، {name} من العربية!",
-  "nav": {
-    "home": "الرئيسية",
-    "communities": "المجتمعات",
-    "account": {
-      "button": {
-        "aria": "زر قائمة الحساب"
-      },
-      "menu": {
-        "aria": "محتوى قائمة الحساب"
-      },
-      "profile": {
-        "aria": "ملف الحساب الشخصي"
-      },
-      "title": "الحساب"
-    }
-  },
-  "auth": {
-    "signIn": "تسجيل الدخول",
-    "signOut": "تسجيل الخروج"
-  },
-  "app": {
-    "update": {
-      "available": "إصدار جديد متوفر",
-      "reload": "إعادة التحميل"
-    }
-  },
-  "brand": {
-    "logo": {
-      "alt": "شعار Spexity"
-    }
-  },
-  "loading": {
-    "redirecting": "جاري إعادة التوجيه..."
-  },
-  "form": {
-    "profile": {
-      "legend": "الملف الشخصي"
-    },
-    "alias": {
-      "label": "اختر اسماً مستعاراً",
-      "placeholder": "الاسم المستعار",
-      "description": "اسمك المرئي للعامة"
-    },
-    "terms": {
-      "prefix": "أنا إنسان وأوافق على"
-    },
-    "save": "حفظ",
-    "subject": {
-      "label": "الموضوع"
-    },
-    "body": {
-      "label": "المحتوى"
-    },
-    "compliance": {
-      "prefix": "تتوافق هذه المشاركة مع شروط Spexity",
-      "suffix": "وإرشادات هذا المجتمع."
-    }
-  },
-  "error": {
-    "register": {
-      "failed": "لا يمكن التسجيل"
-    },
-    "post": {
-      "empty": "يرجى كتابة شيء",
-      "failed": "لا يمكن نشر المشاركة"
-    }
-  },
-  "post": {
-    "create": {
-      "submit": "إنشاء مشاركة",
-      "action": "بدء مشاركة"
-    }
-  },
-  "i18n": {
-    "language": "اللغة",
-    "languageChanged": "تم تغيير اللغة إلى {language}",
-    "locales": {
-      "en": "English",
-      "ar": "العربية",
-      "zh-cn": "简体中文"
-    }
-  },
-  "legal": {
-    "terms": {
-      "link": "الشروط والأحكام",
-      "title": "الشروط والأحكام",
-      "updated": "آخر تحديث: 22 سبتمبر 2025",
-      "intro": "يرجى مراجعة هذه الشروط بعناية. استخدام Spexity يعني موافقتك على المسؤوليات والإرشادات المذكورة هنا.",
-      "section": {
-        "responsibilities": "المسؤوليات الأساسية",
-        "eligibility": {
-          "title": "الأهلية",
-          "content": "Spexity متاح فقط للمستخدمين البشريين. الوكلاء الآليون والروبوتات والسكريبت وأي جهات فاعلة غير بشرية لا يمكنها إنشاء حسابات أو إضافة محتوى إلى Spexity."
-        },
-        "content": {
-          "title": "محتوى المستخدم",
-          "content": "يجب عدم نشر محتوى غير قانوني أو الترويج لأنشطة غير مشروعة أو تسهيل إجراءات تنتهك القوانين واللوائح المعمول بها عند استخدام Spexity. يجب أن يكون كل المحتوى الذي تقدمه من عملك الخاص أو أن تكون لديك إذن صريح من المالك الشرعي لنشره على Spexity."
-        },
-        "changes": {
-          "title": "تغييرات الشروط",
-          "content": "لخدمة المجتمع بشكل أفضل، قد نحدث هذه الشروط من حين لآخر. الاستمرار في استخدام Spexity يدل على قبولك للنسخة الأحدث من هذه الشروط، وتاريخ المراجعة الأحدث مذكور أعلاه."
-        }
-      }
-    }
-  }
+  "nav_home": "الرئيسية",
+  "nav_communities": "المجتمعات",
+  "nav_account_button_aria": "زر قائمة الحساب",
+  "nav_account_menu_aria": "محتوى قائمة الحساب",
+  "nav_account_profile_aria": "ملف الحساب الشخصي",
+  "nav_account_title": "الحساب",
+  "auth_signIn": "تسجيل الدخول",
+  "auth_signOut": "تسجيل الخروج",
+  "app_update_available": "إصدار جديد متوفر",
+  "app_update_reload": "إعادة التحميل",
+  "brand_logo_alt": "شعار Spexity",
+  "loading_redirecting": "جاري إعادة التوجيه...",
+  "form_profile_legend": "الملف الشخصي",
+  "form_alias_label": "اختر اسماً مستعاراً",
+  "form_alias_placeholder": "الاسم المستعار",
+  "form_alias_description": "اسمك المرئي للعامة",
+  "form_terms_prefix": "أنا إنسان وأوافق على",
+  "form_save": "حفظ",
+  "form_subject_label": "الموضوع",
+  "form_body_label": "المحتوى",
+  "form_compliance_prefix": "تتوافق هذه المشاركة مع شروط Spexity",
+  "form_compliance_suffix": "وإرشادات هذا المجتمع.",
+  "error_register_failed": "لا يمكن التسجيل",
+  "error_post_empty": "يرجى كتابة شيء",
+  "error_post_failed": "لا يمكن نشر المشاركة",
+  "post_create_submit": "إنشاء مشاركة",
+  "post_create_action": "بدء مشاركة",
+  "i18n_language": "اللغة",
+  "i18n_languageChanged": "تم تغيير اللغة إلى {language}",
+  "i18n_locales_en": "English",
+  "i18n_locales_ar": "العربية",
+  "i18n_locales_zh-cn": "简体中文",
+  "legal_terms_link": "الشروط والأحكام",
+  "legal_terms_title": "الشروط والأحكام",
+  "legal_terms_updated": "آخر تحديث: 22 سبتمبر 2025",
+  "legal_terms_intro": "يرجى مراجعة هذه الشروط بعناية. استخدام Spexity يعني موافقتك على المسؤوليات والإرشادات المذكورة هنا.",
+  "legal_terms_section_responsibilities": "المسؤوليات الأساسية",
+  "legal_terms_section_eligibility_title": "الأهلية",
+  "legal_terms_section_eligibility_content": "Spexity متاح فقط للمستخدمين البشريين. الوكلاء الآليون والروبوتات والسكريبت وأي جهات فاعلة غير بشرية لا يمكنها إنشاء حسابات أو إضافة محتوى إلى Spexity.",
+  "legal_terms_section_content_title": "محتوى المستخدم",
+  "legal_terms_section_content_content": "يجب عدم نشر محتوى غير قانوني أو الترويج لأنشطة غير مشروعة أو تسهيل إجراءات تنتهك القوانين واللوائح المعمول بها عند استخدام Spexity. يجب أن يكون كل المحتوى الذي تقدمه من عملك الخاص أو أن تكون لديك إذن صريح من المالك الشرعي لنشره على Spexity.",
+  "legal_terms_section_changes_title": "تغييرات الشروط",
+  "legal_terms_section_changes_content": "لخدمة المجتمع بشكل أفضل، قد نحدث هذه الشروط من حين لآخر. الاستمرار في استخدام Spexity يدل على قبولك للنسخة الأحدث من هذه الشروط، وتاريخ المراجعة الأحدث مذكور أعلاه."
 }

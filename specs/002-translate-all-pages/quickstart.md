@@ -38,8 +38,47 @@ Run Playwright suite (post tasks creation) including:
 - ARIA announcement localization
 - No missing keys test (script exit non-zero if mismatch)
 
-## 7. Adding a Locale (Future)
-(Not in current scope) – add new locale file, extend supported locales list, supply full key set before enabling.
+## 7. Adding a New Locale
+
+### Prerequisites
+- Ensure all existing keys in `web/messages/en.json` are documented and stable
+- Identify locale code (ISO 639-1 + optional region, e.g., `fr`, `pt-br`)
+- Determine if RTL support needed (requires additional CSS considerations)
+
+### Step-by-step Process
+1. **Create locale catalog**: Copy `web/messages/en.json` to `web/messages/{locale-code}.json`
+2. **Translate all keys**: Replace English values with native language translations
+   - Maintain placeholder syntax `{variableName}` exactly as in English
+   - Preserve HTML tags and structure where present
+   - Consider cultural context for UI metaphors
+3. **Update RTL detection** (if needed): Modify RTL logic in layout to include new RTL locale
+4. **Add to supported locales**: Update Paraglide configuration if locale list is explicitly defined
+5. **Test comprehensively**:
+   ```bash
+   # Verify key parity
+   npm run check-i18n-keys
+
+   # Test switching and persistence
+   npm run test:e2e -- tests/language-switch
+
+   # RTL layout verification (if applicable)
+   npm run test:e2e -- tests/rtl-layout
+   ```
+
+### RTL Considerations
+For RTL languages (Arabic, Hebrew, Persian, etc.):
+- Ensure `dir="rtl"` is set when locale is active
+- Use CSS logical properties throughout (`margin-inline-start` vs `margin-left`)
+- Test navigation flow and component alignment
+- Verify icon orientation (some may need mirroring, others should remain as-is)
+
+### Quality Checklist
+- [ ] Zero missing keys (`check-i18n-keys.mjs` passes)
+- [ ] All interactive elements have accessible names in new locale
+- [ ] Live regions announce in correct language
+- [ ] Font rendering acceptable across target browsers/OS
+- [ ] Cultural appropriateness review by native speaker
+- [ ] No text overflow in UI components (some languages require more space)
 
 ## 8. Anti-Patterns
 - Direct hard-coded strings inside markup.

@@ -6,11 +6,11 @@
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
   import { m } from "$lib/paraglide/messages.js"
-  import { setLocale, getLocale, locales } from "$lib/paraglide/runtime"
+  import { setLocale, locales } from "$lib/paraglide/runtime"
 
   type MenuItem = "home" | "communities"
 
-  const { children } = $props()
+  const { children, data } = $props()
 
   const determineActiveMenuItem = (): MenuItem => {
     if (page.url.pathname.startsWith("/communities") || page.url.pathname.startsWith("/posts")) {
@@ -39,20 +39,18 @@
 
   const switchLanguage = (event: MouseEvent, locale: string) => {
     event.preventDefault()
-    setLocale(locale, { reload: false })
+    setLocale(locale)
     // Announce language change to screen readers
-    const announcement = m.i18n_languagechanged1({ language: m[`i18n_locales_${locale.replace('-', '_')}`]() })
+    const announcement = m.i18n_languageChanged({ language: m[`i18n_locales_${locale}`]() })
     announceToScreenReader(announcement)
   }
 
   const announceToScreenReader = (message: string) => {
-    const liveRegion = document.getElementById('language-live-region')
+    const liveRegion = document.getElementById("language-live-region")
     if (liveRegion) {
       liveRegion.textContent = message
     }
   }
-
-  $: currentLocale = getLocale()
 </script>
 
 <div class="app-body">
@@ -110,30 +108,30 @@
             <li>
               <a href="/account">{m.nav_account_title()}</a>
             </li>
-            <li>
-              <details class="dropdown dropdown-nested">
-                <summary class="flex cursor-pointer items-center" role="menuitem" tabindex="0">
-                  <span>{m.i18n_language()}</span>
-                </summary>
-                <ul class="dropdown-content menu w-40 rounded-box bg-base-100 shadow-lg">
-                  {#each locales as locale}
-                    <li>
-                      <button
-                        class="btn btn-ghost btn-sm justify-start {currentLocale === locale ? 'btn-active' : ''}"
-                        onclick={(e) => switchLanguage(e, locale)}
-                        type="button"
-                      >
-                        {m[`i18n_locales_${locale.replace('-', '_')}`]()}
-                      </button>
-                    </li>
-                  {/each}
-                </ul>
-              </details>
-            </li>
-            <li><a href="/#" onclick={signOut}>{m.auth_signout1()}</a></li>
+            <li><a href="/#" onclick={signOut}>{m.auth_signOut()}</a></li>
           {:else}
-            <li><a href="/#" onclick={signIn}>{m.auth_signin1()}</a></li>
+            <li><a href="/#" onclick={signIn}>{m.auth_signIn()}</a></li>
           {/if}
+          <li>
+            <details class="dropdown-nested dropdown">
+              <summary class="flex cursor-pointer items-center" role="menuitem" tabindex="0">
+                <span>{m.i18n_language()}</span>
+              </summary>
+            </details>
+          </li>
+          {#each locales as locale (locale)}
+            <li>
+              <button
+                class="btn justify-start btn-ghost btn-sm {data.locale === locale
+                  ? 'btn-active'
+                  : ''}"
+                onclick={(e) => switchLanguage(e, locale)}
+                type="button"
+              >
+                {m[`i18n_locales_${locale}`]()}
+              </button>
+            </li>
+          {/each}
         </ul>
       </div>
     </div>
@@ -142,7 +140,9 @@
     <div class="toast">
       <div class="alert alert-info">
         <span>{m.app_update_available()}</span>
-        <button class="btn btn-outline" onclick={() => location.reload()}>{m.app_update_reload()}</button>
+        <button class="btn btn-outline" onclick={() => location.reload()}
+          >{m.app_update_reload()}</button
+        >
       </div>
     </div>
   {/if}

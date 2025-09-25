@@ -22,21 +22,27 @@
 
         <div class="space-y-10 text-base leading-relaxed">
           <article class="space-y-3">
-            <h2 class="text-2xl font-semibold text-base-content">{m.legal_terms_section_eligibility_title()}</h2>
+            <h2 class="text-2xl font-semibold text-base-content">
+              {m.legal_terms_section_eligibility_title()}
+            </h2>
             <p>
               {m.legal_terms_section_eligibility_content()}
             </p>
           </article>
 
           <article class="space-y-3">
-            <h2 class="text-2xl font-semibold text-base-content">{m.legal_terms_section_content_title()}</h2>
+            <h2 class="text-2xl font-semibold text-base-content">
+              {m.legal_terms_section_content_title()}
+            </h2>
             <p>
               {m.legal_terms_section_content_content()}
             </p>
           </article>
 
           <article class="space-y-3">
-            <h2 class="text-2xl font-semibold text-base-content">{m.legal_terms_section_changes_title()}</h2>
+            <h2 class="text-2xl font-semibold text-base-content">
+              {m.legal_terms_section_changes_title()}
+            </h2>
             <p>
               {m.legal_terms_section_changes_content()}
             </p>

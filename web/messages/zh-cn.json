@@ -1,109 +1,47 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "hello_world": "你好，{name} 来自简体中文！",
-  "nav": {
-    "home": "首页",
-    "communities": "社区",
-    "account": {
-      "button": {
-        "aria": "帐户菜单按钮"
-      },
-      "menu": {
-        "aria": "帐户菜单内容"
-      },
-      "profile": {
-        "aria": "帐户个人资料"
-      },
-      "title": "帐户"
-    }
-  },
-  "auth": {
-    "signIn": "登录",
-    "signOut": "退出"
-  },
-  "app": {
-    "update": {
-      "available": "有新版本可用",
-      "reload": "重新加载"
-    }
-  },
-  "brand": {
-    "logo": {
-      "alt": "Spexity 标志"
-    }
-  },
-  "loading": {
-    "redirecting": "正在重定向..."
-  },
-  "form": {
-    "profile": {
-      "legend": "个人资料"
-    },
-    "alias": {
-      "label": "选择昵称",
-      "placeholder": "昵称",
-      "description": "您的公开可见名称"
-    },
-    "terms": {
-      "prefix": "我是人类，我接受"
-    },
-    "save": "保存",
-    "subject": {
-      "label": "主题"
-    },
-    "body": {
-      "label": "内容"
-    },
-    "compliance": {
-      "prefix": "此帖子符合 Spexity 的",
-      "suffix": "和此社区的准则。"
-    }
-  },
-  "error": {
-    "register": {
-      "failed": "无法注册"
-    },
-    "post": {
-      "empty": "请输入一些内容",
-      "failed": "无法发布"
-    }
-  },
-  "post": {
-    "create": {
-      "submit": "创建帖子",
-      "action": "开始帖子"
-    }
-  },
-  "i18n": {
-    "language": "语言",
-    "languageChanged": "语言已更改为{language}",
-    "locales": {
-      "en": "English",
-      "ar": "العربية",
-      "zh-cn": "简体中文"
-    }
-  },
-  "legal": {
-    "terms": {
-      "link": "条款和条件",
-      "title": "条款和条件",
-      "updated": "最后更新：2025年9月22日",
-      "intro": "请仔细审阅这些条款。使用 Spexity 意味着您同意这里列出的责任和准则。",
-      "section": {
-        "responsibilities": "关键责任",
-        "eligibility": {
-          "title": "资格",
-          "content": "Spexity 仅对人类用户开放。自动代理、机器人、脚本和任何非人类参与者不得创建帐户或向 Spexity 添加内容。"
-        },
-        "content": {
-          "title": "用户内容",
-          "content": "在使用 Spexity 时，您不得发布非法内容、促进非法活动或促进违反适用法律或法规的行为。您提交的所有内容必须是您自己的作品，或者您必须拥有合法所有者的明确授权才能在 Spexity 上发布。"
-        },
-        "changes": {
-          "title": "条款变更",
-          "content": "为了更好地服务社区，我们可能会偶尔更新这些条款。继续使用 Spexity 表示您接受这些条款的最新版本，最新修订日期列在上方。"
-        }
-      }
-    }
-  }
+  "nav_home": "首页",
+  "nav_communities": "社区",
+  "nav_account_button_aria": "帐户菜单按钮",
+  "nav_account_menu_aria": "帐户菜单内容",
+  "nav_account_profile_aria": "帐户个人资料",
+  "nav_account_title": "帐户",
+  "auth_signIn": "登录",
+  "auth_signOut": "退出",
+  "app_update_available": "有新版本可用",
+  "app_update_reload": "重新加载",
+  "brand_logo_alt": "Spexity 标志",
+  "loading_redirecting": "正在重定向...",
+  "form_profile_legend": "个人资料",
+  "form_alias_label": "选择昵称",
+  "form_alias_placeholder": "昵称",
+  "form_alias_description": "您的公开可见名称",
+  "form_terms_prefix": "我是人类，我接受",
+  "form_save": "保存",
+  "form_subject_label": "主题",
+  "form_body_label": "内容",
+  "form_compliance_prefix": "此帖子符合 Spexity 的",
+  "form_compliance_suffix": "和此社区的准则。",
+  "error_register_failed": "无法注册",
+  "error_post_empty": "请输入一些内容",
+  "error_post_failed": "无法发布",
+  "post_create_submit": "创建帖子",
+  "post_create_action": "开始帖子",
+  "i18n_language": "语言",
+  "i18n_languageChanged": "语言已更改为{language}",
+  "i18n_locales_en": "English",
+  "i18n_locales_ar": "العربية",
+  "i18n_locales_zh-cn": "简体中文",
+  "legal_terms_link": "条款和条件",
+  "legal_terms_title": "条款和条件",
+  "legal_terms_updated": "最后更新：2025年9月22日",
+  "legal_terms_intro": "请仔细审阅这些条款。使用 Spexity 意味着您同意这里列出的责任和准则。",
+  "legal_terms_section_responsibilities": "关键责任",
+  "legal_terms_section_eligibility_title": "资格",
+  "legal_terms_section_eligibility_content": "Spexity 仅对人类用户开放。自动代理、机器人、脚本和任何非人类参与者不得创建帐户或向 Spexity 添加内容。",
+  "legal_terms_section_content_title": "用户内容",
+  "legal_terms_section_content_content": "在使用 Spexity 时，您不得发布非法内容、促进非法活动或促进违反适用法律或法规的行为。您提交的所有内容必须是您自己的作品，或者您必须拥有合法所有者的明确授权才能在 Spexity 上发布。",
+  "legal_terms_section_changes_title": "条款变更",
+  "legal_terms_section_changes_content": "为了更好地服务社区，我们可能会偶尔更新这些条款。继续使用 Spexity 表示您接受这些条款的最新版本，最新修订日期列在上方。"
 }
