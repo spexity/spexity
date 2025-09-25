@@ -1,0 +1,11 @@
+{
+  "name": "spexity-load-tests",
+  "version": "1.0.0",
+  "description": "Load testing suite for Spexity using k6",
+  "scripts": {
+    "test:basic-read": "k6 run tests/basic-read-performance.js"
+  },
+  "keywords": ["k6", "load-testing", "spexity"],
+  "author": "",
+  "license": "ISC"
+}
