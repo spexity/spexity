@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 
 /**
- * I18n Key Parity Validator
+ * I18n Key Validator
  *
- * Verifies that all locale files (en.json, ar.json, zh-cn.json) contain
- * the same set of keys. Exits with non-zero code if there are mismatches.
+ * 1. Verifies that all locale files (en.json, ar.json, zh-cn.json) contain the same set of keys
+ * 2. Checks for unused translation keys by scanning source code
+ *
+ * Exits with non-zero code if there are mismatches or unused keys.
  *
  * Usage: node web/scripts/check-i18n-keys.mjs
  */
 
-import { readFileSync, existsSync } from "fs"
+import { readFileSync, existsSync, readdirSync, statSync } from "fs"
 import { join, dirname } from "path"
 import { fileURLToPath } from "url"
 
@@ -17,6 +19,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const MESSAGES_DIR = join(__dirname, "..", "messages")
+const SRC_DIR = join(__dirname, "..", "src")
 const LOCALES = ["en", "ar", "zh-cn"]
 
 function loadLocaleFile(locale) {
@@ -105,14 +108,110 @@ function validateKeyParity() {
   }
 
   if (!hasErrors) {
-    console.log(`\n🎉 All locale files have matching key sets (${referenceKeys.size} keys each)`)
+    console.log(`\n✅ All locale files have matching key sets (${referenceKeys.size} keys each)`)
     return true
   } else {
-    console.log(`\n💥 Key parity validation failed. Fix missing/extra keys before release.`)
+    console.log(`\n❌ Key parity validation failed. Fix missing/extra keys before release.`)
     return false
   }
 }
 
-// Run validation
-const success = validateKeyParity()
-process.exit(success ? 0 : 1)
+function getAllSourceFiles(dir) {
+  const files = []
+
+  function traverse(currentDir) {
+    const entries = readdirSync(currentDir)
+
+    for (const entry of entries) {
+      const fullPath = join(currentDir, entry)
+      const stat = statSync(fullPath)
+
+      if (stat.isDirectory()) {
+        // Skip node_modules and other build directories
+        if (!['node_modules', '.git', 'dist', 'build', '.svelte-kit'].includes(entry)) {
+          traverse(fullPath)
+        }
+      } else if (stat.isFile() && (entry.endsWith('.svelte') || entry.endsWith('.ts') || entry.endsWith('.js'))) {
+        files.push(fullPath)
+      }
+    }
+  }
+
+  traverse(dir)
+  return files
+}
+
+function findUsedKeys() {
+  console.log("\nScanning source files for translation key usage...\n")
+
+  const sourceFiles = getAllSourceFiles(SRC_DIR)
+  const usedKeys = new Set()
+
+  // Patterns to match translation function calls
+  const patterns = [
+    /m\.(\w+)\(/g                    // m.key_name(
+  ]
+
+  let totalFiles = 0
+  let filesWithKeys = 0
+
+  for (const filePath of sourceFiles) {
+    totalFiles++
+    const content = readFileSync(filePath, 'utf-8')
+    let fileHasKeys = false
+
+    for (const pattern of patterns) {
+      let match
+      while ((match = pattern.exec(content)) !== null) {
+        usedKeys.add(match[1])
+        fileHasKeys = true
+      }
+    }
+
+    if (fileHasKeys) {
+      filesWithKeys++
+    }
+  }
+
+  console.log(`Scanned ${totalFiles} source files (${filesWithKeys} contain translation keys)`)
+  console.log(`Found ${usedKeys.size} unique translation keys in use`)
+
+  return usedKeys
+}
+
+function validateUnusedKeys() {
+  const usedKeys = findUsedKeys()
+
+  // Load English keys as reference
+  const enData = loadLocaleFile('en')
+  if (!enData) return false
+
+  const allKeys = new Set(getKeys(enData))
+  const unusedKeys = [...allKeys].filter(key => !usedKeys.has(key))
+
+  console.log("\nChecking for unused translation keys...\n")
+
+  if (unusedKeys.length > 0) {
+    console.error(`❌ Found ${unusedKeys.length} unused translation keys:`)
+    unusedKeys.forEach(key => console.error(`   - ${key}`))
+    console.error("\nConsider removing unused keys to keep message catalogs clean.")
+    return false
+  } else {
+    console.log(`✅ All ${allKeys.size} translation keys are in use`)
+    return true
+  }
+}
+
+// Run validations
+const paritySuccess = validateKeyParity()
+const usageSuccess = validateUnusedKeys()
+
+const overallSuccess = paritySuccess && usageSuccess
+
+if (overallSuccess) {
+  console.log("\n✅ All i18n validation checks passed!")
+} else {
+  console.log("\n❌ I18n validation failed. Please fix the issues above.")
+}
+
+process.exit(overallSuccess ? 0 : 1)

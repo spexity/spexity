@@ -1,6 +1,5 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "hello_world": "你好，{name} 来自简体中文！",
   "nav_home": "首页",
   "nav_communities": "社区",
   "nav_account_button_aria": "帐户菜单按钮",
