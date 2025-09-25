@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+      - name: Validate tag input
+        run: ./do/deploy/scripts/check-tags-exist.sh "${{ inputs.tag }}"
       - name: Set up kubectl
         uses: azure/setup-kubectl@v4
         with:
