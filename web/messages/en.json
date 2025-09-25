@@ -1,4 +1,109 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "hello_world": "Hello, {name} from en!"
+  "hello_world": "Hello, {name} from en!",
+  "nav": {
+    "home": "Home",
+    "communities": "Communities",
+    "account": {
+      "button": {
+        "aria": "Account menu button"
+      },
+      "menu": {
+        "aria": "Account menu content"
+      },
+      "profile": {
+        "aria": "Account profile"
+      },
+      "title": "Account"
+    }
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
+  },
+  "app": {
+    "update": {
+      "available": "A new version is available",
+      "reload": "Reload"
+    }
+  },
+  "brand": {
+    "logo": {
+      "alt": "Spexity logo"
+    }
+  },
+  "loading": {
+    "redirecting": "Redirecting..."
+  },
+  "form": {
+    "profile": {
+      "legend": "Profile"
+    },
+    "alias": {
+      "label": "Pick an alias",
+      "placeholder": "Alias",
+      "description": "Your publicly visible name"
+    },
+    "terms": {
+      "prefix": "I am a human and I accept the"
+    },
+    "save": "Save",
+    "subject": {
+      "label": "Subject"
+    },
+    "body": {
+      "label": "Body"
+    },
+    "compliance": {
+      "prefix": "This post conforms to Spexity",
+      "suffix": "and this community guidelines."
+    }
+  },
+  "error": {
+    "register": {
+      "failed": "Could not register"
+    },
+    "post": {
+      "empty": "Please write something",
+      "failed": "Could not post"
+    }
+  },
+  "post": {
+    "create": {
+      "submit": "Create Post",
+      "action": "Start a Post"
+    }
+  },
+  "i18n": {
+    "language": "Language",
+    "languageChanged": "Language changed to {language}",
+    "locales": {
+      "en": "English",
+      "ar": "العربية",
+      "zh-cn": "简体中文"
+    }
+  },
+  "legal": {
+    "terms": {
+      "link": "terms and conditions",
+      "title": "Terms and Conditions",
+      "updated": "Last updated: 22 September 2025",
+      "intro": "Please review these terms carefully. Using Spexity means you agree to the responsibilities and guidelines outlined here.",
+      "section": {
+        "responsibilities": "Key Responsibilities",
+        "eligibility": {
+          "title": "Eligibility",
+          "content": "Spexity is available only to human users. Automated agents, bots, scripts, and any non-human actors may not create accounts or add content to Spexity."
+        },
+        "content": {
+          "title": "User Content",
+          "content": "You must not post illegal content, promote unlawful activity, or facilitate actions that violate applicable laws or regulations when using Spexity. All content you submit must be your own work or you must have explicit authorization from the rightful owner to post it on Spexity."
+        },
+        "changes": {
+          "title": "Changes to Terms",
+          "content": "To serve the community better, we may update these terms occasionally. Continued use of Spexity indicates your acceptance of the latest version of these terms, and the most recent revision date is listed above."
+        }
+      }
+    }
+  }
 }
