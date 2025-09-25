@@ -70,6 +70,7 @@
           class="btn btn-ghost btn-sm {data.locale === locale ? 'btn-active' : ''}"
           onclick={(e) => switchLanguage(e, locale)}
           type="button"
+          data-testid={"locale-btn-" + locale}
         >
           {LOCALES_MAP[locale]?.label}
         </button>
@@ -87,7 +88,13 @@
   <div class="navbar bg-base-100 shadow-sm">
     <div class="flex h-full flex-1 flex-col justify-center">
       <a href="/">
-        <img width="40px" height="40px" src="/logo.png" alt={m.brand_logo_alt()} />
+        <img
+          width="40px"
+          height="40px"
+          src="/logo.png"
+          alt={m.brand_logo_alt()}
+          data-testid="brand-logo"
+        />
       </a>
     </div>
     <div class="flex-none">
@@ -104,6 +111,7 @@
           tabindex="0"
           role="button"
           aria-label={m.nav_account_button_aria()}
+          data-testid="account-menu-button"
           class="btn avatar btn-circle {[
             AuthUserAccountState.LOGGED_IN,
             AuthUserAccountState.LOGGED_IN_VERIFIED,
@@ -123,6 +131,7 @@
         </div>
         <ul
           aria-label={m.nav_account_menu_aria()}
+          data-testid="account-menu-content"
           class="dropdown-content menu mt-3 w-50 rounded-box bg-base-100 shadow"
         >
           {#if authManager.userAccount}
@@ -139,7 +148,11 @@
           {:else}
             <li><a href="/#" onclick={signIn}>{m.auth_signIn()}</a></li>
           {/if}
-          <li><a href="/#" onclick={showChangeLanguageModal}>{m.i18n_language()} 🌐</a></li>
+          <li>
+            <a href="/#" data-testid="account-language-link" onclick={showChangeLanguageModal}>
+              {m.i18n_language()} 🌐
+            </a>
+          </li>
         </ul>
       </div>
     </div>

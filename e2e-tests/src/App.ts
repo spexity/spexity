@@ -1,14 +1,18 @@
-import test, { type Page } from "@playwright/test"
+import test, { expect, type Page } from "@playwright/test"
 import { AccountMenu } from "./AccountMenu"
+import { LanguageModal } from "./LanguageModal"
+import { SignInPage } from "./SignInPage"
 
 export class App {
   private readonly page: Page
   public accountMenu: AccountMenu
+  public languageModal: LanguageModal
 
 
   constructor(page: Page) {
     this.page = page
     this.accountMenu = new AccountMenu(page)
+    this.languageModal = new LanguageModal(page)
   }
 
   async launch() {
@@ -20,11 +24,20 @@ export class App {
     await test.step("Sign in", async () => {
       await this.accountMenu.open()
       await this.accountMenu.clickSignIn()
-      await this.page.getByRole("textbox", { name: "Email" }).fill(username)
-      await this.page.getByRole("textbox", { name: "Password" }).fill(password)
-      await this.page.getByRole("checkbox", { name: "Remember me" }).check()
-      await this.page.getByRole("button", { name: "Sign In" }).click()
-      await this.awaitAppPage()
+      // The app uses OIDC redirect flow. Wait for callback to complete and app shell to reappear.
+  const signInPage = new SignInPage(this.page)
+  await signInPage.waitForRedirectAndReturn(username, password)
+      // Verify account menu reflects logged-in state by checking that Sign Out is visible when opening menu again
+      // Retry loop to wait for UI state in Chromium
+      for (let i = 0; i < 3; i++) {
+        await this.accountMenu.open()
+        if (await this.accountMenu.isLoggedInMenu()) {
+          break
+        }
+        await this.accountMenu.close()
+        await this.page.waitForTimeout(300)
+      }
+      await expect(this.accountMenu.getSignOutLink()).toBeVisible()
     })
   }
 
@@ -42,7 +55,15 @@ export class App {
   }
 
   getLogo() {
-    return this.page.getByAltText("Spexity logo")
+    return this.page.getByTestId("brand-logo")
+  }
+
+  async changeLanguage(locale: "en" | "zh-cn" | "ar") {
+    await test.step(`Change language to ${locale}`, async () => {
+      await this.accountMenu.open()
+      await this.languageModal.openViaAccountMenu()
+      await this.languageModal.chooseLocale(locale)
+    })
   }
 
 }
