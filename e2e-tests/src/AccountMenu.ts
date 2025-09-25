@@ -13,10 +13,17 @@ export class AccountMenu {
     await this.getMenuContent().waitFor({ state: "visible" })
   }
 
+  async close() {
+    await this.getMenuButton().blur()
+  }
+
+  async isLoggedInMenu(): Promise<boolean> {
+    return await this.getSignOutLink().isVisible().catch(() => false)
+  }
+
   async clickSignIn() {
     const signInLink = this.getSignInLink()
     await signInLink.waitFor({ state: "visible" })
-    await this.getMenuButton().locator(".loading.loading-spinner").waitFor({ state: "detached" })
     await signInLink.click()
   }
 
@@ -31,21 +38,19 @@ export class AccountMenu {
   }
 
   getSignInLink() {
-    return this.page.getByRole("link", { name: "Sign In" })
+    return this.page.getByTestId("sign-in-link")
   }
 
   getSignOutLink() {
-    return this.page.getByRole("link", { name: "Sign Out" })
+    return this.page.getByTestId("sign-out-link")
   }
 
   getMenuButton() {
-    return this.page.getByRole("button", { name: "Account menu button" })
+    return this.page.getByTestId("account-menu-button")
   }
 
   getMenuContent() {
-    return this.page.getByRole("list", {
-      name: "Account menu content",
-    })
+    return this.page.getByTestId("account-menu-content")
   }
 
 }

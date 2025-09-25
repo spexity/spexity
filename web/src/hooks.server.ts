@@ -2,13 +2,17 @@ import type { Handle } from "@sveltejs/kit"
 import { paraglideMiddleware } from "$lib/paraglide/server"
 import { sequence } from "@sveltejs/kit/hooks"
 import { Cookies } from "$lib/cookies"
+import { LOCALES_MAP } from "$lib/locales"
 
 const handleParaglide: Handle = ({ event, resolve }) =>
   paraglideMiddleware(event.request, ({ request, locale }) => {
     event.request = request
     event.locals.locale = locale
     return resolve(event, {
-      transformPageChunk: ({ html }) => html.replace("%paraglide.lang%", locale),
+      transformPageChunk: ({ html }) =>
+        html
+          .replace("%paraglide.lang%", locale)
+          .replace("%paraglide.langDir%", LOCALES_MAP[locale]?.rtl ? "rtl" : "ltr"),
     })
   })
 

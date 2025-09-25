@@ -9,10 +9,10 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  reporter: "html",
+  reporter: process.env.CI ? "html" : "list",
   use: {
     baseURL: `http://localhost:${webPort}`,
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
   },
   projects: [
     {

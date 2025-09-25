@@ -5,6 +5,7 @@
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
   import { onDestroy } from "svelte"
   import type { EditorContent } from "$lib/utils/EditorUtils"
+  import { m } from "$lib/paraglide/messages.js"
 
   interface EditorProps {
     id: string
@@ -94,7 +95,7 @@
           },
         }),
         Placeholder.configure({
-          placeholder: "Write something...",
+          placeholder: m.editor_placeholder(),
         }),
       ],
       onTransaction: (e) => {
@@ -171,26 +172,29 @@
 <div class="textarea w-full">
   {#if editor}
     <dialog bind:this={linkModalRef} class="modal">
-      <div class="modal-box">
+      <div class="modal-box pt-8">
         <form method="dialog">
           <button class="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">✕</button>
         </form>
         <form onsubmit={setLink}>
           <fieldset class="fieldset">
-            <label class="label" for="editor-link-url">URL</label>
+            <label class="label" for="editor-link-url">{m.editor_link_url_label()}</label>
             <input
+              dir="ltr"
               class="validator input w-full"
               id="editor-link-url"
               type="url"
               required
-              placeholder="https://"
-              title="Must be valid URL"
+              placeholder={m.editor_link_placeholder()}
+              title={m.editor_link_title()}
               bind:value={currentLinkState}
             />
-            <div class="validator-hint">Enter a valid URL</div>
+            <div class="validator-hint">{m.editor_link_url_hint()}</div>
           </fieldset>
-          <button type="submit" class="btn btn-sm btn-primary"> Save</button>
-          <button type="button" class="btn btn-sm" onclick={deleteLink}> Delete Link</button>
+          <button type="submit" class="btn btn-sm btn-primary">{m.form_save()}</button>
+          <button type="button" class="btn btn-sm" onclick={deleteLink}
+            >{m.editor_toolbar_link_delete()}</button
+          >
         </form>
       </div>
       <form method="dialog" class="modal-backdrop">
@@ -204,28 +208,28 @@
           onclick={() => editor?.chain().focus().setParagraph().run()}
           class={["btn join-item btn-xs btn-primary", !editorState.paragraph && "btn-soft"]}
         >
-          Normal text
+          {m.editor_toolbar_normal_text()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
           class={["btn join-item btn-xs btn-primary", !editorState.heading[1] && "btn-soft"]}
         >
-          H1
+          {m.editor_toolbar_h1()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
           class={["btn join-item btn-xs btn-primary", !editorState.heading[2] && "btn-soft"]}
         >
-          H2
+          {m.editor_toolbar_h2()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
           class={["btn join-item btn-xs btn-primary", !editorState.heading[3] && "btn-soft"]}
         >
-          H3
+          {m.editor_toolbar_h3()}
         </button>
       </div>
       <div class="join">
@@ -234,14 +238,14 @@
           onclick={() => editor?.chain().focus().toggleBulletList().run()}
           class={["btn join-item btn-xs btn-primary", !editorState.bulletList && "btn-soft"]}
         >
-          Bullet list
+          {m.editor_toolbar_bullet_list()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleOrderedList().run()}
           class={["btn join-item btn-xs btn-primary", !editorState.orderedList && "btn-soft"]}
         >
-          Ordered list
+          {m.editor_toolbar_ordered_list()}
         </button>
       </div>
       <button
@@ -249,14 +253,14 @@
         onclick={() => editor?.chain().focus().toggleCodeBlock().run()}
         class={["btn btn-xs btn-primary", !editorState.codeBlock && "btn-soft"]}
       >
-        Code block
+        {m.editor_toolbar_code_block()}
       </button>
       <button
         type="button"
         onclick={() => editor?.chain().focus().toggleBlockquote().run()}
         class={["btn btn-xs btn-primary", !editorState.blockquote && "btn-soft"]}
       >
-        Quote
+        {m.editor_toolbar_quote()}
       </button>
       <div class="divider m-0 divider-horizontal"></div>
       <div class="join">
@@ -266,7 +270,7 @@
           disabled={!editorState.bold.can}
           class={["btn join-item btn-xs btn-primary", !editorState.bold.active && "btn-soft"]}
         >
-          Bold
+          {m.editor_toolbar_bold()}
         </button>
         <button
           type="button"
@@ -274,7 +278,7 @@
           disabled={!editorState.italic.can}
           class={["btn join-item btn-xs btn-primary", !editorState.italic.active && "btn-soft"]}
         >
-          Italic
+          {m.editor_toolbar_italic()}
         </button>
         <button
           type="button"
@@ -282,7 +286,7 @@
           disabled={!editorState.underline.can}
           class={["btn join-item btn-xs btn-primary", !editorState.underline.active && "btn-soft"]}
         >
-          Underline
+          {m.editor_toolbar_underline()}
         </button>
         <button
           type="button"
@@ -290,7 +294,7 @@
           disabled={!editorState.strike.can}
           class={["btn join-item btn-xs btn-primary", !editorState.strike.active && "btn-soft"]}
         >
-          Strike
+          {m.editor_toolbar_strike()}
         </button>
       </div>
       <button
@@ -298,7 +302,7 @@
         onclick={showLinkModal}
         class={["btn btn-xs btn-primary", !editorState.link && "btn-soft"]}
       >
-        Link
+        {m.editor_toolbar_link()}
       </button>
       <button
         type="button"
@@ -306,7 +310,7 @@
         disabled={!editorState.code.can}
         class={["btn btn-xs btn-primary", !editorState.code.active && "btn-soft"]}
       >
-        Code
+        {m.editor_toolbar_code_inline()}
       </button>
       <div class="divider m-0 divider-horizontal"></div>
       <button
@@ -314,7 +318,7 @@
         onclick={() => editor?.chain().focus().setHorizontalRule().run()}
         class="btn btn-soft btn-xs btn-primary"
       >
-        Horizontal rule
+        {m.editor_toolbar_horizontal_rule()}
       </button>
       <div class="divider m-0 divider-horizontal"></div>
       <div class="join">
@@ -324,7 +328,7 @@
           disabled={!editorState.undo}
           class="btn join-item btn-soft btn-xs btn-primary"
         >
-          Undo
+          {m.editor_toolbar_undo()}
         </button>
         <button
           type="button"
@@ -332,7 +336,7 @@
           disabled={!editorState.redo}
           class="btn join-item btn-soft btn-xs btn-primary"
         >
-          Redo
+          {m.editor_toolbar_redo()}
         </button>
       </div>
     </div>

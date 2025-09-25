@@ -5,6 +5,7 @@
   import { type PostPreview } from "$lib/model/types"
   import Editor from "$lib/components/Editor.svelte"
   import { EditorUtils } from "$lib/utils/EditorUtils"
+  import { m } from "$lib/paraglide/messages.js"
 
   interface PostFormProps {
     communityId: string
@@ -25,7 +26,7 @@
       const conformToTermsAndConditions = data.get("conformToTermsAndConditions") as string
       const body = editorRef?.getValue()
       if (!EditorUtils.hasMeaningfulText(body)) {
-        errorMessage = "Please write something"
+        errorMessage = m.error_post_empty()
         return
       }
       const post = await authManager.httpClient.post<PostPreview>("/api/posts", {
@@ -37,7 +38,7 @@
       await goto(`/posts/${post.id}`)
     } catch (err) {
       console.error("error posting", err)
-      errorMessage = "Could not post"
+      errorMessage = m.error_post_failed()
     } finally {
       submitting = false
     }
@@ -46,7 +47,7 @@
 
 <form class="w-full" onsubmit={handleSubmit} autocomplete="off">
   <fieldset class="fieldset">
-    <label class="label" for="subject">Subject</label>
+    <label class="label" for="subject">{m.form_subject_label()}</label>
     <input
       id="subject"
       name="subject"
@@ -57,7 +58,7 @@
       maxlength="512"
     />
 
-    <label id="bodyLabel" class="label" for="body">Body</label>
+    <label id="bodyLabel" class="label" for="body">{m.form_body_label()}</label>
     <Editor bind:this={editorRef} id="body" labelledBy="bodyLabel" />
     <div class="form-control">
       <label class="label" for="conformToTermsAndConditions">
@@ -69,9 +70,9 @@
           required
         />
         <span class="label-text">
-          This post conforms to Spexity
-          <a href="/terms-and-conditions" class="link" target="_blank">terms and conditions</a>
-          and this community guidelines.
+          {m.form_compliance_prefix()}
+          <a href="/terms-and-conditions" class="link" target="_blank">{m.legal_terms_link()}</a>
+          {m.form_compliance_suffix()}
         </span>
       </label>
     </div>
@@ -85,7 +86,7 @@
     {#if submitting}
       <span class="loading loading-spinner"></span>
     {:else}
-      Create Post
+      {m.post_create_submit()}
     {/if}
   </button>
 </form>

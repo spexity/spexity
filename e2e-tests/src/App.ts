@@ -1,14 +1,17 @@
-import test, { type Page } from "@playwright/test"
+import test, { expect, type Page } from "@playwright/test"
 import { AccountMenu } from "./AccountMenu"
+import { LanguageModal } from "./LanguageModal"
 
 export class App {
   private readonly page: Page
   public accountMenu: AccountMenu
+  public languageModal: LanguageModal
 
 
   constructor(page: Page) {
     this.page = page
     this.accountMenu = new AccountMenu(page)
+    this.languageModal = new LanguageModal(page)
   }
 
   async launch() {
@@ -39,10 +42,23 @@ export class App {
 
   async awaitAppPage() {
     await this.getLogo().waitFor({ state: "visible" })
+    await expect(this.getAuthInitDiv()).toHaveCount(0)
   }
 
   getLogo() {
-    return this.page.getByAltText("Spexity logo")
+    return this.page.getByTestId("brand-logo")
+  }
+
+  getAuthInitDiv() {
+    return this.page.getByTestId("auth-init-in-progress")
+  }
+
+  async changeLanguage(locale: "en" | "zh-cn" | "ar") {
+    await test.step(`Change language to ${locale}`, async () => {
+      await this.accountMenu.open()
+      await this.languageModal.openViaAccountMenu()
+      await this.languageModal.chooseLocale(locale)
+    })
   }
 
 }

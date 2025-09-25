@@ -115,22 +115,27 @@ export class AuthManager {
     if (!this.authManager || !this.currentUserStorage) {
       return
     }
-    let oidcUser = await this.authManager.getUser()
-    if (oidcUser && oidcUser.expired) {
-      console.log("Loaded user expired, trying to reload")
-      oidcUser = await this.authManager.signinSilent()
-    }
-    this.oidcUser = oidcUser
-    if (oidcUser) {
+    this.oidcUser = await this.authManager.getUser()
+    if (this.oidcUser) {
       const userAccount = this.currentUserStorage.get()
       if (userAccount) {
-        if (userAccount.authCorrelationId === oidcUser.profile.sub) {
+        if (userAccount.authCorrelationId === this.oidcUser.profile.sub) {
           this.setUserAccountLoggedIn(userAccount)
         } else {
           this.currentUserStorage.clear()
         }
       }
-      await this.getRemoteCurrentUserAccount(oidcUser, false)
+      if (this.oidcUser.expired) {
+        console.log("Loaded user expired, trying to reload")
+        this.oidcUser = await this.authManager.signinSilent()
+        if (!this.oidcUser) {
+          console.log("Failed to reload user")
+          this.setUserAccountNotLoggedIn()
+        }
+      }
+      if (this.oidcUser) {
+        await this.getRemoteCurrentUserAccount(this.oidcUser, false)
+      }
     } else {
       this.clearCurrentUserAccount()
     }

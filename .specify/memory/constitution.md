@@ -72,11 +72,8 @@ Non-negotiable rules:
 - All user-visible copy MUST be externalized to message keys managed by the i18n system
 	(Inlang) and referenced from UI via the i18n utilities.
 - New features MUST provide translations for every supported locale in commit scope.
-- Fallback to English in non-English locales is NOT allowed unless a temporary waiver is
-	approved and tracked in the PR with an owner and due date.
 - RTL considerations for Arabic MUST be respected (layout, alignment, icons, and
 	mirroring where appropriate). Components MUST support `dir` changes.
-- Dates, numbers, and currencies presented to users MUST be locale-aware.
 
 Rationale: Internationalization ensures inclusivity and a first-class experience across
 languages and directions from day one of each feature.

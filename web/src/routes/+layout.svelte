@@ -1,11 +1,12 @@
 <script lang="ts">
   import "../app.css"
+  import { type LayoutProps } from "./$types"
   import { onMount } from "svelte"
   import { ThemeHandler } from "$lib/utils/ThemeHandler"
   import { ClientEnv } from "$lib/utils/ClientEnv"
   import NavProgress from "$lib/components/NavProgress.svelte"
 
-  const { children } = $props()
+  const { children }: LayoutProps = $props()
 
   onMount(() => {
     ClientEnv.setup()

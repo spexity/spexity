@@ -3,6 +3,7 @@
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
+  import { m } from "$lib/paraglide/messages.js"
 
   let submitting = $state<boolean>(false)
   let errorMessage = $state<string>()
@@ -30,7 +31,7 @@
       await authManager.registerUserAccount(alias, acceptTermsAndConditions === "on")
       await goto("/")
     } catch {
-      errorMessage = "Could not register"
+      errorMessage = m.error_register_failed()
     } finally {
       submitting = false
     }
@@ -40,13 +41,13 @@
 <div class="flex h-screen flex-col items-center justify-center">
   {#if authManager.userAccountState === AuthUserAccountState.INIT}
     <span class="loading loading-lg loading-spinner"></span>
-    <p class="mt-4">Redirecting...</p>
+    <p class="mt-4">{m.loading_redirecting()}</p>
   {:else}
     <form onsubmit={handleSubmit} autocomplete="off">
       <fieldset class="fieldset w-sm rounded-box border border-base-300 bg-base-200 p-4">
-        <legend class="fieldset-legend text-lg">Profile</legend>
+        <legend class="fieldset-legend text-lg">{m.form_profile_legend()}</legend>
 
-        <label class="label" for="alias">Pick an alias</label>
+        <label class="label" for="alias">{m.form_alias_label()}</label>
         <div class="input w-full">
           <input
             id="alias"
@@ -55,10 +56,10 @@
             required
             minlength="3"
             maxlength="20"
-            placeholder="Alias"
+            placeholder={m.form_alias_placeholder()}
           />
         </div>
-        <p class="label">Your publicly visible name</p>
+        <p class="label">{m.form_alias_description()}</p>
         <div class="form-control mt-4">
           <label class="label" for="acceptTermsAndConditions">
             <input
@@ -69,14 +70,14 @@
               required
             />
             <span class="label-text">
-              I am a human and I accept the
+              {m.form_terms_prefix()}
               <a
                 class="link"
                 href="/terms-and-conditions"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                terms and conditions
+                {m.legal_terms_link()}
               </a>.
             </span>
           </label>
@@ -91,7 +92,7 @@
         {#if submitting}
           <span class="loading loading-spinner"></span>
         {:else}
-          Save
+          {m.form_save()}
         {/if}
       </button>
     </form>
