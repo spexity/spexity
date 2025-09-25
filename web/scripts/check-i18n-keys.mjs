@@ -128,10 +128,13 @@ function getAllSourceFiles(dir) {
 
       if (stat.isDirectory()) {
         // Skip node_modules and other build directories
-        if (!['node_modules', '.git', 'dist', 'build', '.svelte-kit'].includes(entry)) {
+        if (!["node_modules", ".git", "dist", "build", ".svelte-kit"].includes(entry)) {
           traverse(fullPath)
         }
-      } else if (stat.isFile() && (entry.endsWith('.svelte') || entry.endsWith('.ts') || entry.endsWith('.js'))) {
+      } else if (
+        stat.isFile() &&
+        (entry.endsWith(".svelte") || entry.endsWith(".ts") || entry.endsWith(".js"))
+      ) {
         files.push(fullPath)
       }
     }
@@ -149,7 +152,7 @@ function findUsedKeys() {
 
   // Patterns to match translation function calls
   const patterns = [
-    /m\.(\w+)\(/g                    // m.key_name(
+    /m\.(\w+)\(/g, // m.key_name(
   ]
 
   let totalFiles = 0
@@ -157,7 +160,7 @@ function findUsedKeys() {
 
   for (const filePath of sourceFiles) {
     totalFiles++
-    const content = readFileSync(filePath, 'utf-8')
+    const content = readFileSync(filePath, "utf-8")
     let fileHasKeys = false
 
     for (const pattern of patterns) {
@@ -183,17 +186,17 @@ function validateUnusedKeys() {
   const usedKeys = findUsedKeys()
 
   // Load English keys as reference
-  const enData = loadLocaleFile('en')
+  const enData = loadLocaleFile("en")
   if (!enData) return false
 
   const allKeys = new Set(getKeys(enData))
-  const unusedKeys = [...allKeys].filter(key => !usedKeys.has(key))
+  const unusedKeys = [...allKeys].filter((key) => !usedKeys.has(key))
 
   console.log("\nChecking for unused translation keys...\n")
 
   if (unusedKeys.length > 0) {
     console.error(`❌ Found ${unusedKeys.length} unused translation keys:`)
-    unusedKeys.forEach(key => console.error(`   - ${key}`))
+    unusedKeys.forEach((key) => console.error(`   - ${key}`))
     console.error("\nConsider removing unused keys to keep message catalogs clean.")
     return false
   } else {
