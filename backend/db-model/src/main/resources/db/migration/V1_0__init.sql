@@ -1,8 +1,6 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE user_account
 (
-    id                  UUID               DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id                  UUID               DEFAULT uuidv7() PRIMARY KEY,
     created_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_verified_human   BOOLEAN   NOT NULL,
     auth_correlation_id TEXT      NOT NULL UNIQUE,
@@ -11,7 +9,7 @@ CREATE TABLE user_account
 
 CREATE TABLE contributor
 (
-    id              UUID               DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id              UUID               DEFAULT uuidv7() PRIMARY KEY,
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_account_id UUID      NOT NULL REFERENCES user_account (id),
     alias           TEXT      NOT NULL,
@@ -82,14 +80,14 @@ $$;
 
 CREATE TABLE community
 (
-    id         UUID               DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id         UUID               DEFAULT uuidv7() PRIMARY KEY,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name       TEXT      NOT NULL UNIQUE
 );
 
 CREATE TABLE post
 (
-    id             UUID               DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id             UUID               DEFAULT uuidv7() PRIMARY KEY,
     created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     subject        TEXT      NOT NULL,
     body_json      JSONB     NOT NULL,

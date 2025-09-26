@@ -4,7 +4,6 @@
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import CommunityName from "$lib/components/CommunityName.svelte"
   import Editor from "$lib/components/Editor.svelte"
-  import { EditorUtils } from "$lib/utils/EditorUtils"
   import { m } from "$lib/paraglide/messages.js"
 
   interface PostViewProps {
