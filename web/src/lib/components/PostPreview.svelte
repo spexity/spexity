@@ -3,7 +3,7 @@
   import { DateFormatter } from "$lib/utils/DateFormatter"
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import CommunityName from "$lib/components/CommunityName.svelte"
-  import type { CommunityPreviewPost } from "$lib/model/types.js"
+  import type { CommunityPreviewPost } from "$lib/model/types"
   import { m } from "$lib/paraglide/messages.js"
   import { resolve } from "$app/paths"
 
@@ -33,7 +33,9 @@
   </a>
   <div class="flex flex-row justify-between">
     <div class="flex flex-row items-center gap-2 text-xs">
-      <span>{m.post_comments_count({ count: 0 })}</span>
+      <span data-testid={`post-preview-comments-count-${post.id}`} data-count={post.commentsCount}>
+        {m.post_comments_count({ count: post.commentsCount })}
+      </span>
     </div>
     <a class="btn btn-sm" href={resolve(`/posts/${post.id}`)}>{m.button_view()}</a>
   </div>

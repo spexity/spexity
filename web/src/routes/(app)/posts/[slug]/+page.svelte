@@ -5,4 +5,4 @@
   let { data }: PageProps = $props()
 </script>
 
-<PostView post={data.post} timezone={data.timezone} />
+<PostView post={data.post} comments={data.comments} timezone={data.timezone} />

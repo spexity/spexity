@@ -591,3 +591,23 @@ VALUES ('85200022-1089-44c6-8a08-610ce321fa9f', '2025-09-18 10:38:05.745539', 'H
         'This is the header Then we talk about what''s inside. There are 2 section As the leader of headers said You should not play with headers if you don''t know your sections - The leader of headers So  be  prepared to be headless. 1 you want to do this Ok so to do this you need to do this and this - this - this And then you can finish it off with some code: This is the code you need. And that should be that. 2 You also want to do that Ok so to do that you need to do this and that - this - that This this is important That this is also important ',
         '2ea5c4a6-dc9a-4da0-bc95-7e9e147bc0e7', 'afb0f543-c454-4f6e-853b-dbfbbd65c005')
 ON CONFLICT DO NOTHING;
+
+INSERT INTO public.post_comment (id, post_id, contributor_id, body_json, body_text, created_at)
+SELECT uuidv7(),
+       '8032dd4e-1abd-434d-b92c-7c39f8ca359d',
+       'afb0f543-c454-4f6e-853b-dbfbbd65c005',
+       jsonb_build_object(
+           'type', 'doc',
+           'content', jsonb_build_array(
+               jsonb_build_object(
+                   'type', 'paragraph',
+                   'content', jsonb_build_array(
+                       jsonb_build_object('type', 'text', 'text', format('Seed comment %s', gs))
+                   )
+               )
+           )
+       ),
+       format('Seed comment %s', gs),
+       (timestamp with time zone '2025-09-17 18:00:00+00') + ((gs - 1) * interval '1 minute')
+FROM generate_series(1, 110) AS gs
+ON CONFLICT DO NOTHING;

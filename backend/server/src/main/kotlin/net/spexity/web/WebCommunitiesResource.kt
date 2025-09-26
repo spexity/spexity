@@ -60,6 +60,7 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
             POST.contributor().HANDLE,
             POST.community().ID,
             POST.community().NAME,
+            POST.COMMENTS_COUNT,
         )
             .from(POST)
             .where(POST.community().ID.eq(id))
@@ -70,7 +71,8 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
                     instant,
                     it.get(POST.SUBJECT),
                     it.get(POST.BODY_TEXT).take(512),
-                    ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE))
+                    ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
+                    it.get(POST.COMMENTS_COUNT)
                 )
             }
         return CommunityPageData(selectedCommunity, selectedPosts)

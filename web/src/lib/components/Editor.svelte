@@ -2,6 +2,7 @@
   import { Editor } from "@tiptap/core"
   import StarterKit from "@tiptap/starter-kit"
   import { Placeholder } from "@tiptap/extensions"
+  import Underline from "@tiptap/extension-underline"
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
   import { onDestroy } from "svelte"
   import type { EditorContent } from "$lib/utils/EditorUtils"
@@ -10,6 +11,8 @@
   interface EditorProps {
     id?: string
     labelledBy?: string
+    content?: EditorContent
+    dataTestId?: string
   }
 
   interface EditorStateItem {
@@ -64,14 +67,20 @@
     redo: false,
   }
 
-  let { id, labelledBy }: EditorProps = $props()
+  let { id, labelledBy, content, dataTestId }: EditorProps = $props()
   let editor: Editor | undefined = $state()
   let editorState = $state<EditorState>(EMPTY_EDITOR_STATE)
   let linkModalRef = $state<HTMLDialogElement>()
-  let currentLinkState = $state<string>()
+  let currentLinkState = $state<string | undefined>()
+
+  const withSoft = (base: string, isActive: boolean) => (isActive ? base : `${base} btn-soft`)
 
   export const getValue = (): EditorContent => {
     return editor?.getJSON() ?? { type: "doc", content: [] }
+  }
+
+  export const setValue = (value: EditorContent) => {
+    editor?.commands.setContent(value, { emitUpdate: false })
   }
 
   const createEditor = (element: HTMLDivElement) => {
@@ -94,6 +103,7 @@
             enableClickSelection: true,
           },
         }),
+        Underline,
         Placeholder.configure({
           placeholder: m.drafting_placeholder(),
         }),
@@ -137,10 +147,19 @@
         }
       },
     })
+    if (content) {
+      editor.commands.setContent(content, { emitUpdate: false })
+    }
   }
 
   onDestroy(() => {
     editor?.destroy()
+  })
+
+  $effect(() => {
+    if (editor && content) {
+      editor.commands.setContent(content, { emitUpdate: false })
+    }
   })
 
   const showLinkModal = () => {
@@ -206,28 +225,28 @@
         <button
           type="button"
           onclick={() => editor?.chain().focus().setParagraph().run()}
-          class={["btn join-item btn-xs btn-primary", !editorState.paragraph && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.paragraph)}
         >
           {m.editor_toolbar_normal_text()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-          class={["btn join-item btn-xs btn-primary", !editorState.heading[1] && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.heading[1])}
         >
           {m.editor_toolbar_h1()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-          class={["btn join-item btn-xs btn-primary", !editorState.heading[2] && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.heading[2])}
         >
           {m.editor_toolbar_h2()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-          class={["btn join-item btn-xs btn-primary", !editorState.heading[3] && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.heading[3])}
         >
           {m.editor_toolbar_h3()}
         </button>
@@ -236,14 +255,14 @@
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleBulletList().run()}
-          class={["btn join-item btn-xs btn-primary", !editorState.bulletList && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.bulletList)}
         >
           {m.editor_toolbar_bullet_list()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleOrderedList().run()}
-          class={["btn join-item btn-xs btn-primary", !editorState.orderedList && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.orderedList)}
         >
           {m.editor_toolbar_ordered_list()}
         </button>
@@ -251,14 +270,14 @@
       <button
         type="button"
         onclick={() => editor?.chain().focus().toggleCodeBlock().run()}
-        class={["btn btn-xs btn-primary", !editorState.codeBlock && "btn-soft"]}
+        class={withSoft("btn btn-xs btn-primary", editorState.codeBlock)}
       >
         {m.editor_toolbar_code_block()}
       </button>
       <button
         type="button"
         onclick={() => editor?.chain().focus().toggleBlockquote().run()}
-        class={["btn btn-xs btn-primary", !editorState.blockquote && "btn-soft"]}
+        class={withSoft("btn btn-xs btn-primary", editorState.blockquote)}
       >
         {m.editor_toolbar_quote()}
       </button>
@@ -268,7 +287,7 @@
           type="button"
           onclick={() => editor?.chain().focus().toggleBold().run()}
           disabled={!editorState.bold.can}
-          class={["btn join-item btn-xs btn-primary", !editorState.bold.active && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.bold.active)}
         >
           {m.editor_toolbar_bold()}
         </button>
@@ -276,7 +295,7 @@
           type="button"
           onclick={() => editor?.chain().focus().toggleItalic().run()}
           disabled={!editorState.italic.can}
-          class={["btn join-item btn-xs btn-primary", !editorState.italic.active && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.italic.active)}
         >
           {m.editor_toolbar_italic()}
         </button>
@@ -284,7 +303,7 @@
           type="button"
           onclick={() => editor?.chain().focus().toggleUnderline().run()}
           disabled={!editorState.underline.can}
-          class={["btn join-item btn-xs btn-primary", !editorState.underline.active && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.underline.active)}
         >
           {m.editor_toolbar_underline()}
         </button>
@@ -292,7 +311,7 @@
           type="button"
           onclick={() => editor?.chain().focus().toggleStrike().run()}
           disabled={!editorState.strike.can}
-          class={["btn join-item btn-xs btn-primary", !editorState.strike.active && "btn-soft"]}
+          class={withSoft("btn join-item btn-xs btn-primary", editorState.strike.active)}
         >
           {m.editor_toolbar_strike()}
         </button>
@@ -300,7 +319,7 @@
       <button
         type="button"
         onclick={showLinkModal}
-        class={["btn btn-xs btn-primary", !editorState.link && "btn-soft"]}
+        class={withSoft("btn btn-xs btn-primary", editorState.link)}
       >
         {m.editor_toolbar_link()}
       </button>
@@ -308,7 +327,7 @@
         type="button"
         onclick={() => editor?.chain().focus().toggleCode().run()}
         disabled={!editorState.code.can}
-        class={["btn btn-xs btn-primary", !editorState.code.active && "btn-soft"]}
+        class={withSoft("btn btn-xs btn-primary", editorState.code.active)}
       >
         {m.editor_toolbar_code_inline()}
       </button>
@@ -341,5 +360,5 @@
       </div>
     </div>
   {/if}
-  <div class="text-base" use:createEditor></div>
+  <div class="text-base" use:createEditor data-testid={dataTestId}></div>
 </div>
