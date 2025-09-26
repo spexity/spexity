@@ -34,8 +34,8 @@ See [Tech Stack](TechStack.md)
 
 ## Develop
 
-Run and then follow the instructions
+Run the setup script and follow the instructions
 
 ```shell
-./setup.sh
+./scripts/setup.sh
 ```

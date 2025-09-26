@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '25'
           cache: 'maven'
           cache-dependency-path: backend/pom.xml
       - name: Set up Node
@@ -39,7 +39,7 @@ jobs:
       - name: Build
         env:
           GIT_SHA: ${{ github.sha }}
-        run: ./build.sh
+        run: ./scripts/build.sh
       - name: Log in to the container registry
         uses: docker/login-action@v3
         with:
