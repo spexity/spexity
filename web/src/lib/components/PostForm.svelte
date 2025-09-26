@@ -6,6 +6,7 @@
   import Editor from "$lib/components/Editor.svelte"
   import { EditorUtils } from "$lib/utils/EditorUtils"
   import { m } from "$lib/paraglide/messages.js"
+  import { resolve } from "$app/paths"
 
   interface PostFormProps {
     communityId: string
@@ -35,7 +36,7 @@
         body,
         conformToTermsAndConditions: conformToTermsAndConditions === "on",
       })
-      await goto(`/posts/${post.id}`)
+      await goto(resolve(`/posts/${post.id}`))
     } catch (err) {
       console.error("error posting", err)
       errorMessage = m.error_post_failed()
@@ -71,7 +72,9 @@
         />
         <span class="label-text">
           {m.form_compliance_prefix()}
-          <a href="/terms-and-conditions" class="link" target="_blank">{m.legal_terms_link()}</a>
+          <a href={resolve("/terms-and-conditions")} class="link" target="_blank"
+            >{m.legal_terms_link()}</a
+          >
           {m.form_compliance_suffix()}
         </span>
       </label>

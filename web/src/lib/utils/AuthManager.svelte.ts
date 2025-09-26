@@ -6,6 +6,7 @@ import { HttpClient } from "$lib/utils/HttpClient"
 import { goto } from "$app/navigation"
 import { authManager } from "$lib/auth"
 import { Cookies } from "$lib/cookies"
+import { resolve } from "$app/paths"
 
 export enum AuthUserAccountState {
   INIT,
@@ -85,11 +86,11 @@ export class AuthManager {
         await this.getRemoteCurrentUserAccount(oidcUser, true)
       } else {
         this.clearCurrentUserAccount()
-        await goto("/")
+        await goto(resolve("/"))
       }
     } catch (err) {
       console.error("Failed to correlate signing with callback", err)
-      await goto("/")
+      await goto(resolve("/"))
     }
   }
 
@@ -152,14 +153,15 @@ export class AuthManager {
       if (followState) {
         const state = oidcUser.state as SignInState | undefined
         if (state?.locationUri) {
-          await goto(state.locationUri)
+          // @ts-expect-error loaded from localstorage
+          await goto(resolve(state.locationUri))
         } else {
-          await goto("/")
+          await goto(resolve("/"))
         }
       }
     } else if (currentUserResponse.status === 404) {
       this.setUserAccountNotRegistered()
-      await goto("/auth/register")
+      await goto(resolve("/auth/register"))
     } else if (currentUserResponse.status === 401) {
       this.clearCurrentUserAccount()
       this.authManager?.signoutSilent()

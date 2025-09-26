@@ -2,6 +2,7 @@
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
   import { authManager } from "$lib/auth"
   import { goto } from "$app/navigation"
+  import { resolve } from "$app/paths"
   import { type CommunityRef } from "$lib/model/types"
   import { m } from "$lib/paraglide/messages.js"
 
@@ -19,7 +20,7 @@
         name,
         conformToTermsAndConditions,
       })
-      await goto(`/communities/${community.id}`)
+      await goto(resolve(`/communities/${community.id}`))
     } catch (err) {
       console.error("error create", err)
       errorMessage = m.community_form_error_failed()
@@ -52,7 +53,9 @@
         />
         <span class="label-text">
           {m.community_form_terms_prefix()}
-          <a href="/terms-and-conditions" class="link" target="_blank">{m.legal_terms_link()}</a>.
+          <a href={resolve("/terms-and-conditions")} class="link" target="_blank"
+            >{m.legal_terms_link()}</a
+          >.
         </span>
       </label>
     </div>

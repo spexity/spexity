@@ -8,6 +8,7 @@
   import { m } from "$lib/paraglide/messages.js"
   import { setLocale, locales, type Locale } from "$lib/paraglide/runtime"
   import { LOCALES_MAP } from "$lib/locales"
+  import { resolve } from "$app/paths"
 
   type MenuItem = "home" | "communities"
 
@@ -25,7 +26,7 @@
 
   onMount(async () => {
     if (authManager.userAccountState === AuthUserAccountState.NOT_REGISTERED) {
-      await goto("/auth/register")
+      await goto(resolve("/auth/register"))
     }
   })
 
@@ -87,7 +88,7 @@
   </div>
   <div class="navbar bg-base-100 shadow-sm">
     <div class="flex h-full flex-1 flex-col justify-center">
-      <a href="/">
+      <a href={resolve("/")}>
         <img
           width="40"
           height="40"
@@ -99,9 +100,11 @@
     </div>
     <div class="flex-none">
       <ul class="menu menu-horizontal px-1">
-        <li><a href="/" class={active === "home" ? "menu-active" : ""}>{m.nav_home()}</a></li>
         <li>
-          <a href="/communities" class={active === "communities" ? "menu-active" : ""}
+          <a href={resolve("/")} class={active === "home" ? "menu-active" : ""}>{m.nav_home()}</a>
+        </li>
+        <li>
+          <a href={resolve("/communities")} class={active === "communities" ? "menu-active" : ""}
             >{m.nav_communities()}</a
           >
         </li>
@@ -136,22 +139,32 @@
         >
           {#if authManager.userAccount}
             <li>
-              <a aria-label={m.nav_account_profile_aria()} href="/account"
+              <a aria-label={m.nav_account_profile_aria()} href={resolve("/account")}
                 >{authManager.userAccount.contributorHandle}</a
               >
             </li>
             <div class="divider m-0"></div>
             <li>
-              <a href="/account">{m.nav_account_title()}</a>
+              <a href={resolve("/account")}>{m.nav_account_title()}</a>
             </li>
             <li>
-              <a href="/#" data-testid="sign-out-link" onclick={signOut}>{m.auth_signOut()}</a>
+              <a href={resolve("/")} data-testid="sign-out-link" onclick={signOut}
+                >{m.auth_signOut()}</a
+              >
             </li>
           {:else}
-            <li><a href="/#" data-testid="sign-in-link" onclick={signIn}>{m.auth_signIn()}</a></li>
+            <li>
+              <a href={resolve("/")} data-testid="sign-in-link" onclick={signIn}
+                >{m.auth_signIn()}</a
+              >
+            </li>
           {/if}
           <li>
-            <a href="/#" data-testid="account-language-link" onclick={showChangeLanguageModal}>
+            <a
+              href={resolve("/")}
+              data-testid="account-language-link"
+              onclick={showChangeLanguageModal}
+            >
               {m.i18n_language()} 🌐
             </a>
           </li>

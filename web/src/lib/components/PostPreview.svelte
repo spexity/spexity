@@ -5,6 +5,7 @@
   import CommunityName from "$lib/components/CommunityName.svelte"
   import type { CommunityPreviewPost } from "$lib/model/types.js"
   import { m } from "$lib/paraglide/messages.js"
+  import { resolve } from "$app/paths"
 
   interface PostPreviewProps {
     post: CommunityPreviewPost
@@ -26,7 +27,7 @@
       - {formattedDateTime}
     </div>
   </div>
-  <a href="/posts/{post.id}">
+  <a href={resolve(`/posts/${post.id}`)}>
     <h2 class="font-medium">{post.subject}</h2>
     <p class="text-sm">{post.body}</p>
   </a>
@@ -34,6 +35,6 @@
     <div class="flex flex-row items-center gap-2 text-xs">
       <span>{m.post_comments_count({ count: 0 })}</span>
     </div>
-    <a class="btn btn-sm" href="/posts/{post.id}">{m.button_view()}</a>
+    <a class="btn btn-sm" href={resolve(`/posts/${post.id}`)}>{m.button_view()}</a>
   </div>
 </div>
