@@ -1,8 +1,9 @@
 #!/bin/bash
 set -euo pipefail
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Backend setup
-pushd backend || exit 1
+pushd "$SCRIPT_DIR/../backend" || exit 1
 
 if command -v mvn >/dev/null 2>&1; then
   echo "running mvn install for server dependencies"
@@ -15,7 +16,7 @@ fi
 popd || exit 1
 
 # Web setup
-pushd web || exit 1
+pushd "$SCRIPT_DIR/../web" || exit 1
 
 if [ -f ".env" ]; then
   echo "web .env file already exists"
