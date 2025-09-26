@@ -95,7 +95,7 @@
           },
         }),
         Placeholder.configure({
-          placeholder: m.editor_placeholder(),
+          placeholder: m.drafting_placeholder(),
         }),
       ],
       onTransaction: (e) => {

@@ -50,7 +50,7 @@
   "community_form_error_failed": "无法创建社区",
   "community_form_terms_prefix": "此社区详情符合 Spexity 的",
   "community_form_submit": "创建社区",
-  "editor_placeholder": "写点什么...",
+  "drafting_placeholder": "写点什么...",
   "editor_toolbar_bold": "粗体",
   "editor_toolbar_italic": "斜体",
   "editor_toolbar_underline": "下划线",
@@ -71,10 +71,10 @@
   "editor_link_title": "必须是有效的URL",
   "editor_link_url_label": "URL",
   "editor_link_url_hint": "输入有效的URL",
-  "comment_add_legend": "添加评论",
-  "comment_placeholder": "开始输入",
   "comment_submit": "发表评论",
   "comments_count": "{count} 条评论",
   "editor_toolbar_undo": "撤销",
-  "editor_toolbar_redo": "重做"
+  "editor_toolbar_redo": "重做",
+  "comment_button": "评论",
+  "comment_discard": "取消评论"
 }

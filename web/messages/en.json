@@ -50,7 +50,7 @@
   "community_form_error_failed": "Could not create community",
   "community_form_terms_prefix": "This community details conform to Spexity",
   "community_form_submit": "Start Community",
-  "editor_placeholder": "Write something...",
+  "drafting_placeholder": "Write something...",
   "editor_toolbar_bold": "Bold",
   "editor_toolbar_italic": "Italic",
   "editor_toolbar_underline": "Underline",
@@ -71,10 +71,10 @@
   "editor_link_title": "Must be valid URL",
   "editor_link_url_label": "URL",
   "editor_link_url_hint": "Enter a valid URL",
-  "comment_add_legend": "Add comment",
-  "comment_placeholder": "Start typing",
   "comment_submit": "Post Comment",
   "comments_count": "{count} Comments",
   "editor_toolbar_undo": "Undo",
-  "editor_toolbar_redo": "Redo"
+  "editor_toolbar_redo": "Redo",
+  "comment_button": "Comment",
+  "comment_discard": "Discard Comment"
 }

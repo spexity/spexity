@@ -13,6 +13,7 @@
   const { post, timezone }: PostViewProps = $props()
   const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(post.createdAt, timezone)
 
+  let commenting = $state(false)
   let submitting = $state<boolean>(false)
 </script>
 
@@ -32,18 +33,36 @@
     <div class="tiptap my-4">{@html post.body}</div>
   </div>
   <div class="divider"></div>
-  <div class="text-sm">{m.comments_count({ count: 0 })}</div>
-  <form class="mt-4">
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend">{m.comment_add_legend()}</legend>
-      <textarea class="textarea h-24" placeholder={m.comment_placeholder()}></textarea>
-    </fieldset>
-    <button type="submit" class="btn mt-4 btn-sm btn-primary" disabled={submitting}>
-      {#if submitting}
-        <span class="loading loading-spinner"></span>
-      {:else}
-        {m.comment_submit()}
-      {/if}
-    </button>
-  </form>
+  <div class="flex items-center justify-between">
+    <div class="text-sm">{m.comments_count({ count: 0 })}</div>
+    {#if commenting}
+      <button
+        class="btn btn-sm"
+        onclick={() => {
+          commenting = false
+        }}>{m.comment_discard()}</button
+      >
+    {:else}
+      <button
+        class="btn btn-sm btn-primary"
+        onclick={() => {
+          commenting = true
+        }}>{m.comment_button()}</button
+      >
+    {/if}
+  </div>
+  {#if commenting}
+    <form>
+      <fieldset class="fieldset">
+        <textarea class="textarea h-24" placeholder={m.drafting_placeholder()}></textarea>
+      </fieldset>
+      <button type="submit" class="btn mt-4 btn-sm btn-primary" disabled={submitting}>
+        {#if submitting}
+          <span class="loading loading-spinner"></span>
+        {:else}
+          {m.comment_submit()}
+        {/if}
+      </button>
+    </form>
+  {/if}
 </div>

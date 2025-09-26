@@ -50,7 +50,7 @@
   "community_form_error_failed": "لا يمكن إنشاء المجتمع",
   "community_form_terms_prefix": "تتوافق تفاصيل هذا المجتمع مع شروط Spexity",
   "community_form_submit": "بدء المجتمع",
-  "editor_placeholder": "اكتب شيئاً...",
+  "drafting_placeholder": "اكتب شيئاً...",
   "editor_toolbar_bold": "غامق",
   "editor_toolbar_italic": "مائل",
   "editor_toolbar_underline": "تحته خط",
@@ -71,10 +71,10 @@
   "editor_link_title": "يجب أن يكون رابط صالح",
   "editor_link_url_label": "الرابط",
   "editor_link_url_hint": "أدخل رابطاً صالحاً",
-  "comment_add_legend": "إضافة تعليق",
-  "comment_placeholder": "ابدأ الكتابة",
   "comment_submit": "نشر التعليق",
   "comments_count": "{count} تعليق",
   "editor_toolbar_undo": "تراجع",
-  "editor_toolbar_redo": "إعادة"
+  "editor_toolbar_redo": "إعادة",
+  "comment_button": "علق",
+  "comment_discard": "إلغاء التعليق"
 }
