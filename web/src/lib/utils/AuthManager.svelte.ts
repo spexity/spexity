@@ -1,6 +1,7 @@
 import { browser } from "$app/environment"
 import { env } from "$env/dynamic/public"
-import { User, UserManager, WebStorageStateStore } from "oidc-client-ts"
+import type { User } from "oidc-client-ts"
+import { UserManager, WebStorageStateStore } from "oidc-client-ts"
 import { type CurrentUserAccount, CurrentUserStorage } from "$lib/utils/CurrentUserStorage"
 import { HttpClient } from "$lib/utils/HttpClient"
 import { goto } from "$app/navigation"

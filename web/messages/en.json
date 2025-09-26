@@ -82,12 +82,7 @@
   "comment_error_throttled": "You're commenting too quickly. Please wait a moment.",
   "comment_edit": "Edit",
   "comment_delete": "Delete",
-  "comment_delete_confirm": "Confirm delete",
   "comment_deleted_placeholder": "Comment deleted by author",
   "comment_edited_badge": "Edited",
-  "comments_load_more": "Load more comments",
-  "comment_edit_failed": "Could not update the comment.",
-  "comment_delete_failed": "Could not delete the comment.",
-  "comment_fetch_failed": "Could not load more comments.",
-  "comment_deleted_at": "Deleted {datetime}"
+  "comments_load_more": "Load more comments"
 }

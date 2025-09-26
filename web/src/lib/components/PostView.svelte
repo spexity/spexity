@@ -129,7 +129,7 @@
         current.id === comment.id ? localizeDeletedPlaceholder(updated) : current,
       )
       editingId = null
-    } catch (err) {
+    } catch {
       editingError = m.comment_error_failed()
     } finally {
       editingSubmitting = false
@@ -161,7 +161,7 @@
       )
       commentsCount = Math.max(0, commentsCount - 1)
       deleteConfirmationId = null
-    } catch (err) {
+    } catch {
       deleteError = m.comment_error_failed()
     } finally {
       deletingId = null
@@ -189,7 +189,7 @@
         pageSize: response.pageSize,
         total: response.total,
       }
-    } catch (err) {
+    } catch {
       loadMoreError = m.comment_error_failed()
     } finally {
       loadMoreBusy = false

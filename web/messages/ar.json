@@ -82,12 +82,7 @@
   "comment_error_throttled": "أنت ترسل التعليقات بسرعة كبيرة. يرجى الانتظار قليلاً.",
   "comment_edit": "تعديل",
   "comment_delete": "حذف",
-  "comment_delete_confirm": "تأكيد الحذف",
   "comment_deleted_placeholder": "تم حذف التعليق بواسطة المؤلف",
   "comment_edited_badge": "تم التعديل",
-  "comments_load_more": "تحميل المزيد من التعليقات",
-  "comment_edit_failed": "تعذر تحديث التعليق.",
-  "comment_delete_failed": "تعذر حذف التعليق.",
-  "comment_fetch_failed": "تعذر تحميل المزيد من التعليقات.",
-  "comment_deleted_at": "تم الحذف {datetime}"
+  "comments_load_more": "تحميل المزيد من التعليقات"
 }
