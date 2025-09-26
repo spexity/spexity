@@ -8,8 +8,8 @@
   import { m } from "$lib/paraglide/messages.js"
 
   interface EditorProps {
-    id: string
-    labelledBy: string
+    id?: string
+    labelledBy?: string
   }
 
   interface EditorStateItem {
@@ -78,8 +78,8 @@
     editor = new Editor({
       editorProps: {
         attributes: {
-          id,
-          "aria-labelledby": labelledBy,
+          ...(id && { id }),
+          ...(labelledBy && { "aria-labelledby": labelledBy }),
         },
       },
       element: element,

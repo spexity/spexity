@@ -3,6 +3,8 @@
   import type { PostView } from "$lib/model/types"
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import CommunityName from "$lib/components/CommunityName.svelte"
+  import Editor from "$lib/components/Editor.svelte"
+  import { EditorUtils } from "$lib/utils/EditorUtils"
   import { m } from "$lib/paraglide/messages.js"
 
   interface PostViewProps {
@@ -15,6 +17,7 @@
 
   let commenting = $state(false)
   let submitting = $state<boolean>(false)
+  let editorRef = $state<Editor>()
 </script>
 
 <div class="flex flex-col">
@@ -54,7 +57,7 @@
   {#if commenting}
     <form>
       <fieldset class="fieldset">
-        <textarea class="textarea h-24" placeholder={m.drafting_placeholder()}></textarea>
+        <Editor bind:this={editorRef} />
       </fieldset>
       <button type="submit" class="btn mt-4 btn-sm btn-primary" disabled={submitting}>
         {#if submitting}
