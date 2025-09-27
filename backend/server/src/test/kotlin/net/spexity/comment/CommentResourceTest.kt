@@ -9,8 +9,8 @@ import jakarta.ws.rs.core.MediaType
 import net.spexity.testutils.docWithParagraph
 import net.spexity.testutils.insertComment
 import net.spexity.testutils.insertCommunity
-import net.spexity.testutils.seedPost
-import net.spexity.testutils.seedUser
+import net.spexity.testutils.insertPost
+import net.spexity.testutils.insertUser
 import org.jooq.DSLContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -28,13 +28,13 @@ class CommentResourceTest {
 
     @Test
     fun `unauthenticated user cannot create comment`() {
-        val contributorId = seedUser(dslContext, authId = "post-author", alias = "Poster", verified = true)
+        val contributorId = insertUser(dslContext, authId = "post-author", alias = "Poster", verified = true)
         val communityId = insertCommunity(dslContext, "Anon Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
         given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(mapOf("body" to docWithParagraph("Anonymous attempt")))
+            .body(mapOf("bodyDocument" to docWithParagraph("Anonymous attempt")))
             .post("/api/posts/${postId}/comments")
             .then()
             .statusCode(401)
@@ -51,13 +51,13 @@ class CommentResourceTest {
         ]
     )
     fun `unverified user cannot create comment`() {
-        val contributorId = seedUser(dslContext, authId = "unverified", alias = "Unverified", verified = false)
+        val contributorId = insertUser(dslContext, authId = "unverified", alias = "Unverified", verified = false)
         val communityId = insertCommunity(dslContext, "Unverified Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
         given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(mapOf("body" to docWithParagraph("Blocked")))
+            .body(mapOf("bodyDocument" to docWithParagraph("Blocked")))
             .post("/api/posts/${postId}/comments")
             .then()
             .statusCode(403)
@@ -74,28 +74,32 @@ class CommentResourceTest {
         ]
     )
     fun `verified user can create comment`() {
-        val contributorId = seedUser(dslContext, authId = "commenter", alias = "Commenter", verified = true)
+        val contributorId = insertUser(dslContext, authId = "commenter", alias = "Commenter", verified = true)
         val communityId = insertCommunity(dslContext, "Verified Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
         val response = given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(mapOf("body" to docWithParagraph("First comment")))
+            .body(mapOf("bodyDocument" to docWithParagraph("First comment")))
             .post("/api/posts/${postId}/comments")
             .then()
             .statusCode(200)
             .extract()
             .jsonPath()
 
-        val returnedHtml = response.getString("html")
         val returnedId = response.getString("id")
-        val edited = response.getBoolean("edited")
-        val deleted = response.getBoolean("deleted")
+        UUID.fromString(returnedId)
 
-        assertTrue(returnedHtml.contains("<p>First comment</p>"))
-        assertTrue(UUID.fromString(returnedId).toString().isNotEmpty())
-        assertEquals(false, edited)
-        assertEquals(false, deleted)
+        val listResponse = given()
+            .get("/api/posts/${postId}/comments")
+            .then()
+            .statusCode(200)
+            .extract()
+            .jsonPath()
+
+        assertEquals(returnedId, listResponse.getString("items[0].id"))
+        assertEquals(false, listResponse.getBoolean("items[0].deleted"))
+        assertTrue(listResponse.getString("items[0].bodyHtml").contains("First comment"))
     }
 
     @Test
@@ -109,13 +113,13 @@ class CommentResourceTest {
         ]
     )
     fun `empty comment is rejected`() {
-        val contributorId = seedUser(dslContext, authId = "commenter-limits", alias = "Limiter", verified = true)
+        val contributorId = insertUser(dslContext, authId = "commenter-limits", alias = "Limiter", verified = true)
         val communityId = insertCommunity(dslContext, "Limit Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
         given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(mapOf("body" to docWithParagraph("   ")))
+            .body(mapOf("bodyDocument" to docWithParagraph("   ")))
             .post("/api/posts/${postId}/comments")
             .then()
             .statusCode(400)
@@ -132,18 +136,11 @@ class CommentResourceTest {
         ]
     )
     fun `requests are throttled after burst`() {
-        val contributorId = seedUser(dslContext, authId = "commenter-throttle", alias = "Throttle", verified = true)
+        val contributorId = insertUser(dslContext, authId = "commenter-throttle", alias = "Throttle", verified = true)
         val communityId = insertCommunity(dslContext, "Throttle Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
-        val payload = mapOf("body" to docWithParagraph("Throttle test"))
-
-        given()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(payload)
-            .post("/api/posts/${postId}/comments")
-            .then()
-            .statusCode(200)
+        val payload = mapOf("bodyDocument" to docWithParagraph("Throttle test"))
 
         given()
             .contentType(MediaType.APPLICATION_JSON)
@@ -171,11 +168,11 @@ class CommentResourceTest {
         ]
     )
     fun `requests from excluded user are not throttled`() {
-        val contributorId = seedUser(dslContext, authId = EXCLUDED_AUTH_ID, alias = "Exempt", verified = true)
+        val contributorId = insertUser(dslContext, authId = EXCLUDED_AUTH_ID, alias = "Exempt", verified = true)
         val communityId = insertCommunity(dslContext, "Exempt Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
-        val payload = mapOf("body" to docWithParagraph("Exempt comment"))
+        val payload = mapOf("bodyDocument" to docWithParagraph("Exempt comment"))
 
         repeat(3) {
             given()
@@ -198,18 +195,25 @@ class CommentResourceTest {
         ]
     )
     fun `comments list is chronological and includes deleted placeholder`() {
-        val contributorId = seedUser(dslContext, authId = "commenter-list", alias = "Lister", verified = true)
+        val contributorId = insertUser(dslContext, authId = "commenter-list", alias = "Lister", verified = true)
         val communityId = insertCommunity(dslContext, "List Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
-        val firstId = createComment(postId, "First comment")
+        val baseTime = java.time.OffsetDateTime.now()
+        val firstId = insertComment(
+            dslContext,
+            postId,
+            contributorId,
+            "First comment",
+            createdAt = baseTime.minusMinutes(5)
+        )
         val secondId = createComment(postId, "Second comment")
         val thirdId = insertComment(
             dslContext,
             postId,
             contributorId,
             "Third comment",
-            createdAt = java.time.OffsetDateTime.now().plusSeconds(1)
+            createdAt = baseTime.plusMinutes(1)
         )
 
         deleteComment(postId, secondId)
@@ -224,17 +228,18 @@ class CommentResourceTest {
         val items = response.getList<Any>("items")
         assertEquals(3, items.size)
 
-        assertEquals(firstId, response.getString("items[0].id"))
+        assertEquals(firstId.toString(), response.getString("items[0].id"))
         assertFalse(response.getBoolean("items[0].deleted"))
-        assertTrue(response.getString("items[0].html").contains("First comment"))
+        assertTrue(response.getString("items[0].bodyHtml").contains("First comment"))
 
         assertEquals(secondId, response.getString("items[1].id"))
         assertTrue(response.getBoolean("items[1].deleted"))
-        assertTrue(response.getString("items[1].html").contains("Comment deleted"))
+        val secondHtml = response.get("items[1].bodyHtml") as String?
+        assertEquals(null, secondHtml)
 
         assertEquals(thirdId.toString(), response.getString("items[2].id"))
         assertFalse(response.getBoolean("items[2].deleted"))
-        assertTrue(response.getString("items[2].html").contains("Third comment"))
+        assertTrue(response.getString("items[2].bodyHtml").contains("Third comment"))
     }
 
     @Test
@@ -248,20 +253,35 @@ class CommentResourceTest {
         ]
     )
     fun `author can edit up to two times`() {
-        val contributorId = seedUser(dslContext, authId = "commenter-edit", alias = "Editor", verified = true)
+        val contributorId = insertUser(dslContext, authId = "commenter-edit", alias = "Editor", verified = true)
         val communityId = insertCommunity(dslContext, "Edit Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
         val commentId = createComment(postId, "Original")
 
         editComment(postId, commentId, "Edited once")
             .then()
             .statusCode(200)
-            .body("edited", org.hamcrest.Matchers.equalTo(true))
+
+        var listResponse = given()
+            .get("/api/posts/${postId}/comments")
+            .then()
+            .statusCode(200)
+            .extract()
+            .jsonPath()
+        assertEquals(1, listResponse.getInt("items[0].editCount"))
 
         editComment(postId, commentId, "Edited twice")
             .then()
             .statusCode(200)
+
+        listResponse = given()
+            .get("/api/posts/${postId}/comments")
+            .then()
+            .statusCode(200)
+            .extract()
+            .jsonPath()
+        assertEquals(2, listResponse.getInt("items[0].editCount"))
 
         editComment(postId, commentId, "Edited thrice")
             .then()
@@ -279,10 +299,10 @@ class CommentResourceTest {
         ]
     )
     fun `non author cannot edit or delete`() {
-        val authorContributor = seedUser(dslContext, authId = "author", alias = "Author", verified = true)
-        seedUser(dslContext, authId = "intruder", alias = "Intruder", verified = true)
+        val authorContributor = insertUser(dslContext, authId = "author", alias = "Author", verified = true)
+        insertUser(dslContext, authId = "intruder", alias = "Intruder", verified = true)
         val communityId = insertCommunity(dslContext, "Guard Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = authorContributor)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = authorContributor)
 
         val commentId = insertComment(dslContext, postId, authorContributor, "Protected comment")
 
@@ -307,9 +327,9 @@ class CommentResourceTest {
         ]
     )
     fun `author can soft delete comment`() {
-        val contributorId = seedUser(dslContext, authId = "commenter-delete", alias = "Remover", verified = true)
+        val contributorId = insertUser(dslContext, authId = "commenter-delete", alias = "Remover", verified = true)
         val communityId = insertCommunity(dslContext, "Delete Community")
-        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+        val postId = insertPost(dslContext, communityId = communityId, contributorId = contributorId)
 
         val commentId = createComment(postId, "Soon gone")
 
@@ -326,13 +346,14 @@ class CommentResourceTest {
             .jsonPath()
 
         assertTrue(response.getBoolean("items[0].deleted"))
-        assertTrue(response.getString("items[0].html").contains("Comment deleted"))
+        val deletedHtml = response.get("items[0].bodyHtml") as String?
+        assertEquals(null, deletedHtml)
     }
 
     private fun createComment(postId: UUID, text: String): String {
         return given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(mapOf("body" to docWithParagraph(text)))
+            .body(mapOf("bodyDocument" to docWithParagraph(text)))
             .post("/api/posts/${postId}/comments")
             .then()
             .statusCode(200)
@@ -344,7 +365,7 @@ class CommentResourceTest {
     private fun editComment(postId: UUID, commentId: String, text: String) =
         given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(mapOf("body" to docWithParagraph(text)))
+            .body(mapOf("bodyDocument" to docWithParagraph(text)))
             .patch("/api/posts/${postId}/comments/${commentId}")
 
     private fun deleteComment(postId: UUID, commentId: String) {

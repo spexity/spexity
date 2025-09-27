@@ -5,10 +5,10 @@ import jakarta.ws.rs.core.MediaType
 import net.spexity.data.model.public_.Tables.COMMUNITY
 import net.spexity.data.model.public_.Tables.CONTRIBUTOR
 import net.spexity.data.model.public_.Tables.POST
+import net.spexity.data.model.public_.Tables.POST_COMMENT
 import net.spexity.data.model.public_.Tables.USER_ACCOUNT
 import org.jooq.DSLContext
 import org.jooq.JSONB
-import org.jooq.impl.DSL
 import java.util.UUID
 import kotlin.random.Random
 
@@ -33,11 +33,20 @@ fun verifyUser(dslContext: DSLContext, authCorrelationId: String) {
         .execute()
 }
 
-fun insertCommunity(dslContext: DSLContext, namePrefix: String): UUID {
+fun insertCommunity(
+    dslContext: DSLContext,
+    namePrefix: String,
+    createdByContributorId: UUID? = null
+): UUID {
     val name = "$namePrefix ${UUID.randomUUID()}"
+    val creatorId = createdByContributorId ?: run {
+        val creatorAuthId = "community-${UUID.randomUUID()}"
+        val creatorAlias = "Owner-${creatorAuthId.takeLast(8)}"
+        insertUser(dslContext, creatorAuthId, creatorAlias)
+    }
     return dslContext.insertInto(COMMUNITY)
-        .columns(COMMUNITY.NAME)
-        .values(name)
+        .columns(COMMUNITY.NAME, COMMUNITY.CREATED_BY_CONTRIBUTOR_ID)
+        .values(name, creatorId)
         .returning(COMMUNITY.ID)
         .fetchOne()!!.id
 }
@@ -64,7 +73,7 @@ fun userAccountId(dslContext: DSLContext, authCorrelationId: String): UUID {
         .fetchOne(USER_ACCOUNT.ID)!!
 }
 
-fun seedUser(
+fun insertUser(
     dslContext: DSLContext,
     authId: String,
     alias: String,
@@ -84,7 +93,7 @@ fun seedUser(
         .fetchOne()!!.id
 }
 
-fun seedPost(
+fun insertPost(
     dslContext: DSLContext,
     communityId: UUID,
     contributorId: UUID,
@@ -106,37 +115,19 @@ fun insertComment(
     bodyText: String,
     createdAt: java.time.OffsetDateTime = java.time.OffsetDateTime.now(),
     deletedAt: java.time.OffsetDateTime? = null,
-    deletedByAuthor: Boolean = false,
     editCount: Int = 0
 ): UUID {
     val id = UUID.randomUUID()
-    val bodyJson = docWithParagraph(bodyText)
-    dslContext.insertInto(DSL.table("post_comment"))
-        .columns(
-            DSL.field("id"),
-            DSL.field("post_id"),
-            DSL.field("contributor_id"),
-            DSL.field("body_json"),
-            DSL.field("body_text"),
-            DSL.field("created_at"),
-            DSL.field("edited_at"),
-            DSL.field("edit_count"),
-            DSL.field("deleted_at"),
-            DSL.field("deleted_by_author")
-        )
-        .values(
-            id,
-            postId,
-            contributorId,
-            JSONB.jsonb(ObjectMappers.mapper.writeValueAsString(bodyJson)),
-            bodyText,
-            createdAt,
-            null,
-            editCount,
-            deletedAt,
-            deletedByAuthor
-        )
-        .execute()
+    val bodyJson = JSONB.jsonb(ObjectMappers.mapper.writeValueAsString(docWithParagraph(bodyText)))
+    val record = dslContext.newRecord(POST_COMMENT)
+    record.id = id
+    record.postId = postId
+    record.contributorId = contributorId
+    record.bodyJson = bodyJson
+    record.createdAt = createdAt
+    record.deletedAt = deletedAt
+    record.editCount = editCount
+    record.store()
     return id
 }
 

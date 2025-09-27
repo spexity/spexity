@@ -46,7 +46,7 @@ class PostResourceTest {
         val requestBody = mapOf(
             "communityId" to communityId.toString(),
             "subject" to subject,
-            "body" to docWithParagraph(message),
+            "bodyDocument" to docWithParagraph(message),
             "conformToTermsAndConditions" to true
         )
 
@@ -101,7 +101,7 @@ class PostResourceTest {
                 mapOf(
                     "communityId" to communityId.toString(),
                     "subject" to subject,
-                    "body" to docWithParagraph("This should not persist."),
+                    "bodyDocument" to docWithParagraph("This should not persist."),
                     "conformToTermsAndConditions" to true
                 )
             )
