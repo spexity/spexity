@@ -18,6 +18,7 @@
   "form_alias_description": "您的公开可见名称",
   "form_terms_prefix": "我是人类，我接受",
   "form_save": "保存",
+  "form_cancel": "取消",
   "form_subject_label": "主题",
   "form_body_label": "内容",
   "form_compliance_prefix": "此帖子符合 Spexity 的",

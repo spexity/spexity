@@ -19,7 +19,7 @@ export class App {
     await this.awaitAppPage()
   }
 
-  async signIn(username: string = "test1@example.com", password: string = "test1") {
+  async signIn(username: string = "god@example.com", password: string = "god") {
     await test.step("Sign in", async () => {
       await this.accountMenu.open()
       await this.accountMenu.clickSignIn()

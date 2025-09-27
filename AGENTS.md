@@ -6,6 +6,7 @@
 - MUST NOT skip any tests.
 - MUST NOT change any configuration unless explicitly asked.
 - MUST clean up after finishing and remove any unused code.
+- MUST NOT add comments to code.
 
 ## Backend
 location: backend/

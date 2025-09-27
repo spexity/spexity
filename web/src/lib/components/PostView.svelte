@@ -6,7 +6,7 @@
   import Editor from "$lib/components/Editor.svelte"
   import type { CommentPage, CommentView, PostView } from "$lib/model/types"
   import { DateFormatter } from "$lib/utils/DateFormatter"
-  import { EditorUtils, type EditorContent } from "$lib/utils/EditorUtils"
+  import { type EditorContent, EditorUtils } from "$lib/utils/EditorUtils"
   import { HttpError } from "$lib/utils/HttpClient"
   import { m } from "$lib/paraglide/messages.js"
 
@@ -21,22 +21,10 @@
 
   const EMPTY_DOC: EditorContent = { type: "doc", content: [] }
 
-  const localizeDeletedPlaceholder = (comment: CommentView): CommentView => {
-    if (!comment.deleted) {
-      return comment
-    }
-    return {
-      ...comment,
-      html: `<p>${m.comment_deleted_placeholder()}</p>`,
-      body: null,
-    }
-  }
-
-  let comments = $state<CommentView[]>(initialComments.items.map(localizeDeletedPlaceholder))
+  let comments = $state<CommentView[]>(initialComments.items)
   let commentsMeta = $state({
     page: initialComments.page,
     pageSize: initialComments.pageSize,
-    total: initialComments.total,
   })
   let commentsCount = $state(post.commentsCount)
 
@@ -57,10 +45,7 @@
   let loadMoreBusy = $state(false)
   let loadMoreError = $state<string | undefined>()
 
-  const hasMore = $derived(comments.length < commentsMeta.total)
-
-  const commentCountLabel = $derived(m.comments_count({ count: commentsCount }))
-  const deletedPlaceholderHtml = () => `<p>${m.comment_deleted_placeholder()}</p>`
+  const hasMore = $derived(comments.length !== 0 && comments.length % commentsMeta.pageSize == 0)
 
   const handleCreateComment = async (event: SubmitEvent) => {
     event.preventDefault()
@@ -76,13 +61,9 @@
         `/api/posts/${post.id}/comments`,
         { body },
       )
-      comments = [...comments, localizeDeletedPlaceholder(created)]
-      commentsMeta = {
-        ...commentsMeta,
-        total: commentsMeta.total + 1,
-      }
+      comments = [...comments, created]
       commentsCount += 1
-      editorRef?.setValue(EMPTY_DOC)
+      editorRef?.setHtmlValue("")
       commenting = false
     } catch (err) {
       if (err instanceof HttpError && err.status === 429) {
@@ -100,7 +81,7 @@
     deleteConfirmationId = null
     editingId = comment.id
     await tick()
-    editingEditorRef?.setValue(comment.body ?? EMPTY_DOC)
+    editingEditorRef?.setHtmlValue(comment.bodyHtml ?? "")
   }
 
   const cancelEditing = () => {
@@ -113,20 +94,27 @@
     if (!editingEditorRef) {
       return
     }
-    const body = editingEditorRef.getValue()
-    if (!EditorUtils.hasMeaningfulText(body)) {
+    const bodyDocument = editingEditorRef.getValue()
+    const bodyHtml = editingEditorRef.getValueHtml()
+    if (!EditorUtils.hasMeaningfulText(bodyDocument)) {
       editingError = m.comment_error_empty()
       return
     }
     try {
       editingSubmitting = true
       editingError = undefined
-      const updated = await authManager.httpClient.patch<CommentView>(
+      await authManager.httpClient.patch<CommentView>(
         `/api/posts/${post.id}/comments/${comment.id}`,
-        { body },
+        { bodyDocument },
       )
       comments = comments.map((current) =>
-        current.id === comment.id ? localizeDeletedPlaceholder(updated) : current,
+        current.id === comment.id
+          ? {
+              ...current,
+              bodyHtml: bodyHtml,
+              editCount: (current.editCount ?? 0) + 1,
+            }
+          : current,
       )
       editingId = null
     } catch {
@@ -142,6 +130,11 @@
     deleteConfirmationId = commentId
   }
 
+  const cancelDelete = () => {
+    deleteError = undefined
+    deleteConfirmationId = null
+  }
+
   const performDelete = async (comment: CommentView) => {
     try {
       deletingId = comment.id
@@ -154,7 +147,7 @@
               ...current,
               deleted: true,
               deletedAt,
-              html: deletedPlaceholderHtml(),
+              bodyHtml: `<p>${m.comment_deleted_placeholder()}</p>`,
               body: null,
             }
           : current,
@@ -180,14 +173,11 @@
         `/api/posts/${post.id}/comments?page=${nextPage}&pageSize=${commentsMeta.pageSize}`,
       )
       const existingIds = new Set(comments.map((item) => item.id))
-      const nextItems = response.items
-        .map(localizeDeletedPlaceholder)
-        .filter((item) => !existingIds.has(item.id))
+      const nextItems = response.items.filter((item) => !existingIds.has(item.id))
       comments = [...comments, ...nextItems]
       commentsMeta = {
         page: response.page,
         pageSize: response.pageSize,
-        total: response.total,
       }
     } catch {
       loadMoreError = m.comment_error_failed()
@@ -205,9 +195,6 @@
 
   const formatCreatedAt = (comment: CommentView) =>
     DateFormatter.formatUtcIsoAbsolute(comment.createdAt, timezone)
-
-  const formatDeletedAt = (comment: CommentView) =>
-    comment.deletedAt ? DateFormatter.formatUtcIsoAbsolute(comment.deletedAt, timezone) : ""
 </script>
 
 <div class="flex flex-col" data-testid="post-view">
@@ -216,19 +203,19 @@
       <CommunityName community={post.community} />
     </span>
     <div class="text-xs">
-      <ContributorHandle contributor={post.contributor} />
+      <ContributorHandle contributor={post.contributor} testIdQualifier={post.id} />
       - {formattedDateTime}
     </div>
   </div>
   <div class="mt-4">
     <h2 class="text-2xl font-medium">{post.subject}</h2>
     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-    <div class="tiptap my-4">{@html post.body}</div>
+    <div class="tiptap my-4">{@html post.bodyHtml}</div>
   </div>
   <div class="divider"></div>
   <div class="flex items-center justify-between">
     <div class="text-sm" data-testid="comments-count" data-count={commentsCount}>
-      {commentCountLabel}
+      {m.comments_count({ count: commentsCount })}
     </div>
     {#if commenting}
       <button
@@ -275,33 +262,35 @@
     </form>
   {/if}
 
-  <div class="mt-6 flex flex-col gap-6">
+  <div class="mt-2 flex flex-col gap-2">
     {#each comments as comment (comment.id)}
       <article
-        class="rounded-lg border border-base-300 p-4"
+        class="rounded-lg border border-base-300 p-3"
         data-testid={`comment-item-${comment.id}`}
       >
-        <div class="flex flex-col gap-1">
+        <div class="flex flex-col gap-2">
           <div class="flex flex-wrap items-center gap-2 text-xs">
-            <ContributorHandle contributor={comment.contributor} />
+            <ContributorHandle contributor={comment.contributor} testIdQualifier={comment.id} />
             <span>{formatCreatedAt(comment)}</span>
-            {#if comment.edited && !comment.deleted}
-              <span class="badge badge-outline" data-testid={`comment-edited-badge-${comment.id}`}>
+            {#if comment.editCount && !comment.deleted}
+              <span
+                class="badge badge-ghost badge-xs"
+                data-testid={`comment-edited-badge-${comment.id}`}
+              >
                 {m.comment_edited_badge()}
               </span>
             {/if}
           </div>
           {#if comment.deleted}
-            <p class="text-sm font-medium">{m.comment_deleted_placeholder()}</p>
-            {#if comment.deletedAt}
-              <span class="text-xs text-base-content/70">{formatDeletedAt(comment)}</span>
-            {/if}
+            <p class="text-sm font-medium text-base-content/66">
+              {m.comment_deleted_placeholder()}
+            </p>
           {:else}
             <div class="tiptap" data-testid={`comment-body-${comment.id}`}>
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-              {@html comment.html}
+              {@html comment.bodyHtml}
             </div>
-            {#if comment.body}
+            {#if comment.contributor.id === authManager.userAccount?.contributorId}
               {#if editingId === comment.id}
                 <form
                   class="mt-3 flex flex-col gap-3"
@@ -310,7 +299,6 @@
                   <Editor
                     bind:this={editingEditorRef}
                     id={`comment-edit-${comment.id}`}
-                    content={comment.body}
                     dataTestId={`comment-edit-editor-${comment.id}`}
                   />
                   {#if editingError}
@@ -337,7 +325,7 @@
                   </div>
                 </form>
               {:else}
-                <div class="mt-3 flex flex-wrap gap-2">
+                <div class="flex flex-wrap gap-2">
                   <button
                     class="btn btn-xs"
                     type="button"
@@ -346,15 +334,17 @@
                   >
                     {m.comment_edit()}
                   </button>
-                  <button
-                    class="btn btn-outline btn-xs"
-                    type="button"
-                    data-testid={`comment-delete-${comment.id}`}
-                    onclick={() => askDelete(comment.id)}
-                  >
-                    {m.comment_delete()}
-                  </button>
+
                   {#if deleteConfirmationId === comment.id}
+                    <button
+                      class="btn btn-xs"
+                      type="button"
+                      data-testid={`comment-delete-cancel-${comment.id}`}
+                      disabled={deletingId === comment.id}
+                      onclick={() => cancelDelete()}
+                    >
+                      {m.form_cancel()}
+                    </button>
                     <button
                       class="btn btn-xs btn-error"
                       type="button"
@@ -367,6 +357,15 @@
                       {:else}
                         {m.comment_delete()}
                       {/if}
+                    </button>
+                  {:else}
+                    <button
+                      class="btn btn-outline btn-xs"
+                      type="button"
+                      data-testid={`comment-delete-${comment.id}`}
+                      onclick={() => askDelete(comment.id)}
+                    >
+                      {m.comment_delete()}
                     </button>
                   {/if}
                 </div>
@@ -385,14 +384,14 @@
   {/if}
 
   {#if hasMore}
-    <div class="mt-6 flex flex-col items-start gap-2">
+    <div class="mt-2 flex flex-col items-start gap-2">
       {#if loadMoreError}
         <div role="alert" class="alert alert-error">
           <span>{loadMoreError}</span>
         </div>
       {/if}
       <button
-        class="btn btn-outline"
+        class="btn btn-outline btn-sm"
         type="button"
         data-testid="comments-load-more"
         aria-busy={loadMoreBusy ? "true" : "false"}

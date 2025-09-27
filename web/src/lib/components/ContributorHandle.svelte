@@ -4,14 +4,18 @@
 
   interface ContributorHandleProps {
     contributor: ContributorRef
+    testIdQualifier: string
   }
 
-  const { contributor }: ContributorHandleProps = $props()
+  const { contributor, testIdQualifier }: ContributorHandleProps = $props()
 
   const contributorName = contributor.handle.substring(0, contributor.handle.indexOf("#"))
   const contributorDiscriminator = contributor.handle.substring(contributorName.length)
 </script>
 
-<a href={resolve(`/contributors/${contributor.id}`)}>
+<a
+  href={resolve(`/contributors/${contributor.id}`)}
+  data-testid={`contributor-${contributor.id}-${testIdQualifier}`}
+>
   {contributorName}<span class="text-base-content/66">{contributorDiscriminator}</span>
 </a>

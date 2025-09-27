@@ -36,7 +36,7 @@ class WebHomeResource(private val dslContext: DSLContext) {
         )
             .from(POST)
             .fetch {
-                val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
+                val instant = it.get(POST.CREATED_AT).toInstant()
                 PostPreview(
                     it.get(POST.ID),
                     instant,

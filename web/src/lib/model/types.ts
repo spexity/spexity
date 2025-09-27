@@ -1,5 +1,3 @@
-import type { EditorContent } from "$lib/utils/EditorUtils"
-
 export interface CommunityPreview {
   id: string
   name: string
@@ -9,7 +7,7 @@ export interface PostPreview {
   id: string
   createdAt: string
   subject: string
-  body: string
+  bodyText: string
   contributor: ContributorRef
   community: CommunityRef
   commentsCount: number
@@ -19,7 +17,7 @@ export interface PostView {
   id: string
   createdAt: string
   subject: string
-  body: string
+  bodyHtml: string
   contributor: ContributorRef
   community: CommunityRef
   commentsCount: number
@@ -29,7 +27,7 @@ export interface CommunityPreviewPost {
   id: string
   createdAt: string
   subject: string
-  body: string
+  bodyText: string
   contributor: ContributorRef
   commentsCount: number
 }
@@ -47,17 +45,14 @@ export interface ContributorRef {
 export interface CommentView {
   id: string
   createdAt: string
-  edited: boolean
+  editCount?: number
   deleted: boolean
-  deletedAt?: string | null
   contributor: ContributorRef
-  html: string
-  body?: EditorContent | null
+  bodyHtml: string
 }
 
 export interface CommentPage {
   items: CommentView[]
   page: number
   pageSize: number
-  total: number
 }

@@ -25,15 +25,15 @@
       const data = CsrFormHandler.onsubmit(event)
       const subject = data.get("subject") as string
       const conformToTermsAndConditions = data.get("conformToTermsAndConditions") as string
-      const body = editorRef?.getValue()
-      if (!EditorUtils.hasMeaningfulText(body)) {
+      const bodyDocument = editorRef?.getValue()
+      if (!EditorUtils.hasMeaningfulText(bodyDocument)) {
         errorMessage = m.error_post_empty()
         return
       }
       const post = await authManager.httpClient.post<PostPreview>("/api/posts", {
         communityId,
         subject,
-        body,
+        bodyDocument,
         conformToTermsAndConditions: conformToTermsAndConditions === "on",
       })
       await goto(resolve(`/posts/${post.id}`))

@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
+private const val EXCLUDED_AUTH_ID = "3561bd91-89f0-4bb3-bf2f-b745fc415b41"
+
 @QuarkusTest
 class CommentResourceTest {
 
@@ -156,6 +158,33 @@ class CommentResourceTest {
             .post("/api/posts/${postId}/comments")
             .then()
             .statusCode(429)
+    }
+
+    @Test
+    @TestSecurity(
+        authorizationEnabled = true,
+        user = EXCLUDED_AUTH_ID,
+        roles = ["user"],
+        attributes = [
+            SecurityAttribute(key = "sub", value = EXCLUDED_AUTH_ID),
+            SecurityAttribute(key = "email", value = "god@example.com")
+        ]
+    )
+    fun `requests from excluded user are not throttled`() {
+        val contributorId = seedUser(dslContext, authId = EXCLUDED_AUTH_ID, alias = "Exempt", verified = true)
+        val communityId = insertCommunity(dslContext, "Exempt Community")
+        val postId = seedPost(dslContext, communityId = communityId, contributorId = contributorId)
+
+        val payload = mapOf("body" to docWithParagraph("Exempt comment"))
+
+        repeat(3) {
+            given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(payload)
+                .post("/api/posts/${postId}/comments")
+                .then()
+                .statusCode(200)
+        }
     }
 
     @Test

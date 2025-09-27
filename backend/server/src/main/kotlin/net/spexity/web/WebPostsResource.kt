@@ -4,19 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.security.PermitAll
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
-import jakarta.ws.rs.core.Context
-import io.quarkus.security.identity.SecurityIdentity
 import net.spexity.data.model.public_.Tables.*
 import net.spexity.post.CommentService
-import net.spexity.post.BodyHtmlSerializer
-import net.spexity.post.Doc
+import net.spexity.post.Document
+import net.spexity.post.DocumentToHtmlSerializer
 import net.spexity.post.HtmlSanitizer
-import net.spexity.security.optionalAuthCorrelationId
 import net.spexity.web.model.CommunityRef
 import net.spexity.web.model.ContributorRef
 import net.spexity.web.model.PostView
 import org.jooq.DSLContext
-import java.time.ZoneOffset
 import java.util.*
 
 @Path("/api/web/posts")
@@ -30,28 +26,25 @@ class WebPostsResource(
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
-    fun getPostPageData(
-        @PathParam("id") id: UUID,
-        @Context securityIdentity: SecurityIdentity
-    ): PostPageData {
+    fun getPostPageData(@PathParam("id") id: UUID): PostPageData {
         val selected = dslContext.select(
             POST.ID,
             POST.CREATED_AT,
             POST.SUBJECT,
             POST.BODY_JSON,
+            POST.COMMENTS_COUNT,
             POST.contributor().ID,
             POST.contributor().HANDLE,
             POST.community().ID,
             POST.community().NAME,
-            POST.COMMENTS_COUNT
         ).from(POST).where(POST.ID.eq(id)).fetchOne {
-            val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
-            val body: Doc = objectMapper.readValue(it.get(POST.BODY_JSON).data(), Doc::class.java)
+            val instant = it.get(POST.CREATED_AT).toInstant()
+            val bodyDocument: Document = objectMapper.readValue(it.get(POST.BODY_JSON).data(), Document::class.java)
             PostView(
                 it.get(POST.ID),
                 instant,
                 it.get(POST.SUBJECT),
-                HtmlSanitizer.sanitize(BodyHtmlSerializer.render(body)),
+                HtmlSanitizer.sanitize(DocumentToHtmlSerializer.serialize(bodyDocument)),
                 ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
                 CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME)),
                 it.get(POST.COMMENTS_COUNT)
@@ -64,8 +57,7 @@ class WebPostsResource(
             CommentService.ListRequest(
                 postId = id,
                 page = 1,
-                pageSize = 100,
-                authCorrelationId = optionalAuthCorrelationId(securityIdentity)
+                pageSize = 100
             )
         )
         return PostPageData(selected, comments)
@@ -85,7 +77,7 @@ class WebPostsResource(
         return NewPostPageData(selected)
     }
 
-    data class PostPageData(val post: PostView, val comments: CommentService.CommentPage)
+    data class PostPageData(val post: PostView, val comments: CommentService.ListResponse)
 
     data class NewPostPageData(val communityName: String)
 

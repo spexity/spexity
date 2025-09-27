@@ -461,16 +461,16 @@
   "users": [
     {
       "id": "3561bd91-89f0-4bb3-bf2f-b745fc415b41",
-      "username": "test1@example.com",
-      "email": "test1@example.com",
-      "emailVerified": false,
+      "username": "god@example.com",
+      "email": "god@example.com",
+      "emailVerified": true,
       "enabled": true,
       "createdTimestamp": 1757477577635,
       "totp": false,
       "credentials": [
         {
           "type": "password",
-          "value": "test1",
+          "value": "god",
           "temporary": false
         }
       ],
@@ -483,16 +483,40 @@
       "groups": []
     },
     {
-      "username": "test2@example.com",
-      "email": "test2@example.com",
-      "emailVerified": false,
+      "id": "266cfe96-52e6-48fa-a01c-c41583f55a58",
+      "username": "human@example.com",
+      "email": "human@example.com",
+      "emailVerified": true,
       "enabled": true,
       "createdTimestamp": 1757477577635,
       "totp": false,
       "credentials": [
         {
           "type": "password",
-          "value": "test2",
+          "value": "human",
+          "temporary": false
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-spexity"
+      ],
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "9a5f8d52-b188-49c2-8d8e-24d4e4406a8d",
+      "username": "bot@example.com",
+      "email": "bot@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "createdTimestamp": 1757477577635,
+      "totp": false,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "bot",
           "temporary": false
         }
       ],

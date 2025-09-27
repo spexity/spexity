@@ -65,7 +65,7 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
             .from(POST)
             .where(POST.community().ID.eq(id))
             .fetch {
-                val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
+                val instant = it.get(POST.CREATED_AT).toInstant()
                 CommunityPreviewPost(
                     it.get(POST.ID),
                     instant,

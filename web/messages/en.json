@@ -18,6 +18,7 @@
   "form_alias_description": "Your publicly visible name",
   "form_terms_prefix": "I am a human and I accept the",
   "form_save": "Save",
+  "form_cancel": "Cancel",
   "form_subject_label": "Subject",
   "form_body_label": "Body",
   "form_compliance_prefix": "This post conforms to Spexity",

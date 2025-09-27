@@ -11,7 +11,6 @@
   interface EditorProps {
     id?: string
     labelledBy?: string
-    content?: EditorContent
     dataTestId?: string
   }
 
@@ -67,7 +66,7 @@
     redo: false,
   }
 
-  let { id, labelledBy, content, dataTestId }: EditorProps = $props()
+  let { id, labelledBy, dataTestId }: EditorProps = $props()
   let editor: Editor | undefined = $state()
   let editorState = $state<EditorState>(EMPTY_EDITOR_STATE)
   let linkModalRef = $state<HTMLDialogElement>()
@@ -78,8 +77,11 @@
   export const getValue = (): EditorContent => {
     return editor?.getJSON() ?? { type: "doc", content: [] }
   }
+  export const getValueHtml = (): string => {
+    return editor?.getHTML() ?? ""
+  }
 
-  export const setValue = (value: EditorContent) => {
+  export const setHtmlValue = (value: string) => {
     editor?.commands.setContent(value, { emitUpdate: false })
   }
 
@@ -147,19 +149,10 @@
         }
       },
     })
-    if (content) {
-      editor.commands.setContent(content, { emitUpdate: false })
-    }
   }
 
   onDestroy(() => {
     editor?.destroy()
-  })
-
-  $effect(() => {
-    if (editor && content) {
-      editor.commands.setContent(content, { emitUpdate: false })
-    }
   })
 
   const showLinkModal = () => {

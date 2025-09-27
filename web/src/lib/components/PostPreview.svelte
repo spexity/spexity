@@ -23,17 +23,17 @@
       {#if community}<CommunityName {community} />{/if}
     </span>
     <div class="text-xs">
-      <ContributorHandle contributor={post.contributor} />
+      <ContributorHandle contributor={post.contributor} testIdQualifier={post.id} />
       - {formattedDateTime}
     </div>
   </div>
   <a href={resolve(`/posts/${post.id}`)}>
     <h2 class="font-medium">{post.subject}</h2>
-    <p class="text-sm">{post.body}</p>
+    <p class="text-sm">{post.bodyText}</p>
   </a>
   <div class="flex flex-row justify-between">
     <div class="flex flex-row items-center gap-2 text-xs">
-      <span data-testid={`post-preview-comments-count-${post.id}`} data-count={post.commentsCount}>
+      <span data-testid={`post-preview-comments-count-${post.id}`}>
         {m.post_comments_count({ count: post.commentsCount })}
       </span>
     </div>

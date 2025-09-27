@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes(
-    JsonSubTypes.Type(value = Doc::class, name = "doc"),
+    JsonSubTypes.Type(value = Document::class, name = "doc"),
     JsonSubTypes.Type(value = Paragraph::class, name = "paragraph"),
     JsonSubTypes.Type(value = Text::class, name = "text"),
     JsonSubTypes.Type(value = Heading::class, name = "heading"),
@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 )
 sealed interface Node
 
-data class Doc(
+data class Document(
     val content: List<Node>? = null,
 ) : Node
 
