@@ -45,10 +45,10 @@ export interface ContributorRef {
 export interface CommentView {
   id: string
   createdAt: string
-  editCount?: number
+  editCount: number | null
   deleted: boolean
   contributor: ContributorRef
-  bodyHtml: string
+  bodyHtml: string | null
 }
 
 export interface CommentPage {

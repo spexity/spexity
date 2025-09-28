@@ -77,7 +77,6 @@
   "editor_toolbar_undo": "تراجع",
   "editor_toolbar_redo": "إعادة",
   "comment_button": "علق",
-  "comment_discard": "إلغاء التعليق",
   "comment_error_empty": "يرجى إدخال تعليق ذي معنى.",
   "comment_error_failed": "حدثت مشكلة أثناء نشر التعليق.",
   "comment_error_throttled": "أنت ترسل التعليقات بسرعة كبيرة. يرجى الانتظار قليلاً.",

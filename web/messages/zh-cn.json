@@ -77,7 +77,6 @@
   "editor_toolbar_undo": "撤销",
   "editor_toolbar_redo": "重做",
   "comment_button": "评论",
-  "comment_discard": "取消评论",
   "comment_error_empty": "请输入有意义的评论。",
   "comment_error_failed": "发布评论时出现问题。",
   "comment_error_throttled": "您评论得太快了，请稍候。",

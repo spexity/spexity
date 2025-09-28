@@ -77,7 +77,6 @@
   "editor_toolbar_undo": "Undo",
   "editor_toolbar_redo": "Redo",
   "comment_button": "Comment",
-  "comment_discard": "Discard Comment",
   "comment_error_empty": "Please enter a meaningful comment.",
   "comment_error_failed": "There was a problem posting your comment.",
   "comment_error_throttled": "You're commenting too quickly. Please wait a moment.",
