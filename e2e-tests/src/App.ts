@@ -1,6 +1,7 @@
 import test, { expect, type Page } from "@playwright/test"
 import { AccountMenu } from "./AccountMenu"
 import { LanguageModal } from "./LanguageModal"
+import { GOD_USER, type UserCredentials } from "./TestData"
 
 export class App {
   private readonly page: Page
@@ -19,12 +20,12 @@ export class App {
     await this.awaitAppPage()
   }
 
-  async signIn(username: string = "god@example.com", password: string = "god") {
+  async signIn(credentials: UserCredentials = GOD_USER) {
     await test.step("Sign in", async () => {
       await this.accountMenu.open()
       await this.accountMenu.clickSignIn()
-      await this.page.getByRole("textbox", { name: "Email" }).fill(username)
-      await this.page.getByRole("textbox", { name: "Password" }).fill(password)
+      await this.page.getByRole("textbox", { name: "Email" }).fill(credentials.username)
+      await this.page.getByRole("textbox", { name: "Password" }).fill(credentials.password)
       await this.page.getByRole("checkbox", { name: "Remember me" }).check()
       await this.page.getByRole("button", { name: "Sign In" }).click()
       await this.awaitAppPage()

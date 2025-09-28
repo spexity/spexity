@@ -6,7 +6,7 @@ test("sign in", async ({ page }) => {
   await app.launch()
   await app.signIn()
   await app.accountMenu.open()
-  expect(await app.accountMenu.contributorHandle()).toEqual("Ham#1001")
+  expect(await app.accountMenu.contributorHandle()).toEqual("God#1000")
 })
 
 test("sign out", async ({ page }) => {

@@ -45,7 +45,7 @@
   let loadMoreBusy = $state(false)
   let loadMoreError = $state<string | undefined>()
 
-  const hasMore = $derived(comments.length !== 0 && comments.length % commentsMeta.pageSize == 0)
+  const hasMore = $derived(comments.length < commentsCount)
 
   const handleCreateComment = async (event: SubmitEvent) => {
     event.preventDefault()
@@ -57,11 +57,25 @@
         return
       }
       submitting = true
-      const created = await authManager.httpClient.post<CommentView>(
+      const bodyHtml = editorRef?.getValueHtml() ?? ""
+      const created = await authManager.httpClient.post<{ id: string }>(
         `/api/posts/${post.id}/comments`,
-        { body },
+        { bodyDocument: body },
       )
-      comments = [...comments, created]
+      comments = [
+        ...comments,
+        {
+          id: created.id,
+          createdAt: new Date().toISOString(),
+          editCount: 0,
+          deleted: false,
+          contributor: {
+            id: authManager.userAccount?.contributorId ?? "",
+            handle: authManager.userAccount?.contributorHandle ?? "",
+          },
+          bodyHtml,
+        },
+      ]
       commentsCount += 1
       editorRef?.setHtmlValue("")
       commenting = false
@@ -214,7 +228,7 @@
   </div>
   <div class="divider"></div>
   <div class="flex items-center justify-between">
-    <div class="text-sm" data-testid="comments-count" data-count={commentsCount}>
+    <div class="text-sm" data-testid="comments-count">
       {m.comments_count({ count: commentsCount })}
     </div>
     {#if commenting}
@@ -262,7 +276,7 @@
     </form>
   {/if}
 
-  <div class="mt-2 flex flex-col gap-2">
+  <div class="mt-2 flex flex-col gap-2" data-testid="comments-list">
     {#each comments as comment (comment.id)}
       <article
         class="rounded-lg border border-base-300 p-3"
@@ -271,7 +285,7 @@
         <div class="flex flex-col gap-2">
           <div class="flex flex-wrap items-center gap-2 text-xs">
             <ContributorHandle contributor={comment.contributor} testIdQualifier={comment.id} />
-            <span>{formatCreatedAt(comment)}</span>
+            - {formatCreatedAt(comment)}
             {#if comment.editCount && !comment.deleted}
               <span
                 class="badge badge-ghost badge-xs"
@@ -282,7 +296,10 @@
             {/if}
           </div>
           {#if comment.deleted}
-            <p class="text-sm font-medium text-base-content/66">
+            <p
+              class="text-sm font-medium text-base-content/66"
+              data-testid={`comment-deleted-placeholder-${comment.id}`}
+            >
               {m.comment_deleted_placeholder()}
             </p>
           {:else}
@@ -302,7 +319,11 @@
                     dataTestId={`comment-edit-editor-${comment.id}`}
                   />
                   {#if editingError}
-                    <div role="alert" class="alert alert-error">
+                    <div
+                      role="alert"
+                      class="alert alert-error"
+                      data-testid={`comment-edit-error-${comment.id}`}
+                    >
                       <span>{editingError}</span>
                     </div>
                   {/if}
@@ -319,7 +340,12 @@
                         {m.form_save()}
                       {/if}
                     </button>
-                    <button class="btn btn-sm" type="button" onclick={cancelEditing}>
+                    <button
+                      class="btn btn-sm"
+                      type="button"
+                      data-testid={`comment-edit-cancel-${comment.id}`}
+                      onclick={cancelEditing}
+                    >
                       {m.comment_discard()}
                     </button>
                   </div>
@@ -360,7 +386,7 @@
                     </button>
                   {:else}
                     <button
-                      class="btn btn-outline btn-xs"
+                      class="btn btn-xs"
                       type="button"
                       data-testid={`comment-delete-${comment.id}`}
                       onclick={() => askDelete(comment.id)}
