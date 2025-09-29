@@ -48,15 +48,6 @@
   const switchLanguage = (event: MouseEvent, locale: Locale) => {
     event.preventDefault()
     setLocale(locale)
-    const announcement = m.i18n_languageChanged()
-    announceToScreenReader(announcement)
-  }
-
-  const announceToScreenReader = (message: string) => {
-    const liveRegion = document.getElementById("language-live-region")
-    if (liveRegion) {
-      liveRegion.textContent = message
-    }
   }
 </script>
 
@@ -83,11 +74,8 @@
   </form>
 </dialog>
 <div class="app-body">
-  <div class="w-full px-4">
-    {@render children?.()}
-  </div>
   <div class="navbar bg-base-100 shadow-sm">
-    <div class="flex h-full flex-1 flex-col justify-center">
+    <div class="flex items-center gap-2">
       <a href={resolve("/")}>
         <img
           width="40"
@@ -97,30 +85,36 @@
           data-testid="brand-logo"
         />
       </a>
+      <nav>
+        <ul class="tabs-border tabs">
+          <li>
+            <a href={resolve("/")} class={["tab", active === "home" && "tab-active"]}
+              >{m.nav_home()}</a
+            >
+          </li>
+          <li>
+            <a
+              href={resolve("/communities")}
+              class={["tab", active === "communities" && "tab-active"]}>{m.nav_communities()}</a
+            >
+          </li>
+        </ul>
+      </nav>
     </div>
-    <div class="flex-none">
-      <ul class="menu menu-horizontal px-1">
-        <li>
-          <a href={resolve("/")} class={active === "home" ? "menu-active" : ""}>{m.nav_home()}</a>
-        </li>
-        <li>
-          <a href={resolve("/communities")} class={active === "communities" ? "menu-active" : ""}
-            >{m.nav_communities()}</a
-          >
-        </li>
-      </ul>
+    <div class="flex-1"></div>
+    <div class="flex">
       <div class="dropdown dropdown-end">
         <div
           tabindex="0"
           role="button"
           aria-label={m.nav_account_button_aria()}
           data-testid="account-menu-button"
-          class="btn avatar btn-circle {[
+          class="btn btn-circle {[
             AuthUserAccountState.LOGGED_IN,
             AuthUserAccountState.LOGGED_IN_VERIFIED,
           ].includes(authManager.userAccountState)
             ? 'btn-outline btn-primary'
-            : 'btn-ghost'}"
+            : 'btn-ghost btn-soft'}"
         >
           {#if authManager.userAccountState === AuthUserAccountState.INIT}
             💭
@@ -172,6 +166,9 @@
       </div>
     </div>
   </div>
+  <div class="w-full px-4">
+    {@render children?.()}
+  </div>
   {#if updated.current}
     <div class="toast">
       <div class="alert alert-info">
@@ -186,6 +183,4 @@
   {#if authManager.userAccountState === AuthUserAccountState.INIT}
     <div data-testid="auth-init-in-progress"></div>
   {/if}
-  <!-- ARIA live region for language change announcements -->
-  <div id="language-live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 </div>

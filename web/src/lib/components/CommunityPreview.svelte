@@ -10,7 +10,7 @@
   const { community }: CommunityPreviewProps = $props()
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col gap-1 rounded-lg border border-base-300 p-3">
   <div class="flex flex-row justify-between">
     <span class="font-medium">
       {community.name}
@@ -18,7 +18,7 @@
   </div>
   <div class="flex flex-row justify-between">
     <div class="flex flex-row items-center gap-2 text-xs">
-      <span>{m.community_posts_count({ count: 0 })}</span>
+      <span class="text-subtle">{m.community_posts_count({ count: 0 })}</span>
     </div>
     <a class="btn btn-sm" href={resolve(`/communities/${community.id}`)}>{m.button_view()}</a>
   </div>

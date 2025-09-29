@@ -30,7 +30,6 @@
   "post_create_action": "Start a Post",
   "post_new_title": "New Post to {communityName}",
   "i18n_language": "Language",
-  "i18n_languageChanged": "Language changed to English",
   "legal_terms_link": "terms and conditions",
   "legal_terms_title": "Terms and Conditions",
   "legal_terms_updated": "Last updated: 22 September 2025",

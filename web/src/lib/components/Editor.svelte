@@ -12,6 +12,7 @@
     id?: string
     labelledBy?: string
     dataTestId?: string
+    mode?: "post" | "comment"
   }
 
   interface EditorStateItem {
@@ -66,13 +67,11 @@
     redo: false,
   }
 
-  let { id, labelledBy, dataTestId }: EditorProps = $props()
+  let { id, labelledBy, dataTestId, mode }: EditorProps = $props()
   let editor: Editor | undefined = $state()
   let editorState = $state<EditorState>(EMPTY_EDITOR_STATE)
   let linkModalRef = $state<HTMLDialogElement>()
   let currentLinkState = $state<string | undefined>()
-
-  const withSoft = (base: string, isActive: boolean) => (isActive ? base : `${base} btn-soft`)
 
   export const getValue = (): EditorContent => {
     return editor?.getJSON() ?? { type: "doc", content: [] }
@@ -97,7 +96,7 @@
       extensions: [
         StarterKit.configure({
           heading: {
-            levels: [1, 2, 3],
+            levels: mode === "comment" ? [] : [1, 2, 3],
           },
           link: {
             openOnClick: false,
@@ -179,6 +178,12 @@
     editor?.chain().focus().extendMarkRange("link").unsetLink().run()
     linkModalRef?.close()
   }
+
+  const toolbarButtonClass = (isActive: boolean, extra?: string) => [
+    "btn btn-xs",
+    extra,
+    isActive && "btn-primary",
+  ]
 </script>
 
 <div class="textarea w-full">
@@ -214,48 +219,50 @@
       </form>
     </dialog>
     <div class="mb-3 flex w-full flex-wrap gap-1">
-      <div class="join">
-        <button
-          type="button"
-          onclick={() => editor?.chain().focus().setParagraph().run()}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.paragraph)}
-        >
-          {m.editor_toolbar_normal_text()}
-        </button>
-        <button
-          type="button"
-          onclick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.heading[1])}
-        >
-          {m.editor_toolbar_h1()}
-        </button>
-        <button
-          type="button"
-          onclick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.heading[2])}
-        >
-          {m.editor_toolbar_h2()}
-        </button>
-        <button
-          type="button"
-          onclick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.heading[3])}
-        >
-          {m.editor_toolbar_h3()}
-        </button>
-      </div>
+      {#if mode !== "comment"}
+        <div class="join">
+          <button
+            type="button"
+            onclick={() => editor?.chain().focus().setParagraph().run()}
+            class={toolbarButtonClass(editorState.paragraph, "join-item")}
+          >
+            {m.editor_toolbar_normal_text()}
+          </button>
+          <button
+            type="button"
+            onclick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
+            class={toolbarButtonClass(editorState.heading[1], "join-item")}
+          >
+            {m.editor_toolbar_h1()}
+          </button>
+          <button
+            type="button"
+            onclick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+            class={toolbarButtonClass(editorState.heading[2], "join-item")}
+          >
+            {m.editor_toolbar_h2()}
+          </button>
+          <button
+            type="button"
+            onclick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+            class={toolbarButtonClass(editorState.heading[3], "join-item")}
+          >
+            {m.editor_toolbar_h3()}
+          </button>
+        </div>
+      {/if}
       <div class="join">
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleBulletList().run()}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.bulletList)}
+          class={toolbarButtonClass(editorState.bulletList, "join-item")}
         >
           {m.editor_toolbar_bullet_list()}
         </button>
         <button
           type="button"
           onclick={() => editor?.chain().focus().toggleOrderedList().run()}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.orderedList)}
+          class={toolbarButtonClass(editorState.orderedList, "join-item")}
         >
           {m.editor_toolbar_ordered_list()}
         </button>
@@ -263,14 +270,14 @@
       <button
         type="button"
         onclick={() => editor?.chain().focus().toggleCodeBlock().run()}
-        class={withSoft("btn btn-xs btn-primary", editorState.codeBlock)}
+        class={toolbarButtonClass(editorState.codeBlock)}
       >
         {m.editor_toolbar_code_block()}
       </button>
       <button
         type="button"
         onclick={() => editor?.chain().focus().toggleBlockquote().run()}
-        class={withSoft("btn btn-xs btn-primary", editorState.blockquote)}
+        class={toolbarButtonClass(editorState.blockquote)}
       >
         {m.editor_toolbar_quote()}
       </button>
@@ -280,7 +287,7 @@
           type="button"
           onclick={() => editor?.chain().focus().toggleBold().run()}
           disabled={!editorState.bold.can}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.bold.active)}
+          class={toolbarButtonClass(editorState.bold.active, "join-item")}
         >
           {m.editor_toolbar_bold()}
         </button>
@@ -288,7 +295,7 @@
           type="button"
           onclick={() => editor?.chain().focus().toggleItalic().run()}
           disabled={!editorState.italic.can}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.italic.active)}
+          class={toolbarButtonClass(editorState.italic.active, "join-item")}
         >
           {m.editor_toolbar_italic()}
         </button>
@@ -296,7 +303,7 @@
           type="button"
           onclick={() => editor?.chain().focus().toggleUnderline().run()}
           disabled={!editorState.underline.can}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.underline.active)}
+          class={toolbarButtonClass(editorState.underline.active, "join-item")}
         >
           {m.editor_toolbar_underline()}
         </button>
@@ -304,41 +311,39 @@
           type="button"
           onclick={() => editor?.chain().focus().toggleStrike().run()}
           disabled={!editorState.strike.can}
-          class={withSoft("btn join-item btn-xs btn-primary", editorState.strike.active)}
+          class={toolbarButtonClass(editorState.strike.active, "join-item")}
         >
           {m.editor_toolbar_strike()}
         </button>
       </div>
-      <button
-        type="button"
-        onclick={showLinkModal}
-        class={withSoft("btn btn-xs btn-primary", editorState.link)}
-      >
+      <button type="button" onclick={showLinkModal} class={toolbarButtonClass(editorState.link)}>
         {m.editor_toolbar_link()}
       </button>
       <button
         type="button"
         onclick={() => editor?.chain().focus().toggleCode().run()}
         disabled={!editorState.code.can}
-        class={withSoft("btn btn-xs btn-primary", editorState.code.active)}
+        class={toolbarButtonClass(editorState.code.active)}
       >
         {m.editor_toolbar_code_inline()}
       </button>
-      <div class="divider m-0 divider-horizontal"></div>
-      <button
-        type="button"
-        onclick={() => editor?.chain().focus().setHorizontalRule().run()}
-        class="btn btn-soft btn-xs btn-primary"
-      >
-        {m.editor_toolbar_horizontal_rule()}
-      </button>
+      {#if mode !== "comment"}
+        <div class="divider m-0 divider-horizontal"></div>
+        <button
+          type="button"
+          onclick={() => editor?.chain().focus().setHorizontalRule().run()}
+          class="btn btn-xs"
+        >
+          {m.editor_toolbar_horizontal_rule()}
+        </button>
+      {/if}
       <div class="divider m-0 divider-horizontal"></div>
       <div class="join">
         <button
           type="button"
           onclick={() => editor?.chain().focus().undo().run()}
           disabled={!editorState.undo}
-          class="btn join-item btn-soft btn-xs btn-primary"
+          class="btn join-item btn-xs"
         >
           {m.editor_toolbar_undo()}
         </button>
@@ -346,12 +351,16 @@
           type="button"
           onclick={() => editor?.chain().focus().redo().run()}
           disabled={!editorState.redo}
-          class="btn join-item btn-soft btn-xs btn-primary"
+          class="btn join-item btn-xs"
         >
           {m.editor_toolbar_redo()}
         </button>
       </div>
     </div>
   {/if}
-  <div class="text-base" use:createEditor data-testid={dataTestId}></div>
+  <div
+    class={["text-base", mode === "comment" && "comment-tiptap"]}
+    use:createEditor
+    data-testid={dataTestId}
+  ></div>
 </div>

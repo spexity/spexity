@@ -17,5 +17,5 @@
   href={resolve(`/contributors/${contributor.id}`)}
   data-testid={`contributor-${contributor.id}-${testIdQualifier}`}
 >
-  {contributorName}<span class="text-base-content/66">{contributorDiscriminator}</span>
+  {contributorName}<span class="text-subtle">{contributorDiscriminator}</span>
 </a>

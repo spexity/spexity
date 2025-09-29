@@ -26,6 +26,8 @@
   let deleting = $state(false)
   let deleteError = $state<string | undefined>()
 
+  let formattedDateTime = DateFormatter.formatUtcIsoAbsolute(comment.createdAt, timezone)
+
   const startEditing = async (comment: CommentView) => {
     editingError = undefined
     deleteConfirming = false
@@ -94,32 +96,31 @@
       deleting = false
     }
   }
-
-  const formatCreatedAt = (comment: CommentView) =>
-    DateFormatter.formatUtcIsoAbsolute(comment.createdAt, timezone)
 </script>
 
 <article class="rounded-lg border border-base-300 p-3" data-testid={`comment-item-${comment.id}`}>
   <div class="flex flex-col gap-2">
-    <div class="flex flex-wrap items-center gap-2 text-xs">
-      <ContributorHandle contributor={comment.contributor} testIdQualifier={comment.id} />
-      - {formatCreatedAt(comment)}
-      {#if comment.editCount && !comment.deleted}
-        <span class="badge badge-ghost badge-xs" data-testid={`comment-edited-badge-${comment.id}`}>
-          {m.comment_edited_badge()}
-        </span>
-      {/if}
+    <div class="flex flex-wrap items-center justify-between gap-1 text-xs">
+      <div class="flex items-center">
+        <ContributorHandle contributor={comment.contributor} testIdQualifier={comment.id} />
+        {#if comment.editCount && !comment.deleted}
+          <span
+            class="badge badge-ghost badge-xs"
+            data-testid={`comment-edited-badge-${comment.id}`}
+          >
+            {m.comment_edited_badge()}
+          </span>
+        {/if}
+      </div>
+      <span class="text-subtle">{formattedDateTime}</span>
     </div>
     {#if comment.deleted}
-      <p
-        class="text-sm font-medium text-base-content/66"
-        data-testid={`comment-deleted-placeholder-${comment.id}`}
-      >
+      <p class="text-subtle text-xs" data-testid={`comment-deleted-placeholder-${comment.id}`}>
         {m.comment_deleted_placeholder()}
       </p>
     {:else}
       {#if !editing}
-        <div class="tiptap" data-testid={`comment-body-${comment.id}`}>
+        <div class="tiptap comment-tiptap" data-testid={`comment-body-${comment.id}`}>
           <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           {@html comment.bodyHtml}
         </div>
@@ -131,6 +132,7 @@
               bind:this={editingEditorRef}
               id={`comment-edit-${comment.id}`}
               dataTestId={`comment-edit-editor-${comment.id}`}
+              mode="comment"
             />
             {#if editingError}
               <div

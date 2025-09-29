@@ -10,7 +10,8 @@
 <div class="mb-4 flex flex-row justify-end">
   <a class="btn btn-sm" href={resolve("/communities/new")}>{m.community_start()}</a>
 </div>
-{#each data.communities as community (community.id)}
-  <CommunityPreview {community} />
-  <div class="divider m-0"></div>
-{/each}
+<div class="mt-2 flex flex-col gap-2" data-testid="communities-list">
+  {#each data.communities as community (community.id)}
+    <CommunityPreview {community} />
+  {/each}
+</div>

@@ -140,12 +140,13 @@
 
 <div class="flex flex-col" data-testid="post-view">
   <div class="flex flex-row justify-between">
-    <span class="text-xs font-medium">
+    <span class="text-lg font-medium">
       <CommunityName community={post.community} />
     </span>
-    <div class="text-xs">
+    <div class="flex flex-wrap items-center gap-1 text-xs">
       <ContributorHandle contributor={post.contributor} testIdQualifier={post.id} />
-      - {formattedDateTime}
+      <span class="text-subtle">•</span>
+      <span class="text-subtle">{formattedDateTime}</span>
     </div>
   </div>
   <div class="mt-4">
@@ -153,20 +154,20 @@
     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     <div class="tiptap my-4">{@html post.bodyHtml}</div>
   </div>
-  <div class="divider"></div>
+  <div class="divider m-0"></div>
   <div class="flex items-center justify-between">
-    <div class="text-sm" data-testid="comments-count">
+    <div class="text-subtle text-sm" data-testid="comments-count">
       {m.comments_count({ count: commentsCount })}
     </div>
     <button
-      class={["btn btn-sm btn-primary", commenting && "invisible"]}
+      class={["btn btn-sm", commenting && "invisible"]}
       data-testid="comment-toggle"
       onclick={startCommenting}>{m.comment_button()}</button
     >
   </div>
   {#if commenting}
     <form class="my-2 flex flex-col gap-2" onsubmit={handleCreateComment} autocomplete="off">
-      <Editor bind:this={editorRef} id="new-comment" dataTestId="comment-editor" />
+      <Editor bind:this={editorRef} id="new-comment" dataTestId="comment-editor" mode="comment" />
       {#if commentError}
         <div role="alert" class="alert alert-error" data-testid="comment-error">
           <span>{commentError}</span>
@@ -217,7 +218,7 @@
         </div>
       {/if}
       <button
-        class="btn btn-outline btn-sm"
+        class="btn btn-sm"
         type="button"
         data-testid="comments-load-more"
         aria-busy={loadMoreBusy ? "true" : "false"}
