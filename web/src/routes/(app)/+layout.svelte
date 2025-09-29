@@ -179,8 +179,8 @@
       </div>
     </div>
   {/if}
-  <!--Auth testing helper-->
+  <!--Init testing helper-->
   {#if authManager.userAccountState === AuthUserAccountState.INIT}
-    <div data-testid="auth-init-in-progress"></div>
+    <div data-testid="init-in-progress"></div>
   {/if}
 </div>

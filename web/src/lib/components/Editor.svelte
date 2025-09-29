@@ -2,7 +2,6 @@
   import { Editor } from "@tiptap/core"
   import StarterKit from "@tiptap/starter-kit"
   import { Placeholder } from "@tiptap/extensions"
-  import Underline from "@tiptap/extension-underline"
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
   import { onDestroy } from "svelte"
   import type { EditorContent } from "$lib/utils/EditorUtils"
@@ -76,6 +75,7 @@
   export const getValue = (): EditorContent => {
     return editor?.getJSON() ?? { type: "doc", content: [] }
   }
+
   export const getValueHtml = (): string => {
     return editor?.getHTML() ?? ""
   }
@@ -104,7 +104,6 @@
             enableClickSelection: true,
           },
         }),
-        Underline,
         Placeholder.configure({
           placeholder: m.drafting_placeholder(),
         }),

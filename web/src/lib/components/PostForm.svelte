@@ -27,7 +27,7 @@
       const conformToTermsAndConditions = data.get("conformToTermsAndConditions") as string
       const bodyDocument = editorRef?.getValue()
       if (!EditorUtils.hasMeaningfulText(bodyDocument)) {
-        errorMessage = m.error_post_empty()
+        errorMessage = m.error_empty()
         return
       }
       const post = await authManager.httpClient.post<PostPreview>("/api/posts", {

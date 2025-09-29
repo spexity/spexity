@@ -49,7 +49,7 @@
     const bodyDocument = editingEditorRef.getValue()
     const bodyHtml = editingEditorRef.getValueHtml()
     if (!EditorUtils.hasMeaningfulText(bodyDocument)) {
-      editingError = m.comment_error_empty()
+      editingError = m.error_empty()
       return
     }
     try {

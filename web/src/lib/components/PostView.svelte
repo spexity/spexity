@@ -9,6 +9,7 @@
   import { HttpError } from "$lib/utils/HttpClient"
   import { m } from "$lib/paraglide/messages.js"
   import PostCommentView from "$lib/components/PostCommentView.svelte"
+  import GatedFeature from "$lib/components/GatedFeature.svelte"
 
   interface PostViewProps {
     post: PostView
@@ -52,7 +53,7 @@
       commentError = undefined
       const body = editorRef?.getValue()
       if (!EditorUtils.hasMeaningfulText(body)) {
-        commentError = m.comment_error_empty()
+        commentError = m.error_empty()
         return
       }
       submitting = true
@@ -150,7 +151,7 @@
     </div>
   </div>
   <div class="mt-4">
-    <h2 class="text-2xl font-medium">{post.subject}</h2>
+    <h2 class="text-2xl font-medium" data-testid="post-subject">{post.subject}</h2>
     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     <div class="tiptap my-4">{@html post.bodyHtml}</div>
   </div>
@@ -161,41 +162,50 @@
     </div>
     <button
       class={["btn btn-sm", commenting && "invisible"]}
-      data-testid="comment-toggle"
+      data-testid="new-comment-button"
       onclick={startCommenting}>{m.comment_button()}</button
     >
   </div>
   {#if commenting}
-    <form class="my-2 flex flex-col gap-2" onsubmit={handleCreateComment} autocomplete="off">
-      <Editor bind:this={editorRef} id="new-comment" dataTestId="comment-editor" mode="comment" />
-      {#if commentError}
-        <div role="alert" class="alert alert-error" data-testid="comment-error">
-          <span>{commentError}</span>
+    {#if authManager.userAccount?.verifiedHuman}
+      <form class="my-2 flex flex-col gap-2" onsubmit={handleCreateComment} autocomplete="off">
+        <Editor
+          bind:this={editorRef}
+          id="new-comment"
+          dataTestId="new-comment-editor"
+          mode="comment"
+        />
+        {#if commentError}
+          <div role="alert" class="alert alert-error" data-testid="new-comment-error">
+            <span>{commentError}</span>
+          </div>
+        {/if}
+        <div class="flex gap-2">
+          <button
+            type="submit"
+            class="btn btn-xs btn-primary"
+            disabled={submitting}
+            data-testid="new-comment-submit"
+          >
+            {#if submitting}
+              <span class="loading loading-spinner"></span>
+            {:else}
+              {m.comment_submit()}
+            {/if}
+          </button>
+          <button
+            class="btn btn-xs"
+            type="button"
+            data-testid="new-comment-cancel"
+            onclick={cancelCommenting}
+          >
+            {m.form_cancel()}
+          </button>
         </div>
-      {/if}
-      <div class="flex gap-2">
-        <button
-          type="submit"
-          class="btn btn-xs btn-primary"
-          disabled={submitting}
-          data-testid="comment-submit"
-        >
-          {#if submitting}
-            <span class="loading loading-spinner"></span>
-          {:else}
-            {m.comment_submit()}
-          {/if}
-        </button>
-        <button
-          class="btn btn-xs"
-          type="button"
-          data-testid="comment-cancel"
-          onclick={cancelCommenting}
-        >
-          {m.form_cancel()}
-        </button>
-      </div>
-    </form>
+      </form>
+    {:else}
+      <GatedFeature mode="small" oncancel={cancelCommenting} />
+    {/if}
   {/if}
 
   <div class="mt-2 flex flex-col gap-2" data-testid="comments-list">

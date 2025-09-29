@@ -2,6 +2,8 @@ import test, { expect, type Page } from "@playwright/test"
 import { AccountMenu } from "./AccountMenu"
 import { LanguageModal } from "./LanguageModal"
 import { GOD_USER, type UserCredentials } from "./TestData"
+import { HomePage } from "./HomePage"
+import { Post } from "./Post"
 
 export class App {
   private readonly page: Page
@@ -18,6 +20,13 @@ export class App {
   async launch() {
     await this.page.goto("/")
     await this.awaitAppPage()
+    return new HomePage(this.page)
+  }
+
+  async goToPost(id: string) {
+    let post = new Post(this.page, id)
+    await post.go()
+    return post
   }
 
   async signIn(credentials: UserCredentials = GOD_USER) {
@@ -43,15 +52,15 @@ export class App {
 
   async awaitAppPage() {
     await this.getLogo().waitFor({ state: "visible" })
-    await expect(this.getAuthInitDiv()).toHaveCount(0)
+    await expect(this.getInitDiv()).toHaveCount(0)
   }
 
   getLogo() {
     return this.page.getByTestId("brand-logo")
   }
 
-  getAuthInitDiv() {
-    return this.page.getByTestId("auth-init-in-progress")
+  getInitDiv() {
+    return this.page.getByTestId("init-in-progress")
   }
 
   async changeLanguage(locale: "en" | "zh-cn" | "ar") {
