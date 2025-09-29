@@ -1,3 +1,7 @@
+.comment-tiptap {
+  font-size: 0.9em;
+}
+
 .tiptap {
   outline: none 0;
   min-height: 100%;
@@ -8,6 +12,7 @@
   p.is-editor-empty:first-child::before {
     color: var(--color-base-content);
     opacity: 0.5;
+    float: inline-start;
     content: attr(data-placeholder);
     height: 0;
     pointer-events: none;
@@ -80,6 +85,7 @@
   }
 
   pre {
+    margin-top: 0.4rem;
     background: var(--color-neutral);
     border-radius: 0.5rem;
     color: var(--color-neutral-content);
@@ -102,6 +108,7 @@
   hr {
     border: none;
     border-top: 1px solid var(--color-base-300);
-    margin: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
   }
 }

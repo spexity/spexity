@@ -24,13 +24,15 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
         val authCorrelationId = optionalAuthCorrelationId(securityIdentity)
         val selected = dslContext.select(
             COMMUNITY.ID,
-            COMMUNITY.NAME
+            COMMUNITY.NAME,
+            COMMUNITY.POSTS_COUNT
         )
             .from(COMMUNITY)
             .fetch {
                 CommunityPreview(
                     it.get(COMMUNITY.ID),
-                    it.get(COMMUNITY.NAME)
+                    it.get(COMMUNITY.NAME),
+                    it.get(COMMUNITY.POSTS_COUNT)
                 )
             }
         return CommunitiesPageData(selected)
@@ -41,12 +43,13 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
     @PermitAll
     fun getCommunityPageData(@PathParam("id") id: UUID): CommunityPageData {
         val selectedCommunity = dslContext.select(
-            COMMUNITY.NAME
+            COMMUNITY.NAME,
+            COMMUNITY.POSTS_COUNT
         )
             .from(COMMUNITY)
             .where(COMMUNITY.ID.eq(id))
             .fetchOne {
-                CommunityPreview(id, it.get(COMMUNITY.NAME))
+                CommunityPreview(id, it.get(COMMUNITY.NAME), it.get(COMMUNITY.POSTS_COUNT))
             }
         if (selectedCommunity == null) {
             throw NotFoundException("Community not found")
@@ -60,17 +63,19 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
             POST.contributor().HANDLE,
             POST.community().ID,
             POST.community().NAME,
+            POST.COMMENTS_COUNT,
         )
             .from(POST)
             .where(POST.community().ID.eq(id))
             .fetch {
-                val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
+                val instant = it.get(POST.CREATED_AT).toInstant()
                 CommunityPreviewPost(
                     it.get(POST.ID),
                     instant,
                     it.get(POST.SUBJECT),
                     it.get(POST.BODY_TEXT).take(512),
-                    ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE))
+                    ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
+                    it.get(POST.COMMENTS_COUNT)
                 )
             }
         return CommunityPageData(selectedCommunity, selectedPosts)

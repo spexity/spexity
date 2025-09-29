@@ -18,40 +18,28 @@ Sync Impact Report
 ## Core Principles
 
 ### I. Privacy-First (No Identifying Telemetry)
-Spexity MUST NOT collect, store, or transmit user-identifying telemetry. No third-party
-trackers, ad beacons, or fingerprinting libraries are allowed. Aggregate operational
-metrics MAY be collected only if they are strictly non-identifying and cannot be combined
-to re-identify individuals. Logs MUST exclude PII by default and be scrubbed at sources.
+MUST NOT collect, store, or transmit user-identifying telemetry. Third-party trackers, ad beacons, and fingerprinting
+libraries are prohibited. Only strictly non-identifying aggregate metrics MAY be collected. Logs MUST exclude PII
 
 Rationale: Communities deserve a privacy-respecting platform with trust by design.
 
 ### II. Ethical, Non-Addictive UX
-The product MUST avoid dark patterns and addictive mechanics. The platform MUST NOT display
+MUST avoid dark patterns and addictive design. MUST NOT display
 ads, MUST NOT autoplay video, and MUST NOT present non–user-initiated pop-ups or dialogs.
-Automated agents MUST NOT masquerade as users; any system automation MUST be explicitly
-labeled and constrained.
 
 Rationale: The mission is healthy, democratic communication, not engagement hacking.
 
 ### III. Accessibility and Inclusive Performance
-The system MUST be accessible to people with disabilities, users on low-end devices, and
-users with spotty connectivity. Minimum bar:
-- Conform to WCAG 2.1 AA for core user flows (semantics, labels, focus order, contrast).
-- Full keyboard navigation for interactive features; screen-reader friendly landmarks.
-- Works reliably on constrained networks (graceful degradation, progressive enhancement).
-
-Performance budgets (initial targets):
-- Web initial route critical resources ≤ 250KB gzip, ≤ 3 network round-trips before
-	interactivity on a reference low-end device.
-- Backend p95 latency for core endpoints ≤ 200ms under expected test load.
+MUST be accessible to people with disabilities, low-end devices, and unreliable networks. Minimum: WCAG 2.1 AA for core
+flows (semantics, labels, focus, contrast); full keyboard navigation with screen-reader landmarks;
 
 Rationale: Accessibility and performance unlock participation for everyone.
 
 ### IV. Simplicity and Proven Technology
-Prefer minimal, proven solutions. Prohibited without explicit, documented exception:
-- Frameworks/libraries younger than 5 years or without active maintenance.
-- Homebrew DSLs.
-- Frivolous dependencies (every addition MUST have a clear, documented rationale).
+MUST use proven solutions:
+- MUST NOT use Frameworks/libraries younger than 5 years old or without active maintenance.
+- MUST NOT create DSLs.
+- MUST NOT add frivolous dependencies.
 
 Rationale: Stability, maintainability, and efficiency come from disciplined choices.
 
@@ -80,8 +68,8 @@ languages and directions from day one of each feature.
 
 ## Technology Standards
 
-- Backend: Quarkus on JVM; Database: PostgreSQL.
-- Web: Svelte + SvelteKit.
+- Backend: Quarkus v3 on JVM; Database: PostgreSQL.
+- Web: Svelte v5 + SvelteKit v2.
 - E2E testing: Playwright. MUST be in Black box testing.
 - Security: HTTPS by default; strict CSP; no third-party trackers; logs without PII.
 - Observability: Structured, privacy-safe logs and metrics only; no user identifiers.
@@ -90,17 +78,16 @@ languages and directions from day one of each feature.
 
 ## Development Workflow & Quality Gates
 
-- Branch naming: `feature/[###-feature-name]` for feature work tracked under `specs/`.
+- Branch naming: `[###-feature-name]` for feature work tracked under `specs/`.
 - Documents: Each feature follows `spec → plan → tasks` flow using templates under
 	`.specify/templates/`.
 - Code review: At least one reviewer required; reviewers MUST run the Constitution Check.
 - Quality gates (CI):
 	1) All tests green (contract + e2e + unit where applicable)
 	2) Accessibility checks pass for core flows (WCAG 2.1 AA)
-	3) Performance budgets satisfied or explicitly waived with rationale and owner
-	4) Privacy/ethics gates pass (no telemetry, no dark patterns, no autoplay/ads)
-	5) Dependency additions justified and approved
-	6) Internationalization: No hard-coded user-visible strings; translations present for
+	3) Privacy/ethics gates pass (no telemetry, no dark patterns, no autoplay/ads)
+	4) No new dependency additions
+	5) Internationalization: No hard-coded user-visible strings; translations present for
 	   locales in `web/project.inlang/settings.json`; RTL behavior verified for affected components
 
 ### AI Agent Conduct

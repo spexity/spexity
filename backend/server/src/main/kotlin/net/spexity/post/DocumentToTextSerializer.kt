@@ -1,11 +1,11 @@
 package net.spexity.post
 
-object BodyTextSerializer {
+object DocumentToTextSerializer {
 
-    fun render(doc: Doc): String =
-        (doc.content ?: emptyList()).joinToString(separator = " ") { render(it) }
+    fun serialize(document: Document): String =
+        (document.content ?: emptyList()).joinToString(separator = " ") { serialize(it) }
 
-    private fun render(node: Node): String = when (node) {
+    private fun serialize(node: Node): String = when (node) {
         is Paragraph -> renderChildren(node.content)
         is Heading -> renderChildren(node.content)
         is BulletList -> renderChildren(node.content)
@@ -15,7 +15,7 @@ object BodyTextSerializer {
         is Blockquote -> renderChildren(node.content)
         is HorizontalRule -> " "
         is Text -> node.text.orEmpty()
-        is Doc -> render(node)
+        is Document -> serialize(node)
     }
 
     private fun renderListItem(n: ListItem): String {
@@ -24,7 +24,7 @@ object BodyTextSerializer {
     }
 
     private fun renderChildren(children: List<Node>?): String =
-        (children ?: emptyList()).joinToString(separator = " ") { render(it) }
+        (children ?: emptyList()).joinToString(separator = " ") { serialize(it) }
 
 
     private fun renderPlainText(children: List<Node>?): String {
@@ -32,7 +32,7 @@ object BodyTextSerializer {
         children.orEmpty().forEach { ch ->
             when (ch) {
                 is Text -> sb.append(ch.text.orEmpty())
-                else -> sb.append(render(ch))
+                else -> sb.append(serialize(ch))
             }
         }
         return sb.toString()

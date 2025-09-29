@@ -10,10 +10,11 @@ import java.util.*
 class CommunityService(private val dslContext: DSLContext, private val securityService: SecurityService) {
 
     fun create(request: CreateRequest): CreateResponse {
-        securityService.validateVerified(request.authCorrelationId)
+        val contributorId = securityService.validateVerifiedGetContributorId(request.authCorrelationId)
         val name = request.name.trim().replace("\\s+".toRegex(), " ")
         val insertedId = dslContext.insertInto(COMMUNITY)
             .set(COMMUNITY.NAME, name)
+            .set(COMMUNITY.CREATED_BY_CONTRIBUTOR_ID, contributorId)
             .returning(COMMUNITY.ID)
             .fetchOne()!!.id
         return CreateResponse(insertedId)

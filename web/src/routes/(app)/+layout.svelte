@@ -8,6 +8,7 @@
   import { m } from "$lib/paraglide/messages.js"
   import { setLocale, locales, type Locale } from "$lib/paraglide/runtime"
   import { LOCALES_MAP } from "$lib/locales"
+  import { resolve } from "$app/paths"
 
   type MenuItem = "home" | "communities"
 
@@ -25,7 +26,7 @@
 
   onMount(async () => {
     if (authManager.userAccountState === AuthUserAccountState.NOT_REGISTERED) {
-      await goto("/auth/register")
+      await goto(resolve("/auth/register"))
     }
   })
 
@@ -47,15 +48,6 @@
   const switchLanguage = (event: MouseEvent, locale: Locale) => {
     event.preventDefault()
     setLocale(locale)
-    const announcement = m.i18n_languageChanged()
-    announceToScreenReader(announcement)
-  }
-
-  const announceToScreenReader = (message: string) => {
-    const liveRegion = document.getElementById("language-live-region")
-    if (liveRegion) {
-      liveRegion.textContent = message
-    }
   }
 </script>
 
@@ -82,12 +74,9 @@
   </form>
 </dialog>
 <div class="app-body">
-  <div class="w-full px-4">
-    {@render children?.()}
-  </div>
   <div class="navbar bg-base-100 shadow-sm">
-    <div class="flex h-full flex-1 flex-col justify-center">
-      <a href="/">
+    <div class="flex items-center gap-2">
+      <a href={resolve("/")}>
         <img
           width="40"
           height="40"
@@ -96,28 +85,36 @@
           data-testid="brand-logo"
         />
       </a>
+      <nav>
+        <ul class="tabs-border tabs">
+          <li>
+            <a href={resolve("/")} class={["tab", active === "home" && "tab-active"]}
+              >{m.nav_home()}</a
+            >
+          </li>
+          <li>
+            <a
+              href={resolve("/communities")}
+              class={["tab", active === "communities" && "tab-active"]}>{m.nav_communities()}</a
+            >
+          </li>
+        </ul>
+      </nav>
     </div>
-    <div class="flex-none">
-      <ul class="menu menu-horizontal px-1">
-        <li><a href="/" class={active === "home" ? "menu-active" : ""}>{m.nav_home()}</a></li>
-        <li>
-          <a href="/communities" class={active === "communities" ? "menu-active" : ""}
-            >{m.nav_communities()}</a
-          >
-        </li>
-      </ul>
+    <div class="flex-1"></div>
+    <div class="flex">
       <div class="dropdown dropdown-end">
         <div
           tabindex="0"
           role="button"
           aria-label={m.nav_account_button_aria()}
           data-testid="account-menu-button"
-          class="btn avatar btn-circle {[
+          class="btn btn-circle {[
             AuthUserAccountState.LOGGED_IN,
             AuthUserAccountState.LOGGED_IN_VERIFIED,
           ].includes(authManager.userAccountState)
             ? 'btn-outline btn-primary'
-            : 'btn-ghost'}"
+            : 'btn-ghost btn-soft'}"
         >
           {#if authManager.userAccountState === AuthUserAccountState.INIT}
             💭
@@ -136,28 +133,41 @@
         >
           {#if authManager.userAccount}
             <li>
-              <a aria-label={m.nav_account_profile_aria()} href="/account"
+              <a aria-label={m.nav_account_profile_aria()} href={resolve("/account")}
                 >{authManager.userAccount.contributorHandle}</a
               >
             </li>
             <div class="divider m-0"></div>
             <li>
-              <a href="/account">{m.nav_account_title()}</a>
+              <a href={resolve("/account")}>{m.nav_account_title()}</a>
             </li>
             <li>
-              <a href="/#" data-testid="sign-out-link" onclick={signOut}>{m.auth_signOut()}</a>
+              <a href={resolve("/")} data-testid="sign-out-link" onclick={signOut}
+                >{m.auth_signOut()}</a
+              >
             </li>
           {:else}
-            <li><a href="/#" data-testid="sign-in-link" onclick={signIn}>{m.auth_signIn()}</a></li>
+            <li>
+              <a href={resolve("/")} data-testid="sign-in-link" onclick={signIn}
+                >{m.auth_signIn()}</a
+              >
+            </li>
           {/if}
           <li>
-            <a href="/#" data-testid="account-language-link" onclick={showChangeLanguageModal}>
+            <a
+              href={resolve("/")}
+              data-testid="account-language-link"
+              onclick={showChangeLanguageModal}
+            >
               {m.i18n_language()} 🌐
             </a>
           </li>
         </ul>
       </div>
     </div>
+  </div>
+  <div class="w-full px-4">
+    {@render children?.()}
   </div>
   {#if updated.current}
     <div class="toast">
@@ -169,10 +179,8 @@
       </div>
     </div>
   {/if}
-  <!--Auth testing helper-->
+  <!--Init testing helper-->
   {#if authManager.userAccountState === AuthUserAccountState.INIT}
-    <div data-testid="auth-init-in-progress"></div>
+    <div data-testid="init-in-progress"></div>
   {/if}
-  <!-- ARIA live region for language change announcements -->
-  <div id="language-live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 </div>

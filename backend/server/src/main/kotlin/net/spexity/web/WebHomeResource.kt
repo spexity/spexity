@@ -32,17 +32,19 @@ class WebHomeResource(private val dslContext: DSLContext) {
             POST.contributor().HANDLE,
             POST.community().ID,
             POST.community().NAME,
+            POST.COMMENTS_COUNT,
         )
             .from(POST)
             .fetch {
-                val instant = it.get(POST.CREATED_AT).toInstant(ZoneOffset.UTC)
+                val instant = it.get(POST.CREATED_AT).toInstant()
                 PostPreview(
                     it.get(POST.ID),
                     instant,
                     it.get(POST.SUBJECT),
                     it.get(POST.BODY_TEXT).take(512),
                     ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
-                    CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME))
+                    CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME)),
+                    it.get(POST.COMMENTS_COUNT)
                 )
             }
         return HomePageData(selected)

@@ -54,16 +54,6 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
         }
     }
 
-    fun registeredAndVerified(authCorrelationId: String): Boolean {
-        val count = dslContext
-            .selectCount()
-            .from(USER_ACCOUNT)
-            .where(USER_ACCOUNT.AUTH_CORRELATION_ID.eq(authCorrelationId))
-            .and(USER_ACCOUNT.IS_VERIFIED_HUMAN.eq(true))
-            .fetchOne(0, Int::class.java)!!
-        return count > 0
-    }
-
     fun hasRegistered(authCorrelationId: String): Boolean {
         val count = dslContext
             .selectCount()

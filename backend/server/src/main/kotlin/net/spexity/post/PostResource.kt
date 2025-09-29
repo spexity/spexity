@@ -22,7 +22,7 @@ class PostResource(private val postService: PostService) {
         return postService.create(
             PostService.CreateRequest(
                 authCorrelationId(securityIdentity), request.communityId,
-                request.subject, request.body
+                request.subject, request.bodyDocument
             )
         )
     }
@@ -30,7 +30,7 @@ class PostResource(private val postService: PostService) {
     data class PostCreateRequest(
         val communityId: UUID,
         @field:Size(min = 10, max = 512) val subject: String,
-        val body: Doc,
+        val bodyDocument: Document,
         @field:AssertTrue(message = "Conform to terms and conditions must be accepted") val conformToTermsAndConditions: Boolean
     )
 

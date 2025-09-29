@@ -1,13 +1,14 @@
 import { error } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { SsrLoadFromApi } from "$lib/utils/SsrLoadFromApi"
-import type { PostView } from "$lib/model/types"
+import type { CommentPage, PostView } from "$lib/model/types"
 
 interface PageData {
   post: PostView
+  comments: CommentPage
 }
 
-export const load: PageServerLoad = async (event) => {
+export const load: PageServerLoad<PageData> = async (event) => {
   const { params } = event
   if (!params || !params.slug) {
     error(404)

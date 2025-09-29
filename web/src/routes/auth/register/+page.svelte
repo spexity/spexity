@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation"
+  import { resolve } from "$app/paths"
   import { authManager } from "$lib/auth"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
@@ -18,7 +19,7 @@
   })
 
   const goHome = async () => {
-    await goto("/")
+    await goto(resolve("/"))
   }
 
   const handleSubmit = async (event: SubmitEvent) => {
@@ -29,7 +30,7 @@
       const alias = data.get("alias") as string
       const acceptTermsAndConditions = data.get("acceptTermsAndConditions") as string
       await authManager.registerUserAccount(alias, acceptTermsAndConditions === "on")
-      await goto("/")
+      await goto(resolve("/"))
     } catch {
       errorMessage = m.error_register_failed()
     } finally {
@@ -73,7 +74,7 @@
               {m.form_terms_prefix()}
               <a
                 class="link"
-                href="/terms-and-conditions"
+                href={resolve("/terms-and-conditions")}
                 target="_blank"
                 rel="noopener noreferrer"
               >

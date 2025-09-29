@@ -12,13 +12,13 @@ export const config = {
 
   // Test accounts
   VERIFIED_ACCOUNT: {
-    email: 'test1@example.com',
-    password: 'test1'
+    email: 'god@example.com',
+    password: 'god'
   },
 
   UNVERIFIED_ACCOUNT: {
-    email: 'test2@example.com',
-    password: 'test2'
+    email: 'bot@example.com',
+    password: 'bot'
   },
 
   // Performance thresholds - high above average expectations

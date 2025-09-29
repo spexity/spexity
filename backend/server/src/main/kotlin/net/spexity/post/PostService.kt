@@ -18,9 +18,9 @@ class PostService(
 ) {
 
     fun create(request: CreateRequest): CreateResponse {
-        securityService.validateVerified(request.authCorrelationId)
-        val bodyJson = objectMapper.writeValueAsString(request.body)
-        val bodyPreview = BodyTextSerializer.render(request.body)
+        securityService.validateVerifiedGetContributorId(request.authCorrelationId)
+        val bodyJson = objectMapper.writeValueAsString(request.bodyDocument)
+        val bodyPreview = DocumentToTextSerializer.serialize(request.bodyDocument)
         val insertedId = dslContext.insertInto(
             POST,
             POST.SUBJECT,
@@ -48,7 +48,7 @@ class PostService(
 
     data class CreateRequest(
         val authCorrelationId: String, val communityId: UUID,
-        val subject: String, val body: Doc
+        val subject: String, val bodyDocument: Document
     )
 
     data class CreateResponse(
