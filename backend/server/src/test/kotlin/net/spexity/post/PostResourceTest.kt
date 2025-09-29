@@ -6,8 +6,9 @@ import io.quarkus.test.security.TestSecurity
 import io.restassured.RestAssured.given
 import jakarta.inject.Inject
 import jakarta.ws.rs.core.MediaType
-import net.spexity.data.model.public_.Tables.POST
+import net.spexity.data.model.public_.Tables.COMMUNITY
 import net.spexity.data.model.public_.Tables.CONTRIBUTOR
+import net.spexity.data.model.public_.Tables.POST
 import org.jooq.DSLContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -70,6 +71,13 @@ class PostResourceTest {
         assertEquals(subject, record!!.subject)
         assertEquals(message, record.bodyText.trim())
         assertEquals(communityId, record.communityId)
+
+        val postsCount = dslContext.select(COMMUNITY.POSTS_COUNT)
+            .from(COMMUNITY)
+            .where(COMMUNITY.ID.eq(communityId))
+            .fetchOne(COMMUNITY.POSTS_COUNT)
+
+        assertEquals(1, postsCount)
 
         val contributorId = dslContext.select(CONTRIBUTOR.ID)
             .from(CONTRIBUTOR)

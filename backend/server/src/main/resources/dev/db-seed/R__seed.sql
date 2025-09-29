@@ -31,7 +31,7 @@ values ('2ea5c4a6-dc9a-4da0-bc95-7e9e147bc0e7', 'Toyota 86', '3561bd91-89f0-4bb3
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.post (id, created_at, subject, body_json, body_text, community_id, contributor_id)
-VALUES ('8032dd4e-1abd-434d-b92c-7c39f8ca359d', '2025-09-17 16:13:27.162757', 'A bit of everything', '{
+VALUES ('17e1af07-467d-4cce-91fa-50e784064b2c', '2025-09-17 16:13:27.162757', 'A bit of everything', '{
   "type": "doc",
   "content": [
     {
@@ -315,7 +315,7 @@ VALUES ('8032dd4e-1abd-434d-b92c-7c39f8ca359d', '2025-09-17 16:13:27.162757', 'A
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.post (id, created_at, subject, body_json, body_text, community_id, contributor_id)
-VALUES ('1032dd4e-1abd-434d-b92c-7c39f8ca359d', '2025-09-17 16:13:27.162757', 'No comments ever', '{
+VALUES ('87471c08-ae55-443c-896c-ebbcab50453c', '2025-09-17 16:13:27.162757', 'No comments ever', '{
   "type": "doc",
   "content": [
     {
@@ -357,7 +357,7 @@ ON CONFLICT DO NOTHING;
 
 INSERT INTO public.post_comment (id, post_id, contributor_id, body_json, created_at)
 SELECT uuidv7(),
-       '8032dd4e-1abd-434d-b92c-7c39f8ca359d',
+       '17e1af07-467d-4cce-91fa-50e784064b2c',
        '3561bd91-89f0-4bb3-bf2f-b745fc415b41',
        jsonb_build_object(
                'type', 'doc',

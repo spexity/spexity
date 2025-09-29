@@ -83,7 +83,8 @@ CREATE TABLE community
     id                        UUID                 DEFAULT uuidv7() PRIMARY KEY,
     created_at                TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name                      TEXT        NOT NULL UNIQUE,
-    created_by_contributor_id UUID        NOT NULL REFERENCES contributor (id)
+    created_by_contributor_id UUID        NOT NULL REFERENCES contributor (id),
+    posts_count               INTEGER     NOT NULL DEFAULT 0
 );
 CREATE INDEX idx_community_created_at ON community (created_at);
 
@@ -105,6 +106,32 @@ CREATE TABLE post
 );
 CREATE INDEX idx_post_created_at ON post (created_at);
 CREATE INDEX post_search_tsv_gin ON post USING GIN (search_tsv);
+
+
+CREATE OR REPLACE FUNCTION update_community_posts_count() RETURNS TRIGGER AS
+$$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        UPDATE community SET posts_count = posts_count + 1 WHERE id = NEW.community_id;
+    ELSIF TG_OP = 'DELETE' THEN
+        UPDATE community SET posts_count = posts_count - 1 WHERE id = OLD.community_id;
+    ELSIF TG_OP = 'UPDATE' THEN
+        IF NEW.community_id IS DISTINCT FROM OLD.community_id THEN
+            UPDATE community SET posts_count = posts_count - 1 WHERE id = OLD.community_id;
+            UPDATE community SET posts_count = posts_count + 1 WHERE id = NEW.community_id;
+        END IF;
+    END IF;
+
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_post_community_posts_count_aiud
+    AFTER INSERT OR DELETE OR UPDATE OF community_id
+    ON post
+    FOR EACH ROW
+EXECUTE FUNCTION update_community_posts_count();
+
 
 CREATE TABLE post_comment
 (

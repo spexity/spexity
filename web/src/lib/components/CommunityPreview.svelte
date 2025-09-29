@@ -18,7 +18,7 @@
   </div>
   <div class="flex flex-row justify-between">
     <div class="flex flex-row items-center gap-2 text-xs">
-      <span class="text-subtle">{m.community_posts_count({ count: 0 })}</span>
+      <span class="text-subtle">{m.community_posts_count({ count: community.postsCount })}</span>
     </div>
     <a class="btn btn-sm" href={resolve(`/communities/${community.id}`)}>{m.button_view()}</a>
   </div>

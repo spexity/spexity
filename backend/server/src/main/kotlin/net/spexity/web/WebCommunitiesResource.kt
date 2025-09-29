@@ -24,13 +24,15 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
         val authCorrelationId = optionalAuthCorrelationId(securityIdentity)
         val selected = dslContext.select(
             COMMUNITY.ID,
-            COMMUNITY.NAME
+            COMMUNITY.NAME,
+            COMMUNITY.POSTS_COUNT
         )
             .from(COMMUNITY)
             .fetch {
                 CommunityPreview(
                     it.get(COMMUNITY.ID),
-                    it.get(COMMUNITY.NAME)
+                    it.get(COMMUNITY.NAME),
+                    it.get(COMMUNITY.POSTS_COUNT)
                 )
             }
         return CommunitiesPageData(selected)
@@ -41,12 +43,13 @@ class WebCommunitiesResource(private val dslContext: DSLContext) {
     @PermitAll
     fun getCommunityPageData(@PathParam("id") id: UUID): CommunityPageData {
         val selectedCommunity = dslContext.select(
-            COMMUNITY.NAME
+            COMMUNITY.NAME,
+            COMMUNITY.POSTS_COUNT
         )
             .from(COMMUNITY)
             .where(COMMUNITY.ID.eq(id))
             .fetchOne {
-                CommunityPreview(id, it.get(COMMUNITY.NAME))
+                CommunityPreview(id, it.get(COMMUNITY.NAME), it.get(COMMUNITY.POSTS_COUNT))
             }
         if (selectedCommunity == null) {
             throw NotFoundException("Community not found")

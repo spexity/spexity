@@ -61,6 +61,7 @@ class CommunityResourceTest {
 
         assertNotNull(record)
         assertEquals(expectedName, record!!.name)
+        assertEquals(0, record.postsCount)
     }
 
     @Test
