@@ -23,6 +23,10 @@ VALUES ('9a5f8d52-b188-49c2-8d8e-24d4e4406a8d', '2025-09-15 11:51:12.777617', fa
         '9a5f8d52-b188-49c2-8d8e-24d4e4406a8d',
         'bot@example.com')
 ON CONFLICT DO NOTHING;
+INSERT INTO public.contributor (id, created_at, user_account_id, alias, discriminator)
+VALUES ('9a5f8d52-b188-49c2-8d8e-24d4e4406a8d', '2025-09-15 11:51:12.777617', '9a5f8d52-b188-49c2-8d8e-24d4e4406a8d',
+        'Bot', 3000)
+ON CONFLICT DO NOTHING;
 
 INSERT INTO public.community (id, name, created_by_contributor_id)
 values ('2ea5c4a6-dc9a-4da0-bc95-7e9e147bc0e7', 'Toyota 86', '3561bd91-89f0-4bb3-bf2f-b745fc415b41'),

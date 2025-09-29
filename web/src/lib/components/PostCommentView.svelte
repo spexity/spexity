@@ -171,7 +171,7 @@
             <button
               class="btn btn-xs"
               type="button"
-              data-testid={`comment-edit-${comment.id}`}
+              data-testid={`comment-edit-button-${comment.id}`}
               onclick={() => startEditing(comment)}
             >
               {m.comment_edit()}
@@ -204,7 +204,7 @@
               <button
                 class="btn btn-xs"
                 type="button"
-                data-testid={`comment-delete-${comment.id}`}
+                data-testid={`comment-delete-button-${comment.id}`}
                 onclick={askDelete}
               >
                 {m.comment_delete()}

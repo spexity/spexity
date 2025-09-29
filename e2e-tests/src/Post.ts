@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test"
+import { expect, type Locator, type Page } from "@playwright/test"
 import { Comment } from "./Comment"
 
 export class Post {
@@ -20,20 +20,17 @@ export class Post {
     return this.page.getByTestId("post-subject")
   }
 
-  getPostContent() {
-    return this.page.locator(".tiptap").first()
-  }
-
-  async startNewComment() {
+  async startNewComment(expectation?: "works" | "gated") {
     const toggleButton = this.getNewCommentButton()
     await toggleButton.scrollIntoViewIfNeeded()
     await expect(toggleButton).toBeVisible()
     await toggleButton.click()
+    const expectationLocator = expectation === "gated" ? this.getGatedFeature() : this.getNewCommentEditor()
     try {
-      await expect(this.getNewCommentEditor()).toBeVisible({ timeout: 1000 });
+      await expect(expectationLocator).toBeVisible({ timeout: 1000 });
     } catch {
       await toggleButton.click();
-      await expect(this.getNewCommentEditor()).toBeVisible();
+      await expect(expectationLocator).toBeVisible();
     }
   }
 
@@ -42,16 +39,25 @@ export class Post {
   }
 
   async setNewCommentValue(value: string) {
-    let editor = this.getNewCommentEditor()
+    const editor = this.getNewCommentEditor()
+    await expect(editor).toBeVisible()
     await editor.click()
     await this.page.keyboard.type(value)
   }
 
   async getCommentWithText(value: string) {
-    const item = this.getCommentItems().filter({
+    const matching = this.getCommentItems().filter({
       has: this.page.locator("[data-testid^=\"comment-body-\"]").filter({ hasText: value }),
     })
-    return new Comment(this.page, item.first())
+    const item = matching.first()
+    await expect(item).toBeVisible()
+    const testId = await item.getAttribute("data-testid")
+    if (!testId) {
+      throw new Error("Comment test id not found")
+    }
+    const stable = this.page.getByTestId(testId)
+    await expect(stable).toBeVisible()
+    return new Comment(this.page, stable)
   }
 
   async submitNewComment() {
@@ -77,6 +83,59 @@ export class Post {
   async getCommentsCountText(): Promise<string> {
     const element = this.getCommentsCount()
     return await element.innerText()
+  }
+
+  async getCommentsCountValue(): Promise<number> {
+    const text = await this.getCommentsCountText()
+    const match = text.match(/\d+/)
+    return match ? Number(match[0]) : 0
+  }
+
+  getNewCommentError() {
+    return this.page.getByTestId("new-comment-error")
+  }
+
+  getNewCommentCancelButton() {
+    return this.page.getByTestId("new-comment-cancel")
+  }
+
+  async cancelNewComment() {
+    const cancelButton = this.getNewCommentCancelButton()
+    if (await cancelButton.count()) {
+      await cancelButton.click()
+    }
+  }
+
+  getGatedFeature() {
+    return this.page.getByTestId("gated-feature")
+  }
+
+  getCommentBodies(): Locator {
+    return this.page.locator("[data-testid^=\"comment-body-\"]")
+  }
+
+  async getVisibleCommentTexts(): Promise<string[]> {
+    const contents = await this.getCommentBodies().allInnerTexts()
+    return contents.map((text) => text.trim()).filter((text) => text.length > 0)
+  }
+
+  async getVisibleCommentCount(): Promise<number> {
+    return await this.getCommentItems().count()
+  }
+
+  getLoadMoreButton() {
+    return this.page.getByTestId("comments-load-more")
+  }
+
+  async loadMoreComments() {
+    const button = this.getLoadMoreButton()
+    if (!(await button.count())) {
+      return
+    }
+    await button.scrollIntoViewIfNeeded()
+    await expect(button).toBeEnabled()
+    await button.click()
+    await this.page.getByTestId("comments-loading-more").waitFor({ state: 'detached' })
   }
 
 }

@@ -237,7 +237,7 @@
         disabled={loadMoreBusy}
       >
         {#if loadMoreBusy}
-          <span class="loading loading-spinner"></span>
+          <span data-testid="comments-loading-more" class="loading loading-spinner"></span>
         {:else}
           {m.comments_load_more()}
         {/if}
