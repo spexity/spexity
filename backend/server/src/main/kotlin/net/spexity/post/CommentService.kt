@@ -42,7 +42,9 @@ class CommentService(
             POST_COMMENT.DELETED_AT,
             POST_COMMENT.BODY_JSON,
             POST_COMMENT.contributor().ID,
-            POST_COMMENT.contributor().HANDLE
+            POST_COMMENT.contributor().HANDLE,
+            POST_COMMENT.contributor().AVATAR_EMOJI,
+            POST_COMMENT.contributor().AVATAR_BG_COLOR
         )
             .from(POST_COMMENT)
             .where(POST_COMMENT.POST_ID.eq(request.postId))
@@ -51,23 +53,25 @@ class CommentService(
             .offset(offset)
             .fetch()
 
-        val commentViews = rows.map { record ->
-            val createdAt = record.get(POST_COMMENT.CREATED_AT).toInstant()
+        val commentViews = rows.map {
+            val createdAt = it.get(POST_COMMENT.CREATED_AT).toInstant()
             val contributor = ContributorRef(
-                record.get(POST_COMMENT.contributor().ID),
-                record.get(POST_COMMENT.contributor().HANDLE)
+                it.get(POST_COMMENT.contributor().ID),
+                it.get(POST_COMMENT.contributor().HANDLE),
+                it.get(POST_COMMENT.contributor().AVATAR_EMOJI),
+                it.get(POST_COMMENT.contributor().AVATAR_BG_COLOR)
             )
-            val editCount = record.get(POST_COMMENT.EDIT_COUNT)
-            val deletedAt = record.get(POST_COMMENT.DELETED_AT)
+            val editCount = it.get(POST_COMMENT.EDIT_COUNT)
+            val deletedAt = it.get(POST_COMMENT.DELETED_AT)
             val deleted = deletedAt != null
             val bodyHtml = if (!deleted) {
-                val document = objectMapper.readValue(record.get(POST_COMMENT.BODY_JSON).data(), Document::class.java)
+                val document = objectMapper.readValue(it.get(POST_COMMENT.BODY_JSON).data(), Document::class.java)
                 HtmlSanitizer.sanitize(DocumentToHtmlSerializer.serialize(document))
             } else {
                 null
             }
             CommentView(
-                id = record.get(POST_COMMENT.ID),
+                id = it.get(POST_COMMENT.ID),
                 createdAt = createdAt,
                 editCount = editCount,
                 deleted = deleted,

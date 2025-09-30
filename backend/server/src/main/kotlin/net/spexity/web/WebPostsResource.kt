@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.security.PermitAll
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
-import net.spexity.data.model.public_.Tables.*
+import net.spexity.data.model.public_.Tables.COMMUNITY
+import net.spexity.data.model.public_.Tables.POST
 import net.spexity.post.CommentService
 import net.spexity.post.Document
 import net.spexity.post.DocumentToHtmlSerializer
@@ -35,6 +36,8 @@ class WebPostsResource(
             POST.COMMENTS_COUNT,
             POST.contributor().ID,
             POST.contributor().HANDLE,
+            POST.contributor().AVATAR_EMOJI,
+            POST.contributor().AVATAR_BG_COLOR,
             POST.community().ID,
             POST.community().NAME,
         ).from(POST).where(POST.ID.eq(id)).fetchOne {
@@ -45,7 +48,12 @@ class WebPostsResource(
                 instant,
                 it.get(POST.SUBJECT),
                 HtmlSanitizer.sanitize(DocumentToHtmlSerializer.serialize(bodyDocument)),
-                ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
+                ContributorRef(
+                    it.get(POST.contributor().ID),
+                    it.get(POST.contributor().HANDLE),
+                    it.get(POST.contributor().AVATAR_EMOJI),
+                    it.get(POST.contributor().AVATAR_BG_COLOR),
+                ),
                 CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME)),
                 it.get(POST.COMMENTS_COUNT)
             )

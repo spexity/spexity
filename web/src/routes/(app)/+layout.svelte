@@ -22,7 +22,12 @@
     return "home"
   }
 
-  const active = $derived<MenuItem>(determineActiveMenuItem())
+  let active = $derived<MenuItem>(determineActiveMenuItem())
+  let loggedIn = $derived(
+    [AuthUserAccountState.LOGGED_IN, AuthUserAccountState.LOGGED_IN_VERIFIED].includes(
+      authManager.userAccountState,
+    ),
+  )
 
   onMount(async () => {
     if (authManager.userAccountState === AuthUserAccountState.NOT_REGISTERED) {
@@ -109,19 +114,15 @@
           role="button"
           aria-label={m.nav_account_button_aria()}
           data-testid="account-menu-button"
-          class="btn btn-circle {[
-            AuthUserAccountState.LOGGED_IN,
-            AuthUserAccountState.LOGGED_IN_VERIFIED,
-          ].includes(authManager.userAccountState)
-            ? 'btn-outline btn-primary'
-            : 'btn-ghost btn-soft'}"
+          style={loggedIn
+            ? `background-color: ${authManager.userAccount?.contributor.avatarBgColor}`
+            : null}
+          class={["btn btn-circle", !loggedIn && "btn-ghost btn-soft"]}
         >
           {#if authManager.userAccountState === AuthUserAccountState.INIT}
             💭
-          {:else if authManager.userAccountState === AuthUserAccountState.LOGGED_IN}
-            🍯
-          {:else if authManager.userAccountState === AuthUserAccountState.LOGGED_IN_VERIFIED}
-            ✨
+          {:else if loggedIn}
+            {authManager.userAccount?.contributor.avatarEmoji}
           {:else}
             👀
           {/if}
@@ -134,7 +135,7 @@
           {#if authManager.userAccount}
             <li>
               <a aria-label={m.nav_account_profile_aria()} href={resolve("/account")}
-                >{authManager.userAccount.contributorHandle}</a
+                >{authManager.userAccount.contributor.handle}</a
               >
             </li>
             <div class="divider m-0"></div>

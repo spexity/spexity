@@ -57,6 +57,8 @@ class ContributorService(private val dslContext: DSLContext, private val logger:
         dslContext.insertInto(CONTRIBUTOR)
             .set(CONTRIBUTOR.USER_ACCOUNT_ID, request.userAccountId)
             .set(CONTRIBUTOR.ALIAS, request.alias)
+            .set(CONTRIBUTOR.AVATAR_EMOJI, request.avatarEmoji)
+            .set(CONTRIBUTOR.AVATAR_BG_COLOR, request.avatarBgColor)
             .set(CONTRIBUTOR.DISCRIMINATOR, candidate)
             .onConflictDoNothing()
             .returning()
@@ -81,7 +83,10 @@ class ContributorService(private val dslContext: DSLContext, private val logger:
         return ThreadLocalRandom.current().nextInt(min, max + 1)
     }
 
-    data class RegRequest(val userAccountId: UUID, val alias: String)
+    data class RegRequest(
+        val userAccountId: UUID, val alias: String,
+        val avatarEmoji: String, val avatarBgColor: String
+    )
 
     data class RegResponse(val id: UUID, val handle: String)
 

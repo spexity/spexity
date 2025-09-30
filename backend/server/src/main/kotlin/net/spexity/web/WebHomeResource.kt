@@ -13,7 +13,6 @@ import net.spexity.web.model.CommunityRef
 import net.spexity.web.model.ContributorRef
 import net.spexity.web.model.PostPreview
 import org.jooq.DSLContext
-import java.time.ZoneOffset
 
 @Path("/api/web/home")
 class WebHomeResource(private val dslContext: DSLContext) {
@@ -30,6 +29,8 @@ class WebHomeResource(private val dslContext: DSLContext) {
             POST.BODY_TEXT,
             POST.contributor().ID,
             POST.contributor().HANDLE,
+            POST.contributor().AVATAR_EMOJI,
+            POST.contributor().AVATAR_BG_COLOR,
             POST.community().ID,
             POST.community().NAME,
             POST.COMMENTS_COUNT,
@@ -42,7 +43,12 @@ class WebHomeResource(private val dslContext: DSLContext) {
                     instant,
                     it.get(POST.SUBJECT),
                     it.get(POST.BODY_TEXT).take(512),
-                    ContributorRef(it.get(CONTRIBUTOR.ID), it.get(CONTRIBUTOR.HANDLE)),
+                    ContributorRef(
+                        it.get(POST.contributor().ID),
+                        it.get(POST.contributor().HANDLE),
+                        it.get(POST.contributor().AVATAR_EMOJI),
+                        it.get(POST.contributor().AVATAR_BG_COLOR),
+                    ),
                     CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME)),
                     it.get(POST.COMMENTS_COUNT)
                 )
