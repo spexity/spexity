@@ -4,6 +4,7 @@ import { LanguageModal } from "./LanguageModal"
 import { GOD_USER, type UserCredentials } from "./TestData"
 import { HomePage } from "./HomePage"
 import { Post } from "./Post"
+import { CommunitiesPage } from "./CommunitiesPage"
 
 export class App {
   private readonly page: Page
@@ -27,6 +28,12 @@ export class App {
     let post = new Post(this.page, id)
     await post.go()
     return post
+  }
+
+  async goToCommunities() {
+    const communitiesPage = new CommunitiesPage(this.page)
+    await communitiesPage.go()
+    return communitiesPage
   }
 
   async signIn(credentials: UserCredentials = GOD_USER) {
