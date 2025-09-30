@@ -74,7 +74,7 @@ test("edited comment shows edited badge", async ({ page }) => {
   const app = new App(page)
   await app.launch()
   await app.signIn()
-  const postPage = await app.goToPost(POST_WITH_LOTS_COMMENTS)
+  const postPage = await app.goToPost(POST_WITH_NO_COMMENTS_YET)
   const baseText = `Editable comment ${randomUUID()}`
   const comment = await createComment(postPage, baseText)
   await comment.openEdit()
@@ -89,7 +89,7 @@ test("deleted comment shows deleted placeholder", async ({ page }) => {
   const app = new App(page)
   await app.launch()
   await app.signIn()
-  const postPage = await app.goToPost(POST_WITH_LOTS_COMMENTS)
+  const postPage = await app.goToPost(POST_WITH_NO_COMMENTS_YET)
   const commentText = `Disposable comment ${randomUUID()}`
   const comment = await createComment(postPage, commentText)
   await comment.delete()
@@ -125,7 +125,7 @@ test("maximum 2 edits per comment", async ({ page }) => {
   const app = new App(page)
   await app.launch()
   await app.signIn()
-  const postPage = await app.goToPost(POST_WITH_LOTS_COMMENTS)
+  const postPage = await app.goToPost(POST_WITH_NO_COMMENTS_YET)
   const baseText = `Edit limit comment ${randomUUID()}`
   const comment = await createComment(postPage, baseText)
 

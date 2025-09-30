@@ -12,8 +12,10 @@
   <div class="text-2xl">
     {community.name}
   </div>
-  <a class="btn btn-sm" href={resolve(`/posts/new?communityId=${community.id}`)}
-    >{m.post_create_action()}</a
+  <a
+    class="btn btn-sm"
+    href={resolve(`/posts/new?communityId=${community.id}`)}
+    data-testid="create-post-button">{m.post_create_action()}</a
   >
 </div>
 <div class="mt-2 flex flex-col gap-2" data-testid="posts-list">

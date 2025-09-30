@@ -60,7 +60,7 @@
     />
 
     <label id="bodyLabel" class="label" for="body">{m.form_body_label()}</label>
-    <Editor bind:this={editorRef} id="body" labelledBy="bodyLabel" />
+    <Editor bind:this={editorRef} id="body" labelledBy="bodyLabel" dataTestId="post-body-editor" />
     <div class="form-control">
       <label class="label" for="conformToTermsAndConditions">
         <input
