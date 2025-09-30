@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.ws.rs.BadRequestException
 import net.spexity.data.model.public_.Tables.CONTRIBUTOR
 import net.spexity.data.model.public_.Tables.USER_ACCOUNT
+import net.spexity.web.model.ContributorRef
 import org.jooq.DSLContext
 import java.util.*
 
@@ -21,13 +22,19 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 .set(USER_ACCOUNT.EMAIL_ADDRESS, request.emailAddress)
                 .returning()
                 .fetchOne()!!
-            val contributor = contributorService.register(ContributorService.RegRequest(account.id, request.alias))
+            val contributor = contributorService.register(
+                ContributorService.RegRequest(account.id, request.alias, request.avatarEmoji, request.avatarBgColor)
+            )
             RegResponse(
                 account.id,
                 account.isVerifiedHuman,
                 request.authCorrelationId,
-                contributor.id,
-                contributor.handle
+                ContributorRef(
+                    contributor.id,
+                    contributor.handle,
+                    request.avatarEmoji,
+                    request.avatarBgColor
+                )
             )
         }
     }
@@ -35,7 +42,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
     fun getUser(authCorrelationId: String): RegResponse? {
         val result = dslContext.select(
             CONTRIBUTOR.userAccount().ID, CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN,
-            CONTRIBUTOR.ID, CONTRIBUTOR.HANDLE
+            CONTRIBUTOR.ID, CONTRIBUTOR.HANDLE, CONTRIBUTOR.AVATAR_EMOJI, CONTRIBUTOR.AVATAR_BG_COLOR
         )
             .from(CONTRIBUTOR)
             .where(CONTRIBUTOR.userAccount().AUTH_CORRELATION_ID.eq(authCorrelationId))
@@ -48,8 +55,12 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 it.get(CONTRIBUTOR.userAccount().ID),
                 it.get(CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN),
                 authCorrelationId,
-                it.get(CONTRIBUTOR.ID),
-                it.get(CONTRIBUTOR.HANDLE),
+                ContributorRef(
+                    it.get(CONTRIBUTOR.ID),
+                    it.get(CONTRIBUTOR.HANDLE),
+                    it.get(CONTRIBUTOR.AVATAR_EMOJI),
+                    it.get(CONTRIBUTOR.AVATAR_BG_COLOR)
+                )
             )
         }
     }
@@ -63,14 +74,19 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
         return count > 0
     }
 
-    data class RegRequest(val authCorrelationId: String, val emailAddress: String, val alias: String)
+    data class RegRequest(
+        val authCorrelationId: String,
+        val emailAddress: String,
+        val alias: String,
+        val avatarEmoji: String,
+        val avatarBgColor: String
+    )
 
     data class RegResponse(
         val id: UUID,
         val isVerifiedHuman: Boolean,
         val authCorrelationId: String,
-        val contributorId: UUID,
-        val contributorHandle: String
+        val contributor: ContributorRef
     )
 
 }

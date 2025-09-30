@@ -102,7 +102,11 @@
   <div class="flex flex-col gap-2">
     <div class="flex flex-wrap items-center justify-between gap-1 text-xs">
       <div class="flex items-center">
-        <ContributorHandle contributor={comment.contributor} testIdQualifier={comment.id} />
+        <ContributorHandle
+          contributor={comment.contributor}
+          testIdQualifier={comment.id}
+          showAvatar
+        />
         {#if comment.editCount && !comment.deleted}
           <span
             class="badge badge-ghost badge-xs"
@@ -125,7 +129,7 @@
           {@html comment.bodyHtml}
         </div>
       {/if}
-      {#if comment.contributor.id === authManager.userAccount?.contributorId}
+      {#if comment.contributor.id === authManager.userAccount?.contributor.id}
         {#if editing}
           <form class="flex flex-col gap-2" onsubmit={(event) => saveEdit(event, comment)}>
             <Editor

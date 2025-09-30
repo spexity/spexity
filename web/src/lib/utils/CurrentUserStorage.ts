@@ -1,11 +1,12 @@
+import type { ContributorRef } from "$lib/model/types"
+
 const CURRENT_USER_KEY = "spexity.user"
 
 export interface CurrentUserAccount {
   id: string
   verifiedHuman: boolean
   authCorrelationId: string
-  contributorId: string
-  contributorHandle: string
+  contributor: ContributorRef
 }
 
 export class CurrentUserStorage {

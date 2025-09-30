@@ -33,13 +33,17 @@
   })
 </script>
 
-<div class="fixed top-0 w-full">
+<div class="bar-container fixed top-0 w-full">
   {#if active || fadingOut}
     <div class={["bar", active ? "animating-in" : "animating-out"]}></div>
   {/if}
 </div>
 
 <style>
+  .bar-container {
+    z-index: 1000;
+  }
+
   .bar {
     height: 2px;
     background-color: var(--color-primary);

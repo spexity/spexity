@@ -69,10 +69,7 @@
           createdAt: new Date().toISOString(),
           editCount: 0,
           deleted: false,
-          contributor: {
-            id: authManager.userAccount?.contributorId ?? "",
-            handle: authManager.userAccount?.contributorHandle ?? "",
-          },
+          contributor: authManager.userAccount!.contributor,
           bodyHtml,
         },
       ]
@@ -145,7 +142,7 @@
       <CommunityName community={post.community} />
     </span>
     <div class="flex flex-wrap items-center gap-1 text-xs">
-      <ContributorHandle contributor={post.contributor} testIdQualifier={post.id} />
+      <ContributorHandle contributor={post.contributor} testIdQualifier={post.id} showAvatar />
       <span class="text-subtle">•</span>
       <span class="text-subtle">{formattedDateTime}</span>
     </div>

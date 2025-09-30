@@ -46,13 +46,13 @@ class UserResourceTest {
             .post("/api/current-user")
             .then()
             .statusCode(200)
-            .body("contributorHandle", startsWith("TEST#"))
+            .body("contributor.handle", startsWith("TEST#"))
         given()
             .`when`()
             .get("/api/current-user")
             .then()
             .statusCode(200)
-            .body("contributorHandle", startsWith("TEST#"))
+            .body("contributor.handle", startsWith("TEST#"))
     }
 
     @Test
