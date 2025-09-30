@@ -87,8 +87,8 @@ fun insertUser(
         .fetchOne()!!.id
 
     return dslContext.insertInto(CONTRIBUTOR)
-        .columns(CONTRIBUTOR.USER_ACCOUNT_ID, CONTRIBUTOR.ALIAS, CONTRIBUTOR.DISCRIMINATOR)
-        .values(accountId, alias, randomDiscriminator())
+        .columns(CONTRIBUTOR.USER_ACCOUNT_ID, CONTRIBUTOR.ALIAS, CONTRIBUTOR.DISCRIMINATOR, CONTRIBUTOR.AVATAR_EMOJI, CONTRIBUTOR.AVATAR_BG_COLOR)
+        .values(accountId, alias, randomDiscriminator(), "🤖", "#22C55E")
         .returning(CONTRIBUTOR.ID)
         .fetchOne()!!.id
 }
