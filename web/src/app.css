@@ -91,6 +91,6 @@
   @apply mx-auto sm:container;
 }
 
-/*.tab.tab-active::before {
+.tab.tab-active::before {
     border-color: var(--color-primary);
-}*/
+}
