@@ -21,14 +21,20 @@ class CommentResource(private val commentService: CommentService) {
         @PathParam("postId") postId: UUID,
         @QueryParam("page") page: Int?,
         @QueryParam("pageSize") pageSize: Int?,
+        @QueryParam("order") order: String?,
     ): CommentService.ListResponse {
         val resolvedPage = page ?: 1
         val resolvedPageSize = pageSize ?: 100
+        val resolvedOrder = when (order?.lowercase()) {
+            "desc" -> "desc"
+            else -> "asc"
+        }
         return commentService.list(
             CommentService.ListRequest(
                 postId = postId,
                 page = resolvedPage,
-                pageSize = resolvedPageSize
+                pageSize = resolvedPageSize,
+                order = resolvedOrder
             )
         )
     }
