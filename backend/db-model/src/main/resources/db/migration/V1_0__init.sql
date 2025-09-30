@@ -43,18 +43,13 @@ declare
     v           bigint;
     disc        int;
 begin
-    -- per-alias transaction lock
     perform pg_advisory_xact_lock(hashtextextended(p_alias, 0));
 
-    -- bounds
     minv_big := power(10, p_digits - 1)::bigint;
     maxv_big := power(10, p_digits)::bigint - 1;
     range_sz := maxv_big - minv_big + 1;
-
-    -- ring offset (per-call variability)
     ring_offset := hashtextextended(p_alias, extract(epoch from clock_timestamp())::bigint);
 
-    -- walk the ring once, exit on first free
     i := 0;
     while i < range_sz
         loop
@@ -62,7 +57,6 @@ begin
             v := minv_big + idx;
             disc := v::int;
 
-            -- free?
             if not exists (select 1
                            from contributor uh
                            where uh.alias = p_alias
