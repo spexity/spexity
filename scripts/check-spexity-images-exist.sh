@@ -8,10 +8,11 @@ if [ $# -ne 1 ]; then
 fi
 
 TAG=$1
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 IMAGES=(
     "ghcr.io/spexity/spexity-web:$TAG"
     "ghcr.io/spexity/spexity-backend:$TAG"
 )
 
-./check-docker-images-exist.sh "${IMAGES[@]}"
+"$SCRIPT_DIR/check-docker-images-exist.sh" "${IMAGES[@]}"
