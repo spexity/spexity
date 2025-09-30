@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
     JsonSubTypes.Type(value = ListItem::class, name = "listItem"),
     JsonSubTypes.Type(value = CodeBlock::class, name = "codeBlock"),
     JsonSubTypes.Type(value = Blockquote::class, name = "blockquote"),
+    JsonSubTypes.Type(value = HardBreak::class, name = "hardBreak"),
     JsonSubTypes.Type(value = HorizontalRule::class, name = "horizontalRule"),
 )
 sealed interface Node
@@ -56,6 +57,7 @@ data class Blockquote(
     val content: List<Node>? = null // usually paragraphs
 ) : Node
 
+class HardBreak : Node
 class HorizontalRule : Node
 
 data class Text(
