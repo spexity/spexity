@@ -48,7 +48,10 @@ class CommentService(
         )
             .from(POST_COMMENT)
             .where(POST_COMMENT.POST_ID.eq(request.postId))
-            .orderBy(POST_COMMENT.CREATED_AT.asc(), POST_COMMENT.ID.asc())
+            .orderBy(
+                if (request.order == "desc") POST_COMMENT.CREATED_AT.desc() else POST_COMMENT.CREATED_AT.asc(),
+                if (request.order == "desc") POST_COMMENT.ID.desc() else POST_COMMENT.ID.asc(),
+            )
             .limit(size)
             .offset(offset)
             .fetch()
@@ -181,7 +184,7 @@ class CommentService(
         }
     }
 
-    data class ListRequest(val postId: UUID, val page: Int, val pageSize: Int)
+    data class ListRequest(val postId: UUID, val page: Int, val pageSize: Int, val order: String = "asc")
     data class ListResponse(val items: List<CommentView>, val page: Int, val pageSize: Int)
     data class CreateRequest(val authCorrelationId: String, val postId: UUID, val bodyDocument: Document)
     data class CreateResponse(val id: UUID)
