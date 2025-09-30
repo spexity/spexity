@@ -86,9 +86,8 @@
 
   pre {
     margin-top: 0.4rem;
-    background: var(--color-neutral);
+    background: var(--color-base-300);
     border-radius: 0.5rem;
-    color: var(--color-neutral-content);
     font-family: "JetBrainsMono", monospace;
     padding: 0.75rem 1rem;
     code {
