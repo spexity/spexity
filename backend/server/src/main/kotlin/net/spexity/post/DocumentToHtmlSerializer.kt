@@ -13,6 +13,7 @@ object DocumentToHtmlSerializer {
         is ListItem -> renderListItem(node)
         is CodeBlock -> renderCodeBlock(node)
         is Blockquote -> renderBlockquote(node)
+        is HardBreak -> "<br/>"
         is HorizontalRule -> "<hr/>"
         is Text -> renderText(node)
         is Document -> serialize(node)

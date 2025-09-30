@@ -13,7 +13,7 @@ object DocumentToTextSerializer {
         is ListItem -> renderListItem(node)
         is CodeBlock -> renderPlainText(node.content)
         is Blockquote -> renderChildren(node.content)
-        is HorizontalRule -> " "
+        is HorizontalRule, is HardBreak -> " "
         is Text -> node.text.orEmpty()
         is Document -> serialize(node)
     }
