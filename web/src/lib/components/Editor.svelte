@@ -188,9 +188,9 @@
 <div class="textarea w-full">
   {#if editor}
     <dialog bind:this={linkModalRef} class="modal">
-      <div class="modal-box pt-8">
+      <div class="spx-modal-box modal-box">
         <form method="dialog">
-          <button class="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">✕</button>
+          <button class="spx-modal-close-btn">✕</button>
         </form>
         <form onsubmit={setLink}>
           <fieldset class="fieldset">

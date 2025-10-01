@@ -19,9 +19,9 @@
   data-testid={`contributor-${contributor.id}-${testIdQualifier}`}
 >
   {#if showAvatar}
-    <span class="rounded-full p-1" style="background-color: {contributor.avatarBgColor}"
+    <span class="spx-avatar-badge" style="background-color: {contributor.avatarBgColor}"
       >{contributor.avatarEmoji}</span
     >
   {/if}
-  {contributorName}<span class="text-subtle">{contributorDiscriminator}</span>
+  {contributorName}<span class="spx-text-subtle">{contributorDiscriminator}</span>
 </a>

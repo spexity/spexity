@@ -57,9 +57,9 @@
 </script>
 
 <dialog bind:this={langModalRef} class="modal">
-  <div class="modal-box">
+  <div class="spx-modal-box modal-box">
     <form method="dialog">
-      <button class="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">✕</button>
+      <button class="spx-modal-close-btn">✕</button>
     </form>
     <div class="flex flex-col gap-2 py-6">
       {#each locales as locale (locale)}
@@ -78,8 +78,8 @@
     <button>close</button>
   </form>
 </dialog>
-<div class="app-body">
-  <div class="navbar bg-base-100 shadow-sm">
+<div class="spx-app">
+  <div class="spx-navbar">
     <div class="flex items-center gap-2">
       <a href={resolve("/")}>
         <img

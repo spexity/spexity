@@ -12,7 +12,7 @@
     >{m.community_start()}</a
   >
 </div>
-<div class="mt-2 flex flex-col gap-2" data-testid="communities-list">
+<div class="spx-cards-list" data-testid="communities-list">
   {#each data.communities as community (community.id)}
     <CommunityPreview {community} />
   {/each}
