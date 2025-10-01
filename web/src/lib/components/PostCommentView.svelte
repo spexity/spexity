@@ -98,127 +98,122 @@
   }
 </script>
 
-<article class="rounded-lg border border-base-300 p-3" data-testid={`comment-item-${comment.id}`}>
-  <div class="flex flex-col gap-2">
-    <div class="flex flex-wrap items-center justify-between gap-1 text-xs">
-      <div class="flex items-center">
-        <ContributorHandle
-          contributor={comment.contributor}
-          testIdQualifier={comment.id}
-          showAvatar
-        />
-        {#if comment.editCount && !comment.deleted}
-          <span
-            class="badge badge-ghost badge-xs"
-            data-testid={`comment-edited-badge-${comment.id}`}
-          >
-            {m.comment_edited_badge()}
-          </span>
-        {/if}
-      </div>
-      <span class="text-subtle">{formattedDateTime}</span>
-    </div>
-    {#if comment.deleted}
-      <p class="text-subtle text-xs" data-testid={`comment-deleted-placeholder-${comment.id}`}>
-        {m.comment_deleted_placeholder()}
-      </p>
-    {:else}
-      {#if !editing}
-        <div class="tiptap comment-tiptap" data-testid={`comment-body-${comment.id}`}>
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          {@html comment.bodyHtml}
-        </div>
+<article class="spx-card" data-testid={`comment-item-${comment.id}`}>
+  <div class="spx-card-header text-xs">
+    <div class="flex items-center">
+      <ContributorHandle
+        contributor={comment.contributor}
+        testIdQualifier={comment.id}
+        showAvatar
+      />
+      {#if comment.editCount && !comment.deleted}
+        <span class="badge badge-ghost badge-xs" data-testid={`comment-edited-badge-${comment.id}`}>
+          {m.comment_edited_badge()}
+        </span>
       {/if}
-      {#if comment.contributor.id === authManager.userAccount?.contributor.id}
-        {#if editing}
-          <form class="flex flex-col gap-2" onsubmit={(event) => saveEdit(event, comment)}>
-            <Editor
-              bind:this={editingEditorRef}
-              id={`comment-edit-${comment.id}`}
-              dataTestId={`comment-edit-editor-${comment.id}`}
-              mode="comment"
-            />
-            {#if editingError}
-              <div
-                role="alert"
-                class="alert alert-error"
-                data-testid={`comment-edit-error-${comment.id}`}
-              >
-                <span>{editingError}</span>
-              </div>
-            {/if}
-            <div class="flex gap-2">
-              <button
-                class="btn btn-xs btn-primary"
-                type="submit"
-                disabled={editingSubmitting}
-                data-testid={`comment-save-${comment.id}`}
-              >
-                {#if editingSubmitting}
-                  <span class="loading loading-spinner"></span>
-                {:else}
-                  {m.form_save()}
-                {/if}
-              </button>
-              <button
-                class="btn btn-xs"
-                type="button"
-                data-testid={`comment-edit-cancel-${comment.id}`}
-                onclick={cancelEditing}
-              >
-                {m.form_cancel()}
-              </button>
+    </div>
+    <span class="spx-text-subtle">{formattedDateTime}</span>
+  </div>
+  {#if comment.deleted}
+    <p class="spx-text-subtle text-xs" data-testid={`comment-deleted-placeholder-${comment.id}`}>
+      {m.comment_deleted_placeholder()}
+    </p>
+  {:else}
+    {#if !editing}
+      <div class="tiptap comment-tiptap" data-testid={`comment-body-${comment.id}`}>
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html comment.bodyHtml}
+      </div>
+    {/if}
+    {#if comment.contributor.id === authManager.userAccount?.contributor.id}
+      {#if editing}
+        <form class="flex flex-col gap-2" onsubmit={(event) => saveEdit(event, comment)}>
+          <Editor
+            bind:this={editingEditorRef}
+            id={`comment-edit-${comment.id}`}
+            dataTestId={`comment-edit-editor-${comment.id}`}
+            mode="comment"
+          />
+          {#if editingError}
+            <div
+              role="alert"
+              class="alert alert-error"
+              data-testid={`comment-edit-error-${comment.id}`}
+            >
+              <span>{editingError}</span>
             </div>
-          </form>
-        {:else}
-          <div class="flex flex-wrap gap-2">
+          {/if}
+          <div class="flex gap-2">
+            <button
+              class="btn btn-xs btn-primary"
+              type="submit"
+              disabled={editingSubmitting}
+              data-testid={`comment-save-${comment.id}`}
+            >
+              {#if editingSubmitting}
+                <span class="loading loading-spinner"></span>
+              {:else}
+                {m.form_save()}
+              {/if}
+            </button>
             <button
               class="btn btn-xs"
               type="button"
-              data-testid={`comment-edit-button-${comment.id}`}
-              onclick={() => startEditing(comment)}
+              data-testid={`comment-edit-cancel-${comment.id}`}
+              onclick={cancelEditing}
             >
-              {m.comment_edit()}
+              {m.form_cancel()}
             </button>
-
-            {#if deleteConfirming}
-              <button
-                class="btn btn-xs"
-                type="button"
-                data-testid={`comment-delete-cancel-${comment.id}`}
-                disabled={deleting}
-                onclick={() => cancelDelete()}
-              >
-                {m.form_cancel()}
-              </button>
-              <button
-                class="btn btn-xs btn-error"
-                type="button"
-                data-testid={`comment-delete-confirm-${comment.id}`}
-                disabled={deleting}
-                onclick={() => performDelete(comment)}
-              >
-                {#if deleting}
-                  <span class="loading loading-spinner"></span>
-                {:else}
-                  {m.comment_delete()}
-                {/if}
-              </button>
-            {:else}
-              <button
-                class="btn btn-xs"
-                type="button"
-                data-testid={`comment-delete-button-${comment.id}`}
-                onclick={askDelete}
-              >
-                {m.comment_delete()}
-              </button>
-            {/if}
           </div>
-        {/if}
+        </form>
+      {:else}
+        <div class="flex flex-wrap gap-2">
+          <button
+            class="btn btn-xs"
+            type="button"
+            data-testid={`comment-edit-button-${comment.id}`}
+            onclick={() => startEditing(comment)}
+          >
+            {m.comment_edit()}
+          </button>
+
+          {#if deleteConfirming}
+            <button
+              class="btn btn-xs"
+              type="button"
+              data-testid={`comment-delete-cancel-${comment.id}`}
+              disabled={deleting}
+              onclick={() => cancelDelete()}
+            >
+              {m.form_cancel()}
+            </button>
+            <button
+              class="btn btn-xs btn-error"
+              type="button"
+              data-testid={`comment-delete-confirm-${comment.id}`}
+              disabled={deleting}
+              onclick={() => performDelete(comment)}
+            >
+              {#if deleting}
+                <span class="loading loading-spinner"></span>
+              {:else}
+                {m.comment_delete()}
+              {/if}
+            </button>
+          {:else}
+            <button
+              class="btn btn-xs"
+              type="button"
+              data-testid={`comment-delete-button-${comment.id}`}
+              onclick={askDelete}
+            >
+              {m.comment_delete()}
+            </button>
+          {/if}
+        </div>
       {/if}
     {/if}
-  </div>
+  {/if}
   {#if deleteError}
     <div role="alert" class="mt-4 alert alert-error">
       <span>{deleteError}</span>

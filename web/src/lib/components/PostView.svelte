@@ -143,8 +143,8 @@
     </span>
     <div class="flex flex-wrap items-center gap-1 text-xs">
       <ContributorHandle contributor={post.contributor} testIdQualifier={post.id} showAvatar />
-      <span class="text-subtle">•</span>
-      <span class="text-subtle">{formattedDateTime}</span>
+      <span class="spx-text-subtle">•</span>
+      <span class="spx-text-subtle">{formattedDateTime}</span>
     </div>
   </div>
   <div class="mt-4">
@@ -154,7 +154,7 @@
   </div>
   <div class="divider m-0"></div>
   <div class="flex items-center justify-between">
-    <div class="text-subtle text-sm" data-testid="comments-count">
+    <div class="spx-text-subtle text-sm" data-testid="comments-count">
       {m.comments_count({ count: commentsCount })}
     </div>
     <button
@@ -205,7 +205,7 @@
     {/if}
   {/if}
 
-  <div class="mt-2 flex flex-col gap-2" data-testid="comments-list">
+  <div class="spx-cards-list" data-testid="comments-list">
     {#each comments as comment (comment.id)}
       <PostCommentView
         postId={post.id}

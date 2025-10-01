@@ -71,26 +71,66 @@
   --noise: 0;
 }
 
-.text-subtle {
-  @apply text-base-content/66;
+body {
+  overflow-y: scroll;
 }
 
 .label {
   text-wrap: auto;
 }
 
-.navbar {
+.tab.tab-active::before {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+}
+
+/* Spexity classes */
+
+.spx-text-subtle {
+    @apply text-base-content/66;
+}
+
+.spx-app {
+    margin-top: 5rem;
+    margin-bottom: 2.5rem;
+    @apply mx-auto sm:container;
+}
+
+.spx-navbar {
   height: 4rem;
   z-index: 100;
-  @apply fixed top-0 mx-auto sm:container;
+  @apply navbar fixed top-0 mx-auto sm:container bg-base-100 shadow-sm;
 }
 
-.app-body {
-  margin-top: 5rem;
-  margin-bottom: 2.5rem;
-  @apply mx-auto sm:container;
+/* Modal */
+.spx-modal-box {
+  @apply pt-8;
 }
 
-.tab.tab-active::before {
-  border-color: var(--color-primary);
+.spx-modal-close-btn {
+  @apply btn absolute top-2 right-2 btn-circle btn-ghost btn-sm;
+}
+
+/* Cards & Containers */
+.spx-card {
+  @apply flex flex-col gap-1 rounded-lg border border-base-300 p-3;
+}
+
+.spx-card-header {
+  @apply flex flex-wrap items-center justify-between gap-1;
+}
+
+.spx-card-footer {
+  @apply flex flex-wrap items-center justify-between gap-1;
+}
+
+.spx-cards-list {
+  @apply mt-2 flex flex-col gap-2;
+}
+
+/* Avatar */
+
+.spx-avatar-badge {
+  @apply rounded-full p-1;
+  line-height: 1.5rem;
 }

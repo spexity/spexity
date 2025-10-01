@@ -18,7 +18,7 @@
     data-testid="create-post-button">{m.post_create_action()}</a
   >
 </div>
-<div class="mt-2 flex flex-col gap-2" data-testid="posts-list">
+<div class="spx-cards-list" data-testid="posts-list">
   {#each data.posts as post (post.id)}
     <PostPreview {post} timezone={data.timezone} />
   {/each}
