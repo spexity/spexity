@@ -18,6 +18,6 @@
     <span class="spx-text-subtle text-xs"
       >{m.community_posts_count({ count: community.postsCount })}</span
     >
-    <a class="btn btn-sm" href={resolve(`/communities/${community.id}`)}>{m.button_view()}</a>
+    <a class="btn btn-sm" href={resolve(`/communities/${community.id}`)}>{m.view_action()}</a>
   </div>
 </div>

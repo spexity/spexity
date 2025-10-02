@@ -59,3 +59,11 @@ export interface CommentPage {
   page: number
   pageSize: number
 }
+
+export type SortPreference = "asc" | "desc"
+
+export interface Prefs {
+  timezone: string
+  locale: string
+  commentsOrder: SortPreference
+}

@@ -5,7 +5,7 @@ VALUES ('3561bd91-89f0-4bb3-bf2f-b745fc415b41', '2025-09-15 11:51:12.777617', tr
 ON CONFLICT DO NOTHING;
 INSERT INTO public.contributor (id, created_at, user_account_id, alias, discriminator, avatar_emoji, avatar_bg_color)
 VALUES ('3561bd91-89f0-4bb3-bf2f-b745fc415b41', '2025-09-15 11:51:12.777617', '3561bd91-89f0-4bb3-bf2f-b745fc415b41',
-        'God', 1000, '✨', '#1E3A8A')
+        'God', 1000, '☁️✨', '#1E3A8A')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.user_account (id, created_at, is_verified_human, auth_correlation_id, email_address)
@@ -15,7 +15,7 @@ VALUES ('266cfe96-52e6-48fa-a01c-c41583f55a58', '2025-09-15 11:51:12.777617', tr
 ON CONFLICT DO NOTHING;
 INSERT INTO public.contributor (id, created_at, user_account_id, alias, discriminator, avatar_emoji, avatar_bg_color)
 VALUES ('266cfe96-52e6-48fa-a01c-c41583f55a58', '2025-09-15 11:51:12.777617', '266cfe96-52e6-48fa-a01c-c41583f55a58',
-        'Human', 2000, '🧍', '#C084FC')
+        'Human', 2000, '😎✊', '#C084FC')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.user_account (id, created_at, is_verified_human, auth_correlation_id, email_address)
@@ -25,7 +25,7 @@ VALUES ('9a5f8d52-b188-49c2-8d8e-24d4e4406a8d', '2025-09-15 11:51:12.777617', fa
 ON CONFLICT DO NOTHING;
 INSERT INTO public.contributor (id, created_at, user_account_id, alias, discriminator, avatar_emoji, avatar_bg_color)
 VALUES ('9a5f8d52-b188-49c2-8d8e-24d4e4406a8d', '2025-09-15 11:51:12.777617', '9a5f8d52-b188-49c2-8d8e-24d4e4406a8d',
-        'Bot', 3000, '🤖', '#22C55E')
+        'Bot', 3000, '😡🤖', '#22C55E')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.community (id, name, created_by_contributor_id)

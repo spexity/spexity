@@ -27,7 +27,8 @@ class WebPostsResource(
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
-    fun getPostPageData(@PathParam("id") id: UUID): PostPageData {
+    fun getPostPageData(@PathParam("id") id: UUID,
+                        @QueryParam("order") order: String?): PostPageData {
         val selected = dslContext.select(
             POST.ID,
             POST.CREATED_AT,
@@ -65,7 +66,8 @@ class WebPostsResource(
             CommentService.ListRequest(
                 postId = id,
                 page = 1,
-                pageSize = 100
+                pageSize = 100,
+                order = order ?: "asc"
             )
         )
         return PostPageData(selected, comments)

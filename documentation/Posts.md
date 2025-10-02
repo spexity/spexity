@@ -1,16 +1,21 @@
 # Posts
 
-## The date/time
+## Overview
+- Publicly readable; creation requires an authenticated, verified contributor.
+- Post bodies are structured documents stored as JSON and rendered to sanitized HTML for display.
+- Previews use a plain‑text serialization (truncated to ~512 chars in lists).
+- Community postsCount and per‑post commentsCount are maintained and exposed in views.
 
-When the post's date and time are shown in the frontend, the user should be able to toggle between two modes:
+## Validation and limits
+- Subject: 10–512 characters.
+- Body: must contain meaningful text (validated via document text serialization).
+- Terms and conditions checkbox must be accepted on creation.
 
-1. Absolute date/time
-2. Relative date/time (future)
+## Permissions
+- Read: anyone.
+- Create: authenticated, verified contributor.
 
 
-## Absolute
-Formatted to the user's locale.
-If less than 18hrs ago, show the time.
-If more than 18hrs ago, show the date and time.
-
-## Relative (future)
+## Client/UI notes
+- Form constraints mirror backend: subject minlength/maxlength, body required (editor), explicit T&C checkbox.
+- On create success, client navigates to Post view.

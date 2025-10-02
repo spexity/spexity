@@ -33,7 +33,7 @@ class UserResource(private val userService: UserService, private val logger: Log
         return userService.register(
             UserService.RegRequest(
                 authCorrelationId(securityIdentity), tokenEmail(securityIdentity), request.alias,
-                randomEmoji(), randomColor()
+                randomEmoji() + randomEmoji(), randomColor()
             )
         )
     }

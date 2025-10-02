@@ -154,29 +154,13 @@ CREATE OR REPLACE FUNCTION update_post_comments_count() RETURNS TRIGGER AS
 $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
-        IF NEW.deleted_at IS NULL THEN
-            UPDATE post SET comments_count = comments_count + 1 WHERE id = NEW.post_id;
-        END IF;
-
+        UPDATE post SET comments_count = comments_count + 1 WHERE id = NEW.post_id;
     ELSIF TG_OP = 'DELETE' THEN
-        IF OLD.deleted_at IS NULL THEN
-            UPDATE post SET comments_count = comments_count - 1 WHERE id = OLD.post_id;
-        END IF;
-
+        UPDATE post SET comments_count = comments_count - 1 WHERE id = OLD.post_id;
     ELSIF TG_OP = 'UPDATE' THEN
         IF NEW.post_id IS DISTINCT FROM OLD.post_id THEN
-            IF OLD.deleted_at IS NULL THEN
-                UPDATE post SET comments_count = comments_count - 1 WHERE id = OLD.post_id;
-            END IF;
-            IF NEW.deleted_at IS NULL THEN
-                UPDATE post SET comments_count = comments_count + 1 WHERE id = NEW.post_id;
-            END IF;
-        ELSE
-            IF OLD.deleted_at IS NULL AND NEW.deleted_at IS NOT NULL THEN
-                UPDATE post SET comments_count = comments_count - 1 WHERE id = NEW.post_id;
-            ELSIF OLD.deleted_at IS NOT NULL AND NEW.deleted_at IS NULL THEN
-                UPDATE post SET comments_count = comments_count + 1 WHERE id = NEW.post_id;
-            END IF;
+            UPDATE post SET comments_count = comments_count - 1 WHERE id = OLD.post_id;
+            UPDATE post SET comments_count = comments_count + 1 WHERE id = NEW.post_id;
         END IF;
     END IF;
 
@@ -185,7 +169,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_post_comment_comments_count_aiud
-    AFTER INSERT OR DELETE OR UPDATE OF deleted_at, post_id
+    AFTER INSERT OR DELETE OR UPDATE OF post_id
     ON post_comment
     FOR EACH ROW
 EXECUTE FUNCTION update_post_comments_count();

@@ -64,7 +64,7 @@
     <div class="flex flex-col gap-2 py-6">
       {#each locales as locale (locale)}
         <button
-          class="btn btn-ghost btn-sm {data.locale === locale ? 'btn-active' : ''}"
+          class="btn btn-ghost btn-sm {data.prefs.locale === locale ? 'btn-active' : ''}"
           onclick={(e) => switchLanguage(e, locale)}
           type="button"
           data-testid={"locale-btn-" + locale}
@@ -117,7 +117,7 @@
           style={loggedIn
             ? `background-color: ${authManager.userAccount?.contributor.avatarBgColor}`
             : null}
-          class={["btn btn-circle", !loggedIn && "btn-ghost btn-soft"]}
+          class={[loggedIn ? "btn rounded-full p-2" : "btn btn-circle btn-ghost btn-soft"]}
         >
           {#if authManager.userAccountState === AuthUserAccountState.INIT}
             💭

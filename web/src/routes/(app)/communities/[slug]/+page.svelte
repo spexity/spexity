@@ -20,6 +20,6 @@
 </div>
 <div class="spx-cards-list" data-testid="posts-list">
   {#each data.posts as post (post.id)}
-    <PostPreview {post} timezone={data.timezone} />
+    <PostPreview {post} prefs={data.prefs} />
   {/each}
 </div>

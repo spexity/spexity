@@ -80,26 +80,26 @@ body {
 }
 
 .tab.tab-active::before {
-    border-color: var(--color-primary);
-    background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
 }
 
 /* Spexity classes */
 
 .spx-text-subtle {
-    @apply text-base-content/66;
+  @apply text-base-content/66;
 }
 
 .spx-app {
-    margin-top: 5rem;
-    margin-bottom: 2.5rem;
-    @apply mx-auto sm:container;
+  margin-top: 5rem;
+  margin-bottom: 2.5rem;
+  @apply mx-auto sm:container;
 }
 
 .spx-navbar {
   height: 4rem;
   z-index: 100;
-  @apply navbar fixed top-0 mx-auto sm:container bg-base-100 shadow-sm;
+  @apply fixed top-0 mx-auto navbar bg-base-100 shadow-sm sm:container;
 }
 
 /* Modal */

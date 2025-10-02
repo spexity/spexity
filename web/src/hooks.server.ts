@@ -4,6 +4,8 @@ import { sequence } from "@sveltejs/kit/hooks"
 import { Cookies } from "$lib/cookies"
 import { LOCALES_MAP } from "$lib/locales"
 
+import type { SortPreference } from "$lib/model/types"
+
 const handleParaglide: Handle = ({ event, resolve }) =>
   paraglideMiddleware(event.request, ({ request, locale }) => {
     event.request = request
@@ -18,6 +20,8 @@ const handleParaglide: Handle = ({ event, resolve }) =>
 
 const handleLocals: Handle = ({ event, resolve }) => {
   event.locals.timezone = event.cookies.get(Cookies.timezone) ?? "UTC"
+  event.locals.commentsOrder = (event.cookies.get(Cookies.commentsOrder) as SortPreference) ?? "asc"
+  event.locals.contributorId = event.cookies.get(Cookies.contributorId)
   return resolve(event)
 }
 

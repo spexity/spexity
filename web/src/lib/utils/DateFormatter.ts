@@ -34,24 +34,24 @@ export class DateFormatter {
   }
 
   //Format from an iso string to an absolute representation (at a specific date or time, as opposed to 1d ago)
-  static formatUtcIsoAbsolute(utcIso: string, timezone: string): string {
+  static formatUtcIsoAbsolute(utcIso: string, timezone: string, locale: string): string {
     const date = new Date(utcIso)
     const now = Date.now()
     const diffMs = now - date.getTime()
     if (diffMs <= TIME_ONLY_CUTOFF_MS) {
-      return date.toLocaleTimeString(undefined, {
+      return date.toLocaleTimeString(locale, {
         timeStyle: "short",
         timeZone: timezone,
       })
     }
     if (diffMs <= DATE_TIME_CUTOFF_MS) {
-      return date.toLocaleString(undefined, {
+      return date.toLocaleString(locale, {
         dateStyle: "medium",
         timeStyle: "short",
         timeZone: timezone,
       })
     }
-    return date.toLocaleDateString(undefined, {
+    return date.toLocaleDateString(locale, {
       dateStyle: "medium",
       timeZone: timezone,
     })
