@@ -64,7 +64,7 @@ class WebPostsCommentsTest {
             .extract()
             .jsonPath()
 
-        assertEquals(2, response.getInt("post.commentsCount"))
+        assertEquals(3, response.getInt("post.commentsCount"))
 
         val items = response.getList<Any>("comments.items")
         assertEquals(3, items.size)
