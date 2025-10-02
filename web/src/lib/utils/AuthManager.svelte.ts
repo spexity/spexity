@@ -224,6 +224,7 @@ export class AuthManager {
     this.oidcUser = null
     this.userAccount = null
     this.userAccountState = AuthUserAccountState.NOT_LOGGED_IN
+    document.cookie = `${Cookies.contributorId}=; path=/; max-age=0`
   }
 
   private setUserAccountLoggedIn(userAccount: CurrentUserAccount) {
@@ -233,10 +234,12 @@ export class AuthManager {
     } else {
       this.userAccountState = AuthUserAccountState.LOGGED_IN
     }
+    document.cookie = `${Cookies.contributorId}=${userAccount.contributor.id}; path=/; max-age=315360000`
   }
 
   private setUserAccountNotRegistered() {
     this.userAccount = null
     this.userAccountState = AuthUserAccountState.NOT_REGISTERED
+    document.cookie = `${Cookies.contributorId}=; path=/; max-age=0`
   }
 }

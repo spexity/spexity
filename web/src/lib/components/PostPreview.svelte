@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CommunityRef } from "$lib/model/types"
+  import type { CommunityRef, Prefs } from "$lib/model/types"
   import { DateFormatter } from "$lib/utils/DateFormatter"
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import CommunityName from "$lib/components/CommunityName.svelte"
@@ -10,11 +10,15 @@
   interface PostPreviewProps {
     post: CommunityPreviewPost
     community?: CommunityRef
-    timezone: string
+    prefs: Prefs
   }
 
-  const { post, community, timezone }: PostPreviewProps = $props()
-  const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(post.createdAt, timezone)
+  const { post, community, prefs }: PostPreviewProps = $props()
+  const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(
+    post.createdAt,
+    prefs.timezone,
+    prefs.locale,
+  )
 </script>
 
 <div class="spx-card">
@@ -36,6 +40,6 @@
     <span class="spx-text-subtle text-xs" data-testid={`post-preview-comments-count-${post.id}`}>
       {m.post_comments_count({ count: post.commentsCount })}
     </span>
-    <a class="btn btn-sm" href={resolve(`/posts/${post.id}`)}>{m.button_view()}</a>
+    <a class="btn btn-sm" href={resolve(`/posts/${post.id}`)}>{m.view_action()}</a>
   </div>
 </div>

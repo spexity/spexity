@@ -3,22 +3,28 @@
   import CommunityName from "$lib/components/CommunityName.svelte"
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import Editor from "$lib/components/Editor.svelte"
-  import type { CommentPage, CommentView, PostView } from "$lib/model/types"
+  import type { CommentPage, CommentView, PostView, Prefs, SortPreference } from "$lib/model/types"
   import { DateFormatter } from "$lib/utils/DateFormatter"
   import { EditorUtils } from "$lib/utils/EditorUtils"
   import { HttpError } from "$lib/utils/HttpClient"
   import { m } from "$lib/paraglide/messages.js"
   import PostCommentView from "$lib/components/PostCommentView.svelte"
   import GatedFeature from "$lib/components/GatedFeature.svelte"
+  import { ClientEnv } from "$lib/utils/ClientEnv"
 
   interface PostViewProps {
     post: PostView
-    timezone: string
+    prefs: Prefs
     comments: CommentPage
+    currentContributorId?: string
   }
 
-  const { post, timezone, comments: initialComments }: PostViewProps = $props()
-  const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(post.createdAt, timezone)
+  const { post, prefs, comments: initialComments, currentContributorId }: PostViewProps = $props()
+  const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(
+    post.createdAt,
+    prefs.timezone,
+    prefs.locale,
+  )
 
   let comments = $state<CommentView[]>(initialComments.items)
   let commentsMeta = $state({
@@ -26,6 +32,7 @@
     pageSize: initialComments.pageSize,
   })
   let commentsCount = $state(post.commentsCount)
+  let commentsOrder = $state(prefs.commentsOrder)
 
   let commenting = $state(false)
   let submitting = $state(false)
@@ -36,6 +43,7 @@
   let loadMoreError = $state<string | undefined>()
 
   const hasMore = $derived(comments.length < commentsCount)
+  const showSortControl = $derived(commentsCount > 1)
 
   const startCommenting = () => {
     commenting = true
@@ -96,7 +104,7 @@
     const nextPage = commentsMeta.page + 1
     try {
       const response = await authManager.httpClient.get<CommentPage>(
-        `/api/posts/${post.id}/comments?page=${nextPage}&pageSize=${commentsMeta.pageSize}`,
+        `/api/posts/${post.id}/comments?page=${nextPage}&pageSize=${commentsMeta.pageSize}&order=${commentsOrder}`,
       )
       const existingIds = new Set(comments.map((item) => item.id))
       const nextItems = response.items.filter((item) => !existingIds.has(item.id))
@@ -134,6 +142,29 @@
   const onCommentEdited = (comment: CommentView) => {
     comments = comments.map((current) => (current.id === comment.id ? comment : current))
   }
+
+  const handleSortChange = async (newPreference: SortPreference) => {
+    if (commentsOrder === newPreference) return
+
+    commentsOrder = newPreference
+    ClientEnv.setCommentsOrder(newPreference)
+
+    commentsMeta = { page: 1, pageSize: commentsMeta.pageSize }
+    loadMoreError = undefined
+
+    try {
+      const response = await authManager.httpClient.get<CommentPage>(
+        `/api/posts/${post.id}/comments?page=1&pageSize=${commentsMeta.pageSize}&order=${newPreference}`,
+      )
+      comments = response.items
+      commentsMeta = {
+        page: response.page,
+        pageSize: response.pageSize,
+      }
+    } catch {
+      loadMoreError = m.comment_error_failed()
+    }
+  }
 </script>
 
 <div class="flex flex-col" data-testid="post-view">
@@ -154,13 +185,37 @@
   </div>
   <div class="divider m-0"></div>
   <div class="flex items-center justify-between">
-    <div class="spx-text-subtle text-sm" data-testid="comments-count">
-      {m.comments_count({ count: commentsCount })}
+    <div class="flex items-center gap-3">
+      <div class="spx-text-subtle text-xs" data-testid="comments-count">
+        {m.comments_count({ count: commentsCount })}
+      </div>
+      {#if showSortControl}
+        <div class="join" data-testid="comments-sort-control">
+          <button
+            class={["btn join-item btn-xs", commentsOrder === "asc" && "btn-active"]}
+            data-testid="comments-sort-asc"
+            type="button"
+            aria-pressed={commentsOrder === "asc"}
+            onclick={() => handleSortChange("asc")}
+          >
+            {m.sort_oldest_first()}
+          </button>
+          <button
+            class={["btn join-item btn-xs", commentsOrder === "desc" && "btn-active"]}
+            data-testid="comments-sort-desc"
+            type="button"
+            aria-pressed={commentsOrder === "desc"}
+            onclick={() => handleSortChange("desc")}
+          >
+            {m.sort_newest_first()}
+          </button>
+        </div>
+      {/if}
     </div>
     <button
       class={["btn btn-sm", commenting && "invisible"]}
       data-testid="new-comment-button"
-      onclick={startCommenting}>{m.comment_button()}</button
+      onclick={startCommenting}>{m.comment_action()}</button
     >
   </div>
   {#if commenting}
@@ -210,7 +265,8 @@
       <PostCommentView
         postId={post.id}
         {comment}
-        {timezone}
+        {prefs}
+        {currentContributorId}
         onEdited={onCommentEdited}
         onDeleted={onCommentDeleted}
       />
@@ -236,7 +292,7 @@
         {#if loadMoreBusy}
           <span data-testid="comments-loading-more" class="loading loading-spinner"></span>
         {:else}
-          {m.comments_load_more()}
+          {m.load_more()}
         {/if}
       </button>
     </div>

@@ -1,13 +1,19 @@
 import type { LayoutServerLoad } from "./$types"
 
+import type { Prefs } from "$lib/model/types"
+
 type PageData = {
-  timezone: string
-  locale: string
+  prefs: Prefs
+  currentContributorId?: string
 }
 
 export const load: LayoutServerLoad = async (event) => {
   return {
-    timezone: event.locals.timezone,
-    locale: event.locals.locale,
+    prefs: {
+      timezone: event.locals.timezone,
+      locale: event.locals.locale,
+      commentsOrder: event.locals.commentsOrder,
+    },
+    currentContributorId: event.locals.contributorId,
   } as PageData
 }

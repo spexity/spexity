@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CommentView } from "$lib/model/types"
+  import type { CommentView, Prefs } from "$lib/model/types"
   import { tick } from "svelte"
   import { EditorUtils } from "$lib/utils/EditorUtils"
   import { authManager } from "$lib/auth"
@@ -11,12 +11,14 @@
   interface PostCommentViewProps {
     postId: string
     comment: CommentView
-    timezone: string
+    prefs: Prefs
+    currentContributorId?: string
     onEdited: (comment: CommentView) => void
     onDeleted: (id: string) => void
   }
 
-  let { postId, comment, timezone, onEdited, onDeleted }: PostCommentViewProps = $props()
+  let { postId, comment, prefs, currentContributorId, onEdited, onDeleted }: PostCommentViewProps =
+    $props()
   let editing = $state(false)
   let editingSubmitting = $state(false)
   let editingError = $state<string | undefined>()
@@ -26,7 +28,11 @@
   let deleting = $state(false)
   let deleteError = $state<string | undefined>()
 
-  let formattedDateTime = DateFormatter.formatUtcIsoAbsolute(comment.createdAt, timezone)
+  let formattedDateTime = DateFormatter.formatUtcIsoAbsolute(
+    comment.createdAt,
+    prefs.timezone,
+    prefs.locale,
+  )
 
   const startEditing = async (comment: CommentView) => {
     editingError = undefined
@@ -108,7 +114,7 @@
       />
       {#if comment.editCount && !comment.deleted}
         <span class="badge badge-ghost badge-xs" data-testid={`comment-edited-badge-${comment.id}`}>
-          {m.comment_edited_badge()}
+          {m.edited()}
         </span>
       {/if}
     </div>
@@ -116,7 +122,7 @@
   </div>
   {#if comment.deleted}
     <p class="spx-text-subtle text-xs" data-testid={`comment-deleted-placeholder-${comment.id}`}>
-      {m.comment_deleted_placeholder()}
+      {m.deleted_placeholder()}
     </p>
   {:else}
     {#if !editing}
@@ -125,7 +131,7 @@
         {@html comment.bodyHtml}
       </div>
     {/if}
-    {#if comment.contributor.id === authManager.userAccount?.contributor.id}
+    {#if comment.contributor.id === currentContributorId}
       {#if editing}
         <form class="flex flex-col gap-2" onsubmit={(event) => saveEdit(event, comment)}>
           <Editor
@@ -174,7 +180,7 @@
             data-testid={`comment-edit-button-${comment.id}`}
             onclick={() => startEditing(comment)}
           >
-            {m.comment_edit()}
+            {m.edit_action()}
           </button>
 
           {#if deleteConfirming}
@@ -197,7 +203,7 @@
               {#if deleting}
                 <span class="loading loading-spinner"></span>
               {:else}
-                {m.comment_delete()}
+                {m.delete_action()}
               {/if}
             </button>
           {:else}
@@ -207,7 +213,7 @@
               data-testid={`comment-delete-button-${comment.id}`}
               onclick={askDelete}
             >
-              {m.comment_delete()}
+              {m.delete_action()}
             </button>
           {/if}
         </div>
