@@ -25,7 +25,7 @@ class CommunityResource(private val communityService: CommunityService) {
 
     data class CommunityCreateRequest(
         @field:Size(min = 3, max = 64) val name: String,
-        @field:AssertTrue(message = "Conform to terms and conditions must be accepted") val conformToTermsAndConditions: Boolean
+        @field:AssertTrue(message = "Terms and conditions must be accepted") val acceptTermsAndConditions: Boolean
     )
 
 }

@@ -3,7 +3,7 @@
   import { page, updated } from "$app/state"
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
-  import { authManager } from "$lib/auth"
+  import { auth } from "$lib/state"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
   import { m } from "$lib/paraglide/messages.js"
   import { setLocale, locales, type Locale } from "$lib/paraglide/runtime"
@@ -25,24 +25,24 @@
   let active = $derived<MenuItem>(determineActiveMenuItem())
   let loggedIn = $derived(
     [AuthUserAccountState.LOGGED_IN, AuthUserAccountState.LOGGED_IN_VERIFIED].includes(
-      authManager.userAccountState,
+      auth.userAccountState,
     ),
   )
 
   onMount(async () => {
-    if (authManager.userAccountState === AuthUserAccountState.NOT_REGISTERED) {
+    if (auth.userAccountState === AuthUserAccountState.NOT_REGISTERED) {
       await goto(resolve("/auth/register"))
     }
   })
 
   const signIn = async (event: MouseEvent) => {
     event.preventDefault()
-    await authManager.signIn()
+    await auth.signIn()
   }
 
   const signOut = async (event: MouseEvent) => {
     event.preventDefault()
-    await authManager.signOut()
+    await auth.signOut()
   }
 
   const showChangeLanguageModal = (event: MouseEvent) => {
@@ -115,14 +115,14 @@
           aria-label={m.nav_account_button_aria()}
           data-testid="account-menu-button"
           style={loggedIn
-            ? `background-color: ${authManager.userAccount?.contributor.avatarBgColor}`
+            ? `background-color: ${auth.userAccount?.contributor.avatarBgColor}`
             : null}
           class={[loggedIn ? "btn rounded-full p-2" : "btn btn-circle btn-ghost btn-soft"]}
         >
-          {#if authManager.userAccountState === AuthUserAccountState.INIT}
+          {#if auth.userAccountState === AuthUserAccountState.INIT}
             💭
           {:else if loggedIn}
-            {authManager.userAccount?.contributor.avatarEmoji}
+            {auth.userAccount?.contributor.avatarEmojis}
           {:else}
             👀
           {/if}
@@ -132,10 +132,10 @@
           data-testid="account-menu-content"
           class="dropdown-content menu mt-3 w-50 rounded-box bg-base-100 shadow"
         >
-          {#if authManager.userAccount}
+          {#if auth.userAccount}
             <li>
               <a aria-label={m.nav_account_profile_aria()} href={resolve("/account")}
-                >{authManager.userAccount.contributor.handle}</a
+                >{auth.userAccount.contributor.handle}</a
               >
             </li>
             <div class="divider m-0"></div>
@@ -181,7 +181,7 @@
     </div>
   {/if}
   <!--Init testing helper-->
-  {#if authManager.userAccountState === AuthUserAccountState.INIT}
+  {#if auth.userAccountState === AuthUserAccountState.INIT}
     <div data-testid="init-in-progress"></div>
   {/if}
 </div>

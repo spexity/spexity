@@ -5,7 +5,7 @@ import { UserManager, WebStorageStateStore } from "oidc-client-ts"
 import { type CurrentUserAccount, CurrentUserStorage } from "$lib/utils/CurrentUserStorage"
 import { HttpClient } from "$lib/utils/HttpClient"
 import { goto } from "$app/navigation"
-import { authManager } from "$lib/auth"
+import { auth } from "$lib/state"
 import { Cookies } from "$lib/cookies"
 import { resolve } from "$app/paths"
 
@@ -104,11 +104,18 @@ export class AuthManager {
     this.ignoreOidcUserLoaded = false
   }
 
-  async registerUserAccount(alias: string, acceptTermsAndConditions: boolean) {
-    const registerResponse = await authManager.httpClient.post<CurrentUserAccount>(
-      "/api/current-user",
-      { alias, acceptTermsAndConditions },
-    )
+  async registerUserAccount(
+    alias: string,
+    avatarEmojis: string,
+    avatarBgColor: string,
+    acceptTermsAndConditions: boolean,
+  ) {
+    const registerResponse = await auth.httpClient.post<CurrentUserAccount>("/api/current-user", {
+      alias,
+      avatarEmojis,
+      avatarBgColor,
+      acceptTermsAndConditions,
+    })
     this.setUserAccountLoggedIn(registerResponse)
     this.currentUserStorage?.set(registerResponse)
   }

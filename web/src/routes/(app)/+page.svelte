@@ -7,6 +7,6 @@
 
 <div class="spx-cards-list" data-testid="posts-list">
   {#each data.posts as post (post.id)}
-    <PostPreview {post} community={post.community} prefs={data.prefs} />
+    <PostPreview {post} community={post.community} />
   {/each}
 </div>

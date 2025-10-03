@@ -20,7 +20,7 @@
 >
   {#if showAvatar}
     <span class="spx-avatar-badge" style="background-color: {contributor.avatarBgColor}"
-      >{contributor.avatarEmoji}</span
+      >{contributor.avatarEmojis}</span
     >
   {/if}
   {contributorName}<span class="spx-text-subtle">{contributorDiscriminator}</span>

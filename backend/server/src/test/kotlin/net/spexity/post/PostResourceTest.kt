@@ -48,7 +48,7 @@ class PostResourceTest {
             "communityId" to communityId.toString(),
             "subject" to subject,
             "bodyDocument" to docWithParagraph(message),
-            "conformToTermsAndConditions" to true
+            "acceptTermsAndConditions" to true
         )
 
         val postId = UUID.fromString(
@@ -110,7 +110,7 @@ class PostResourceTest {
                     "communityId" to communityId.toString(),
                     "subject" to subject,
                     "bodyDocument" to docWithParagraph("This should not persist."),
-                    "conformToTermsAndConditions" to true
+                    "acceptTermsAndConditions" to true
                 )
             )
             .post("/api/posts")

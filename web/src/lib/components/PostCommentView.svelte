@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { CommentView, Prefs } from "$lib/model/types"
+  import type { CommentView } from "$lib/model/types"
   import { tick } from "svelte"
   import { EditorUtils } from "$lib/utils/EditorUtils"
-  import { authManager } from "$lib/auth"
+  import { auth, prefs } from "$lib/state"
   import Editor from "$lib/components/Editor.svelte"
   import { m } from "$lib/paraglide/messages.js"
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
@@ -11,13 +11,12 @@
   interface PostCommentViewProps {
     postId: string
     comment: CommentView
-    prefs: Prefs
     currentContributorId?: string
     onEdited: (comment: CommentView) => void
     onDeleted: (id: string) => void
   }
 
-  let { postId, comment, prefs, currentContributorId, onEdited, onDeleted }: PostCommentViewProps =
+  let { postId, comment, currentContributorId, onEdited, onDeleted }: PostCommentViewProps =
     $props()
   let editing = $state(false)
   let editingSubmitting = $state(false)
@@ -61,10 +60,9 @@
     try {
       editingSubmitting = true
       editingError = undefined
-      await authManager.httpClient.patch<CommentView>(
-        `/api/posts/${postId}/comments/${comment.id}`,
-        { bodyDocument },
-      )
+      await auth.httpClient.patch<CommentView>(`/api/posts/${postId}/comments/${comment.id}`, {
+        bodyDocument,
+      })
       onEdited({
         ...comment,
         bodyHtml: bodyHtml,
@@ -93,7 +91,7 @@
     try {
       deleting = true
       deleteError = undefined
-      await authManager.httpClient.delete(`/api/posts/${postId}/comments/${comment.id}`)
+      await auth.httpClient.delete(`/api/posts/${postId}/comments/${comment.id}`)
       onDeleted(comment.id)
       deleteConfirming = false
     } catch {

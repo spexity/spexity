@@ -1,6 +1,6 @@
 <script lang="ts">
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
-  import { authManager } from "$lib/auth"
+  import { auth } from "$lib/state"
   import { goto } from "$app/navigation"
   import { resolve } from "$app/paths"
   import { type CommunityRef } from "$lib/model/types"
@@ -15,10 +15,10 @@
       errorMessage = undefined
       const data = CsrFormHandler.onsubmit(event)
       const name = data.get("name") as string
-      const conformToTermsAndConditions = data.get("conformToTermsAndConditions") === "on"
-      const community = await authManager.httpClient.post<CommunityRef>("/api/communities", {
+      const acceptTermsAndConditions = data.get("acceptTermsAndConditions") === "on"
+      const community = await auth.httpClient.post<CommunityRef>("/api/communities", {
         name,
-        conformToTermsAndConditions,
+        acceptTermsAndConditions,
       })
       await goto(resolve(`/communities/${community.id}`))
     } catch (err) {
@@ -43,10 +43,10 @@
       maxlength="64"
     />
     <div class="form-control">
-      <label class="label" for="conformToTermsAndConditions">
+      <label class="label" for="acceptTermsAndConditions">
         <input
-          id="conformToTermsAndConditions"
-          name="conformToTermsAndConditions"
+          id="acceptTermsAndConditions"
+          name="acceptTermsAndConditions"
           type="checkbox"
           class="checkbox"
           required

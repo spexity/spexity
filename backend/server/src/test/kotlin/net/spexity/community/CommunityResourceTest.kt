@@ -44,7 +44,7 @@ class CommunityResourceTest {
                 .body(
                     mapOf(
                         "name" to rawName,
-                        "conformToTermsAndConditions" to true
+                        "acceptTermsAndConditions" to true
                     )
                 )
                 .post("/api/communities")
@@ -84,7 +84,7 @@ class CommunityResourceTest {
             .body(
                 mapOf(
                     "name" to communityName,
-                    "conformToTermsAndConditions" to true
+                    "acceptTermsAndConditions" to true
                 )
             )
             .post("/api/communities")

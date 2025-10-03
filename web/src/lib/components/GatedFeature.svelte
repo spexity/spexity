@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { authManager } from "$lib/auth"
+  import { auth } from "$lib/state"
   import { m } from "$lib/paraglide/messages.js"
 
   interface GatedFeatureProps {
@@ -19,7 +19,7 @@
 >
   <div class="flex flex-row justify-center">
     <span>
-      {#if authManager.userAccount}
+      {#if auth.userAccount}
         You need to be verified as a human before proceeding.
       {:else}
         You need to sign in and verify humanity.

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { CsrFormHandler } from "$lib/utils/CsrFormHandler"
-  import { authManager } from "$lib/auth"
+  import { auth } from "$lib/state"
   import { goto } from "$app/navigation"
   import { type PostPreview } from "$lib/model/types"
   import Editor from "$lib/components/Editor.svelte"
@@ -24,17 +24,17 @@
       errorMessage = undefined
       const data = CsrFormHandler.onsubmit(event)
       const subject = data.get("subject") as string
-      const conformToTermsAndConditions = data.get("conformToTermsAndConditions") as string
+      const acceptTermsAndConditions = data.get("acceptTermsAndConditions") as string
       const bodyDocument = editorRef?.getValue()
       if (!EditorUtils.hasMeaningfulText(bodyDocument)) {
         errorMessage = m.error_empty()
         return
       }
-      const post = await authManager.httpClient.post<PostPreview>("/api/posts", {
+      const post = await auth.httpClient.post<PostPreview>("/api/posts", {
         communityId,
         subject,
         bodyDocument,
-        conformToTermsAndConditions: conformToTermsAndConditions === "on",
+        acceptTermsAndConditions: acceptTermsAndConditions === "on",
       })
       await goto(resolve(`/posts/${post.id}`))
     } catch (err) {
@@ -62,10 +62,10 @@
     <label id="bodyLabel" class="label" for="body">{m.form_body_label()}</label>
     <Editor bind:this={editorRef} id="body" labelledBy="bodyLabel" dataTestId="post-body-editor" />
     <div class="form-control">
-      <label class="label" for="conformToTermsAndConditions">
+      <label class="label" for="acceptTermsAndConditions">
         <input
-          id="conformToTermsAndConditions"
-          name="conformToTermsAndConditions"
+          id="acceptTermsAndConditions"
+          name="acceptTermsAndConditions"
           type="checkbox"
           class="checkbox"
           required

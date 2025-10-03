@@ -31,7 +31,7 @@ class PostResource(private val postService: PostService) {
         val communityId: UUID,
         @field:Size(min = 10, max = 512) val subject: String,
         val bodyDocument: Document,
-        @field:AssertTrue(message = "Conform to terms and conditions must be accepted") val conformToTermsAndConditions: Boolean
+        @field:AssertTrue(message = "Terms and conditions must be accepted") val acceptTermsAndConditions: Boolean
     )
 
 }

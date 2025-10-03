@@ -25,5 +25,5 @@ data class CommunityRef(val id: UUID, val name: String)
 
 data class ContributorRef(
     val id: UUID, val handle: String,
-    val avatarEmoji: String, val avatarBgColor: String
+    val avatarEmojis: String, val avatarBgColor: String
 )
