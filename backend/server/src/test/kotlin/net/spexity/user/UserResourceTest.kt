@@ -21,24 +21,53 @@ class UserResourceTest {
             SecurityAttribute(key = "email", value = "test1@example.com")
         ]
     )
-    fun `get current user authenticated succeeds`() {
+    fun `test current user authenticated registration`() {
         given()
             .`when`()
             .get("/api/current-user")
             .then()
             .statusCode(404)
-        given()
-            .header("Content-Type", MediaType.APPLICATION_JSON)
-            .body(mapOf("alias" to "TEST"))
-            .`when`()
-            .post("/api/current-user")
-            .then()
-            .statusCode(400)
+        //Bad Terms and conditions
+        registerBadRequest(
+            mapOf(
+                "alias" to "TEST",
+                "avatarEmojis" to "🌟👍🏾",
+                "avatarBgColor" to "#1E3A8A"
+            )
+        )
+        registerBadRequest(
+            mapOf(
+                "alias" to "TEST",
+                "avatarEmojis" to "🌟👍🏾",
+                "avatarBgColor" to "#1E3A8A",
+                "acceptTermsAndConditions" to false
+            )
+        )
+        //Bad emojis
+        registerBadRequest(
+            mapOf(
+                "alias" to "TEST",
+                "avatarEmojis" to "TE",
+                "avatarBgColor" to "#1E3A8A",
+                "acceptTermsAndConditions" to true
+            )
+        )
+        //Bad bg color
+        registerBadRequest(
+            mapOf(
+                "alias" to "TEST",
+                "avatarEmojis" to "🌟👍🏾",
+                "avatarBgColor" to "FFFFFF",
+                "acceptTermsAndConditions" to true
+            )
+        )
         given()
             .header("Content-Type", MediaType.APPLICATION_JSON)
             .body(
                 mapOf(
                     "alias" to "TEST",
+                    "avatarEmojis" to "🌟👍🏾",
+                    "avatarBgColor" to "#1E3A8A",
                     "acceptTermsAndConditions" to true
                 )
             )
@@ -68,6 +97,16 @@ class UserResourceTest {
             .get("/api/current-user")
             .then()
             .statusCode(401)
+    }
+
+    private fun registerBadRequest(request: Map<String, Any>) {
+        given()
+            .header("Content-Type", MediaType.APPLICATION_JSON)
+            .body(request)
+            .`when`()
+            .post("/api/current-user")
+            .then()
+            .statusCode(400)
     }
 
 }

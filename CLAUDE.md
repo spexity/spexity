@@ -5,7 +5,6 @@ Auto-generated from all feature plans. Last updated: 2025-09-25
 ## Active Technologies
 - Web frontend: Svelte 5, TypeScript + SvelteKit 2 (current project); Backend (unchanged) Quarkus JVM (not in scope for translation logic). + SvelteKit, Paraglide/Inlang i18n runtime, Playwright (E2E), existing build tooling (Vite). (main)
 - Kotlin 2.2.x (JDK 21) + TypeScript (SvelteKit v2) + Quarkus 3.26.x, RESTEasy Reactive, jOOQ 3.19, Flyway, HtmlSanitizer (owasp-sanitizer), Svelte 5, Inlang i18n (003-adding-the-ability)
-- PostgreSQL (existing), new `post_comment` table; triggers to maintain `post.comments_count` (003-adding-the-ability)
 
 ## Project Structure
 ```
@@ -21,8 +20,6 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 Web frontend: TypeScript + SvelteKit (current project); Backend (unchanged) Quarkus JVM (not in scope for translation logic).: Follow standard conventions
 
 ## Recent Changes
-- 003-adding-the-ability: Added Kotlin 2.2.x (JDK 21) + TypeScript (SvelteKit v2) + Quarkus 3.26.x, RESTEasy Reactive, jOOQ 3.19, Flyway, HtmlSanitizer (owasp-sanitizer), Svelte 5, Inlang i18n
-- 002-translate-all-pages: Added Web frontend: TypeScript + SvelteKit (current project); Backend (unchanged) Quarkus JVM (not in scope for translation logic). + SvelteKit, Paraglide/Inlang i18n runtime, Playwright (E2E), existing build tooling (Vite).
 
 <!-- MANUAL ADDITIONS START -->
 - Be concise.

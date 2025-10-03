@@ -1,19 +1,19 @@
 <script lang="ts">
-  import type { CommunityRef, Prefs } from "$lib/model/types"
+  import type { CommunityRef } from "$lib/model/types"
   import { DateFormatter } from "$lib/utils/DateFormatter"
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import CommunityName from "$lib/components/CommunityName.svelte"
   import type { CommunityPreviewPost } from "$lib/model/types"
   import { m } from "$lib/paraglide/messages.js"
   import { resolve } from "$app/paths"
+  import { prefs } from "$lib/state"
 
   interface PostPreviewProps {
     post: CommunityPreviewPost
     community?: CommunityRef
-    prefs: Prefs
   }
 
-  const { post, community, prefs }: PostPreviewProps = $props()
+  const { post, community }: PostPreviewProps = $props()
   const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(
     post.createdAt,
     prefs.timezone,

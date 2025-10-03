@@ -8,6 +8,5 @@
 <PostView
   post={data.post}
   comments={data.comments}
-  prefs={data.prefs}
   currentContributorId={data.currentContributorId}
 />

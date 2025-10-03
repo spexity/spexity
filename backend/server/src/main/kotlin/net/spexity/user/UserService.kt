@@ -23,7 +23,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 .returning()
                 .fetchOne()!!
             val contributor = contributorService.register(
-                ContributorService.RegRequest(account.id, request.alias, request.avatarEmoji, request.avatarBgColor)
+                ContributorService.RegRequest(account.id, request.alias, request.avatarEmojis, request.avatarBgColor)
             )
             RegResponse(
                 account.id,
@@ -32,7 +32,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 ContributorRef(
                     contributor.id,
                     contributor.handle,
-                    request.avatarEmoji,
+                    request.avatarEmojis,
                     request.avatarBgColor
                 )
             )
@@ -78,7 +78,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
         val authCorrelationId: String,
         val emailAddress: String,
         val alias: String,
-        val avatarEmoji: String,
+        val avatarEmojis: String,
         val avatarBgColor: String
     )
 

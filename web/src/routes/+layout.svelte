@@ -5,8 +5,11 @@
   import { ThemeHandler } from "$lib/utils/ThemeHandler"
   import { ClientEnv } from "$lib/utils/ClientEnv"
   import NavProgress from "$lib/components/NavProgress.svelte"
+  import { prefs } from "$lib/state"
 
-  const { children }: LayoutProps = $props()
+  const { children, data }: LayoutProps = $props()
+
+  prefs.set(data.prefs)
 
   onMount(() => {
     ClientEnv.setup()

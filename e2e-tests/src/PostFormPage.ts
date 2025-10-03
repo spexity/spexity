@@ -20,7 +20,7 @@ export class PostFormPage {
   }
 
   getTermsCheckbox() {
-    return this.page.locator("#conformToTermsAndConditions");
+    return this.page.locator("#acceptTermsAndConditions");
   }
 
   getSubmitButton() {

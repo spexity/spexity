@@ -1,7 +1,7 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 
-import type { SortPreference } from "$lib/model/types"
+import type { OrderPref } from "$lib/model/types"
 
 declare global {
   namespace App {
@@ -9,7 +9,7 @@ declare global {
     interface Locals {
       timezone: string
       locale: string
-      commentsOrder: SortPreference
+      commentsOrder: OrderPref
       contributorId?: string
     }
     // interface PageData {}

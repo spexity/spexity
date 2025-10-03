@@ -41,7 +41,7 @@ export interface CommunityRef {
 export interface ContributorRef {
   id: string
   handle: string
-  avatarEmoji: string
+  avatarEmojis: string
   avatarBgColor: string
 }
 
@@ -60,10 +60,10 @@ export interface CommentPage {
   pageSize: number
 }
 
-export type SortPreference = "asc" | "desc"
+export type OrderPref = "asc" | "desc"
 
 export interface Prefs {
   timezone: string
   locale: string
-  commentsOrder: SortPreference
+  commentsOrder: OrderPref
 }

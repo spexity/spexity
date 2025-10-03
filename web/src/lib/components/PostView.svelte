@@ -1,25 +1,23 @@
 <script lang="ts">
-  import { authManager } from "$lib/auth"
+  import { auth, prefs } from "$lib/state"
   import CommunityName from "$lib/components/CommunityName.svelte"
   import ContributorHandle from "$lib/components/ContributorHandle.svelte"
   import Editor from "$lib/components/Editor.svelte"
-  import type { CommentPage, CommentView, PostView, Prefs, SortPreference } from "$lib/model/types"
+  import type { CommentPage, CommentView, PostView, OrderPref } from "$lib/model/types"
   import { DateFormatter } from "$lib/utils/DateFormatter"
   import { EditorUtils } from "$lib/utils/EditorUtils"
   import { HttpError } from "$lib/utils/HttpClient"
   import { m } from "$lib/paraglide/messages.js"
   import PostCommentView from "$lib/components/PostCommentView.svelte"
   import GatedFeature from "$lib/components/GatedFeature.svelte"
-  import { ClientEnv } from "$lib/utils/ClientEnv"
 
   interface PostViewProps {
     post: PostView
-    prefs: Prefs
     comments: CommentPage
     currentContributorId?: string
   }
 
-  const { post, prefs, comments: initialComments, currentContributorId }: PostViewProps = $props()
+  const { post, comments: initialComments, currentContributorId }: PostViewProps = $props()
   const formattedDateTime = DateFormatter.formatUtcIsoAbsolute(
     post.createdAt,
     prefs.timezone,
@@ -32,7 +30,6 @@
     pageSize: initialComments.pageSize,
   })
   let commentsCount = $state(post.commentsCount)
-  let commentsOrder = $state(prefs.commentsOrder)
 
   let commenting = $state(false)
   let submitting = $state(false)
@@ -66,10 +63,9 @@
       }
       submitting = true
       const bodyHtml = editorRef?.getValueHtml() ?? ""
-      const created = await authManager.httpClient.post<{ id: string }>(
-        `/api/posts/${post.id}/comments`,
-        { bodyDocument: body },
-      )
+      const created = await auth.httpClient.post<{ id: string }>(`/api/posts/${post.id}/comments`, {
+        bodyDocument: body,
+      })
       comments = [
         ...comments,
         {
@@ -77,7 +73,7 @@
           createdAt: new Date().toISOString(),
           editCount: 0,
           deleted: false,
-          contributor: authManager.userAccount!.contributor,
+          contributor: auth.userAccount!.contributor,
           bodyHtml,
         },
       ]
@@ -103,8 +99,8 @@
     loadMoreError = undefined
     const nextPage = commentsMeta.page + 1
     try {
-      const response = await authManager.httpClient.get<CommentPage>(
-        `/api/posts/${post.id}/comments?page=${nextPage}&pageSize=${commentsMeta.pageSize}&order=${commentsOrder}`,
+      const response = await auth.httpClient.get<CommentPage>(
+        `/api/posts/${post.id}/comments?page=${nextPage}&pageSize=${commentsMeta.pageSize}&order=${prefs.commentsOrder}`,
       )
       const existingIds = new Set(comments.map((item) => item.id))
       const nextItems = response.items.filter((item) => !existingIds.has(item.id))
@@ -143,17 +139,16 @@
     comments = comments.map((current) => (current.id === comment.id ? comment : current))
   }
 
-  const handleSortChange = async (newPreference: SortPreference) => {
-    if (commentsOrder === newPreference) return
+  const handleSortChange = async (newPreference: OrderPref) => {
+    if (prefs.commentsOrder === newPreference) return
 
-    commentsOrder = newPreference
-    ClientEnv.setCommentsOrder(newPreference)
+    prefs.setCommentsOrder(newPreference)
 
     commentsMeta = { page: 1, pageSize: commentsMeta.pageSize }
     loadMoreError = undefined
 
     try {
-      const response = await authManager.httpClient.get<CommentPage>(
+      const response = await auth.httpClient.get<CommentPage>(
         `/api/posts/${post.id}/comments?page=1&pageSize=${commentsMeta.pageSize}&order=${newPreference}`,
       )
       comments = response.items
@@ -192,19 +187,19 @@
       {#if showSortControl}
         <div class="join" data-testid="comments-sort-control">
           <button
-            class={["btn join-item btn-xs", commentsOrder === "asc" && "btn-active"]}
+            class={["btn join-item btn-xs", prefs.commentsOrder === "asc" && "btn-active"]}
             data-testid="comments-sort-asc"
             type="button"
-            aria-pressed={commentsOrder === "asc"}
+            aria-pressed={prefs.commentsOrder === "asc"}
             onclick={() => handleSortChange("asc")}
           >
             {m.sort_oldest_first()}
           </button>
           <button
-            class={["btn join-item btn-xs", commentsOrder === "desc" && "btn-active"]}
+            class={["btn join-item btn-xs", prefs.commentsOrder === "desc" && "btn-active"]}
             data-testid="comments-sort-desc"
             type="button"
-            aria-pressed={commentsOrder === "desc"}
+            aria-pressed={prefs.commentsOrder === "desc"}
             onclick={() => handleSortChange("desc")}
           >
             {m.sort_newest_first()}
@@ -219,7 +214,7 @@
     >
   </div>
   {#if commenting}
-    {#if authManager.userAccount?.verifiedHuman}
+    {#if auth.userAccount?.verifiedHuman}
       <form class="my-2 flex flex-col gap-2" onsubmit={handleCreateComment} autocomplete="off">
         <Editor
           bind:this={editorRef}
@@ -265,7 +260,6 @@
       <PostCommentView
         postId={post.id}
         {comment}
-        {prefs}
         {currentContributorId}
         onEdited={onCommentEdited}
         onDeleted={onCommentDeleted}
