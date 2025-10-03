@@ -23,7 +23,10 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 .returning()
                 .fetchOne()!!
             val contributor = contributorService.register(
-                ContributorService.RegRequest(account.id, request.alias, request.avatarText, request.avatarBgColor)
+                ContributorService.RegRequest(
+                    account.id, request.alias,
+                    request.avatarText, request.avatarBgColor
+                )
             )
             RegResponse(
                 account.id,
@@ -42,7 +45,8 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
     fun getUser(authCorrelationId: String): RegResponse? {
         val result = dslContext.select(
             CONTRIBUTOR.userAccount().ID, CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN,
-            CONTRIBUTOR.ID, CONTRIBUTOR.HANDLE, CONTRIBUTOR.AVATAR_TEXT, CONTRIBUTOR.AVATAR_BG_COLOR
+            CONTRIBUTOR.ID, CONTRIBUTOR.HANDLE,
+            CONTRIBUTOR.AVATAR_TEXT, CONTRIBUTOR.AVATAR_BG_COLOR
         )
             .from(CONTRIBUTOR)
             .where(CONTRIBUTOR.userAccount().AUTH_CORRELATION_ID.eq(authCorrelationId))
@@ -74,9 +78,47 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
         return count > 0
     }
 
+    fun update(request: UpdateRequest): RegResponse {
+        val result = dslContext.select(
+            CONTRIBUTOR.userAccount().ID, CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN,
+            CONTRIBUTOR.ID
+        )
+            .from(CONTRIBUTOR)
+            .where(CONTRIBUTOR.userAccount().AUTH_CORRELATION_ID.eq(request.authCorrelationId))
+            .fetch()
+        if (result.isEmpty()) {
+            throw BadRequestException("Not registered yet")
+        }
+        val updatedContributor = contributorService.update(
+            ContributorService.UpdateRequest(
+                result[0].get(CONTRIBUTOR.ID), request.alias, request.avatarText, request.avatarBgColor
+            )
+        )
+        return result[0].map {
+            RegResponse(
+                it.get(CONTRIBUTOR.userAccount().ID),
+                it.get(CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN),
+                request.authCorrelationId,
+                ContributorRef(
+                    updatedContributor.id,
+                    updatedContributor.handle,
+                    request.avatarText,
+                    request.avatarBgColor
+                )
+            )
+        }
+    }
+
     data class RegRequest(
         val authCorrelationId: String,
         val emailAddress: String,
+        val alias: String,
+        val avatarText: String,
+        val avatarBgColor: String
+    )
+
+    data class UpdateRequest(
+        val authCorrelationId: String,
         val alias: String,
         val avatarText: String,
         val avatarBgColor: String
