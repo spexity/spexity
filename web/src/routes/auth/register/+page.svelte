@@ -44,7 +44,7 @@
   $effect(() => {
     if (
       auth.userAccountState !== AuthUserAccountState.INIT &&
-      auth.userAccountState != AuthUserAccountState.NOT_REGISTERED
+      auth.userAccountState !== AuthUserAccountState.NOT_REGISTERED
     ) {
       goHome()
     }
