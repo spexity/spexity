@@ -43,7 +43,7 @@ class CommentService(
             POST_COMMENT.BODY_JSON,
             POST_COMMENT.contributor().ID,
             POST_COMMENT.contributor().HANDLE,
-            POST_COMMENT.contributor().AVATAR_EMOJI,
+            POST_COMMENT.contributor().AVATAR_TEXT,
             POST_COMMENT.contributor().AVATAR_BG_COLOR
         )
             .from(POST_COMMENT)
@@ -61,7 +61,7 @@ class CommentService(
             val contributor = ContributorRef(
                 it.get(POST_COMMENT.contributor().ID),
                 it.get(POST_COMMENT.contributor().HANDLE),
-                it.get(POST_COMMENT.contributor().AVATAR_EMOJI),
+                it.get(POST_COMMENT.contributor().AVATAR_TEXT),
                 it.get(POST_COMMENT.contributor().AVATAR_BG_COLOR)
             )
             val editCount = it.get(POST_COMMENT.EDIT_COUNT)

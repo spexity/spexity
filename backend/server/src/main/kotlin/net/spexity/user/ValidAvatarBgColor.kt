@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @Constraint(validatedBy = [AvatarBgColorValidator::class])
 annotation class ValidAvatarBgColor(
-    val message: String = "must be a valid emoji background color",
+    val message: String = "must be a valid hex color",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )

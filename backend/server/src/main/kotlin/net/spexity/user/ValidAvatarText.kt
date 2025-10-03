@@ -10,15 +10,15 @@ import kotlin.reflect.KClass
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.RUNTIME)
-@Constraint(validatedBy = [AvatarEmojisValidator::class])
-annotation class ValidAvatarEmojis(
-    val message: String = "must be a valid emoji",
+@Constraint(validatedBy = [AvatarTextValidator::class])
+annotation class ValidAvatarText(
+    val message: String = "must be emojis",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 
 )
 
-class AvatarEmojisValidator : ConstraintValidator<ValidAvatarEmojis, String> {
+class AvatarTextValidator : ConstraintValidator<ValidAvatarText, String> {
 
     override fun isValid(value: String?, context: ConstraintValidatorContext): Boolean {
         if (value == null) return false

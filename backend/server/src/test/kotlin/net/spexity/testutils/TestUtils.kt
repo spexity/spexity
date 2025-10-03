@@ -17,7 +17,9 @@ fun registerCurrentUser(alias: String) {
         .contentType(MediaType.APPLICATION_JSON)
         .body(
             mapOf(
-                "alias" to alias,
+                "alias" to "TEST",
+                "avatarText" to "🌟👍🏾",
+                "avatarBgColor" to "#1E3A8A",
                 "acceptTermsAndConditions" to true
             )
         )
@@ -87,8 +89,8 @@ fun insertUser(
         .fetchOne()!!.id
 
     return dslContext.insertInto(CONTRIBUTOR)
-        .columns(CONTRIBUTOR.USER_ACCOUNT_ID, CONTRIBUTOR.ALIAS, CONTRIBUTOR.DISCRIMINATOR, CONTRIBUTOR.AVATAR_EMOJI, CONTRIBUTOR.AVATAR_BG_COLOR)
-        .values(accountId, alias, randomDiscriminator(), "🤖", "#22C55E")
+        .columns(CONTRIBUTOR.USER_ACCOUNT_ID, CONTRIBUTOR.ALIAS, CONTRIBUTOR.DISCRIMINATOR, CONTRIBUTOR.AVATAR_TEXT, CONTRIBUTOR.AVATAR_BG_COLOR)
+        .values(accountId, alias, randomDiscriminator(), "🤖🤖", "#22C55E")
         .returning(CONTRIBUTOR.ID)
         .fetchOne()!!.id
 }

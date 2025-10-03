@@ -122,7 +122,7 @@
           {#if auth.userAccountState === AuthUserAccountState.INIT}
             💭
           {:else if loggedIn}
-            {auth.userAccount?.contributor.avatarEmojis}
+            {auth.userAccount?.contributor.avatarText}
           {:else}
             👀
           {/if}

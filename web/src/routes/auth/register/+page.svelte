@@ -10,15 +10,15 @@
   let submitting = $state<boolean>(false)
   let errorMessage = $state<string>()
   let alias = $state<string>("")
-  let avatarEmojis = $state<string>(randomEmoji() + randomEmoji())
+  let avatarText = $state<string>(randomEmoji() + randomEmoji())
   let avatarBgColor = $state<string>(randomItem(bgColors))
-  let emojiError = $state<string>()
+  let avatarTextError = $state<string>()
   const emojiSegmenter = new Intl.Segmenter("en", { granularity: "grapheme" })
   const emojiRegex = /\p{Extended_Pictographic}/u
 
   $effect(() => {
-    const graphemes = [...emojiSegmenter.segment(avatarEmojis)]
-    avatarEmojis = graphemes
+    const graphemes = [...emojiSegmenter.segment(avatarText)]
+    avatarText = graphemes
       .slice(0, 2)
       .filter((g) => emojiRegex.test(g.segment))
       .map((g) => g.segment)
@@ -26,18 +26,18 @@
   })
 
   const validateEmojis = (value: string): boolean => {
-    const graphemes = [...emojiSegmenter.segment(avatarEmojis)]
+    const graphemes = [...emojiSegmenter.segment(value)]
     if (graphemes.length !== 2) {
-      emojiError = "Please enter exactly 2 emojis"
+      avatarTextError = "Please enter exactly 2 emojis"
       return false
     }
     // Check if characters are emojis (unicode ranges for emoji)
     const emojiRegex = /^[\p{Emoji}\p{Emoji_Component}]+$/u
     if (!emojiRegex.test(value)) {
-      emojiError = "Please enter only emojis"
+      avatarTextError = "Please enter only emojis"
       return false
     }
-    emojiError = undefined
+    avatarTextError = undefined
     return true
   }
 
@@ -61,17 +61,17 @@
       const data = CsrFormHandler.onsubmit(event)
       const alias = data.get("alias") as string
       const acceptTermsAndConditions = data.get("acceptTermsAndConditions") as string
-      const avatarEmojis = data.get("avatarEmojis") as string
+      const avatarText = data.get("avatarText") as string
       const avatarBgColor = data.get("avatarBgColor") as string
 
-      if (!validateEmojis(avatarEmojis)) {
+      if (!validateEmojis(avatarText)) {
         submitting = false
         return
       }
 
       await auth.registerUserAccount(
         alias,
-        avatarEmojis,
+        avatarText,
         avatarBgColor,
         acceptTermsAndConditions === "on",
       )
@@ -108,20 +108,20 @@
         </div>
         <p class="label">{m.form_alias_description()}</p>
 
-        <label class="label mt-4" for="avatarEmojis">Avatar emojis</label>
+        <label class="label mt-4" for="avatarText">Avatar emojis</label>
         <div class="input w-full">
           <input
-            id="avatarEmojis"
-            name="avatarEmojis"
+            id="avatarText"
+            name="avatarText"
             type="text"
             required
             placeholder="👀🍯"
-            bind:value={avatarEmojis}
-            oninput={() => validateEmojis(avatarEmojis)}
+            bind:value={avatarText}
+            oninput={() => validateEmojis(avatarText)}
           />
         </div>
-        {#if emojiError}
-          <p class="label text-sm text-error">{emojiError}</p>
+        {#if avatarTextError}
+          <p class="label text-sm text-error">{avatarTextError}</p>
         {:else}
           <p class="label">Choose 2 emojis for your avatar</p>
         {/if}
@@ -157,7 +157,7 @@
               }}
             >
               <span class="spx-avatar-badge" style="background-color: {avatarBgColor}"
-                >{avatarEmojis || "👀🍯"}</span
+                >{avatarText || "👀🍯"}</span
               >
               {alias || "Alias"}<span class="spx-text-subtle">#0000</span>
             </a>

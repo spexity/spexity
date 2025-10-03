@@ -31,23 +31,23 @@ class UserResourceTest {
         registerBadRequest(
             mapOf(
                 "alias" to "TEST",
-                "avatarEmojis" to "🌟👍🏾",
+                "avatarText" to "🌟👍🏾",
                 "avatarBgColor" to "#1E3A8A"
             )
         )
         registerBadRequest(
             mapOf(
                 "alias" to "TEST",
-                "avatarEmojis" to "🌟👍🏾",
+                "avatarText" to "🌟👍🏾",
                 "avatarBgColor" to "#1E3A8A",
                 "acceptTermsAndConditions" to false
             )
         )
-        //Bad emojis
+        //Bad text
         registerBadRequest(
             mapOf(
                 "alias" to "TEST",
-                "avatarEmojis" to "TE",
+                "avatarText" to "TE",
                 "avatarBgColor" to "#1E3A8A",
                 "acceptTermsAndConditions" to true
             )
@@ -56,7 +56,7 @@ class UserResourceTest {
         registerBadRequest(
             mapOf(
                 "alias" to "TEST",
-                "avatarEmojis" to "🌟👍🏾",
+                "avatarText" to "🌟👍🏾",
                 "avatarBgColor" to "FFFFFF",
                 "acceptTermsAndConditions" to true
             )
@@ -66,7 +66,7 @@ class UserResourceTest {
             .body(
                 mapOf(
                     "alias" to "TEST",
-                    "avatarEmojis" to "🌟👍🏾",
+                    "avatarText" to "🌟👍🏾",
                     "avatarBgColor" to "#1E3A8A",
                     "acceptTermsAndConditions" to true
                 )
