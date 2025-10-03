@@ -9,12 +9,13 @@
 </svelte:head>
 {#if auth.userAccount}
   <div class="flex min-h-[50vh] flex-col items-center justify-center">
-    <AccountForm initAlias={auth.userAccount.contributor.handle.split("#")[0]}
-                 initDiscriminator={auth.userAccount.contributor.handle.split("#")[1]}
-                 initAvatarText={auth.userAccount.contributor.avatarText}
-                 initAvatarBgColor={auth.userAccount.contributor.avatarBgColor}
-                 onsuccess={()=>{}}
-                 mode="update"
+    <AccountForm
+      initAlias={auth.userAccount.contributor.handle.split("#")[0]}
+      initDiscriminator={auth.userAccount.contributor.handle.split("#")[1]}
+      initAvatarText={auth.userAccount.contributor.avatarText}
+      initAvatarBgColor={auth.userAccount.contributor.avatarBgColor}
+      onsuccess={() => {}}
+      mode="update"
     />
   </div>
 {/if}

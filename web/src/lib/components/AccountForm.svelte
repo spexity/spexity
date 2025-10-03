@@ -71,11 +71,7 @@
         return
       }
       if (mode === "update") {
-        await auth.updateUserAccount(
-          alias,
-          avatarText,
-          avatarBgColor,
-        )
+        await auth.updateUserAccount(alias, avatarText, avatarBgColor)
       } else {
         await auth.registerUserAccount(
           alias,
@@ -157,13 +153,15 @@
         <a
           href="#"
           onclick={(event) => {
-                event.preventDefault()
-              }}
+            event.preventDefault()
+          }}
         >
-              <span class="spx-avatar-badge" style="background-color: {avatarBgColor}"
-              >{avatarText || "👀🍯"}</span
-              >
-          {alias || "Alias"}<span class="spx-text-subtle">#{alias === initAlias ? initDiscriminator : '0000'}</span>
+          <span class="spx-avatar-badge" style="background-color: {avatarBgColor}"
+            >{avatarText || "👀🍯"}</span
+          >
+          {alias || "Alias"}<span class="spx-text-subtle"
+            >#{alias === initAlias ? initDiscriminator : "0000"}</span
+          >
         </a>
       </div>
     </div>
@@ -178,16 +176,16 @@
             required
           />
           <span class="label-text">
-              {m.form_terms_prefix()}
+            {m.form_terms_prefix()}
             <a
               class="link"
               href={resolve("/terms-and-conditions")}
               target="_blank"
               rel="noopener noreferrer"
             >
-                {m.legal_terms_link()}
-              </a>.
-            </span>
+              {m.legal_terms_link()}
+            </a>.
+          </span>
         </label>
       </div>
     {/if}

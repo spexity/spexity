@@ -19,7 +19,6 @@
   const goHome = async () => {
     await goto(resolve("/"))
   }
-
 </script>
 
 <div class="flex h-screen flex-col items-center justify-center">
@@ -27,8 +26,13 @@
     <span class="loading loading-lg loading-spinner"></span>
     <p class="mt-4">{m.loading_redirecting()}</p>
   {:else}
-    <AccountForm initAvatarText={randomEmoji() + randomEmoji()} initAvatarBgColor={randomItem(bgColors)} onsuccess={async ()=> {
-      await goto(resolve("/"))
-    }} mode="register" />
+    <AccountForm
+      initAvatarText={randomEmoji() + randomEmoji()}
+      initAvatarBgColor={randomItem(bgColors)}
+      onsuccess={async () => {
+        await goto(resolve("/"))
+      }}
+      mode="register"
+    />
   {/if}
 </div>
