@@ -37,7 +37,7 @@ class WebPostsResource(
             POST.COMMENTS_COUNT,
             POST.contributor().ID,
             POST.contributor().HANDLE,
-            POST.contributor().AVATAR_EMOJI,
+            POST.contributor().AVATAR_TEXT,
             POST.contributor().AVATAR_BG_COLOR,
             POST.community().ID,
             POST.community().NAME,
@@ -52,7 +52,7 @@ class WebPostsResource(
                 ContributorRef(
                     it.get(POST.contributor().ID),
                     it.get(POST.contributor().HANDLE),
-                    it.get(POST.contributor().AVATAR_EMOJI),
+                    it.get(POST.contributor().AVATAR_TEXT),
                     it.get(POST.contributor().AVATAR_BG_COLOR),
                 ),
                 CommunityRef(it.get(COMMUNITY.ID), it.get(COMMUNITY.NAME)),

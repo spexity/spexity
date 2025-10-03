@@ -31,14 +31,14 @@ class UserResource(private val userService: UserService) {
         return userService.register(
             UserService.RegRequest(
                 authCorrelationId(securityIdentity), tokenEmail(securityIdentity), request.alias,
-                request.avatarEmojis, request.avatarBgColor
+                request.avatarText, request.avatarBgColor
             )
         )
     }
 
     data class UserRegisterRequest(
         @field:Size(min = 3, max = 20) val alias: String,
-        @field:ValidAvatarEmojis val avatarEmojis: String,
+        @field:ValidAvatarText val avatarText: String,
         @field:ValidAvatarBgColor val avatarBgColor: String,
         @field:AssertTrue(message = "Terms and conditions must be accepted") val acceptTermsAndConditions: Boolean
     )

@@ -13,7 +13,7 @@ CREATE TABLE contributor
     created_at      TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_account_id UUID        NOT NULL REFERENCES user_account (id),
     alias           TEXT        NOT NULL,
-    avatar_emoji    TEXT        NOT NULL,
+    avatar_text     TEXT        NOT NULL,
     avatar_bg_color TEXT        NOT NULL,
     discriminator   INT         NOT NULL CHECK ( discriminator > 0 ),
     handle          TEXT GENERATED ALWAYS AS (alias || '#' || discriminator) STORED UNIQUE

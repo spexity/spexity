@@ -106,13 +106,13 @@ export class AuthManager {
 
   async registerUserAccount(
     alias: string,
-    avatarEmojis: string,
+    avatarText: string,
     avatarBgColor: string,
     acceptTermsAndConditions: boolean,
   ) {
     const registerResponse = await auth.httpClient.post<CurrentUserAccount>("/api/current-user", {
       alias,
-      avatarEmojis,
+      avatarText,
       avatarBgColor,
       acceptTermsAndConditions,
     })

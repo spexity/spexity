@@ -23,7 +23,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 .returning()
                 .fetchOne()!!
             val contributor = contributorService.register(
-                ContributorService.RegRequest(account.id, request.alias, request.avatarEmojis, request.avatarBgColor)
+                ContributorService.RegRequest(account.id, request.alias, request.avatarText, request.avatarBgColor)
             )
             RegResponse(
                 account.id,
@@ -32,7 +32,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 ContributorRef(
                     contributor.id,
                     contributor.handle,
-                    request.avatarEmojis,
+                    request.avatarText,
                     request.avatarBgColor
                 )
             )
@@ -42,7 +42,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
     fun getUser(authCorrelationId: String): RegResponse? {
         val result = dslContext.select(
             CONTRIBUTOR.userAccount().ID, CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN,
-            CONTRIBUTOR.ID, CONTRIBUTOR.HANDLE, CONTRIBUTOR.AVATAR_EMOJI, CONTRIBUTOR.AVATAR_BG_COLOR
+            CONTRIBUTOR.ID, CONTRIBUTOR.HANDLE, CONTRIBUTOR.AVATAR_TEXT, CONTRIBUTOR.AVATAR_BG_COLOR
         )
             .from(CONTRIBUTOR)
             .where(CONTRIBUTOR.userAccount().AUTH_CORRELATION_ID.eq(authCorrelationId))
@@ -58,7 +58,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
                 ContributorRef(
                     it.get(CONTRIBUTOR.ID),
                     it.get(CONTRIBUTOR.HANDLE),
-                    it.get(CONTRIBUTOR.AVATAR_EMOJI),
+                    it.get(CONTRIBUTOR.AVATAR_TEXT),
                     it.get(CONTRIBUTOR.AVATAR_BG_COLOR)
                 )
             )
@@ -78,7 +78,7 @@ class UserService(private val dslContext: DSLContext, private val contributorSer
         val authCorrelationId: String,
         val emailAddress: String,
         val alias: String,
-        val avatarEmojis: String,
+        val avatarText: String,
         val avatarBgColor: String
     )
 

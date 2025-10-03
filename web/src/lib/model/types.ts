@@ -41,7 +41,7 @@ export interface CommunityRef {
 export interface ContributorRef {
   id: string
   handle: string
-  avatarEmojis: string
+  avatarText: string
   avatarBgColor: string
 }
 
