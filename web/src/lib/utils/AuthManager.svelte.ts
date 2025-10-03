@@ -120,6 +120,16 @@ export class AuthManager {
     this.currentUserStorage?.set(registerResponse)
   }
 
+  async updateUserAccount(alias: string, avatarText: string, avatarBgColor: string) {
+    const updateResponse = await auth.httpClient.put<CurrentUserAccount>("/api/current-user", {
+      alias,
+      avatarText,
+      avatarBgColor,
+    })
+    this.setUserAccountLoggedIn(updateResponse)
+    this.currentUserStorage?.set(updateResponse)
+  }
+
   private async init() {
     if (!this.authManager || !this.currentUserStorage) {
       return
