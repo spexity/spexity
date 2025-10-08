@@ -7,6 +7,10 @@
   let { data }: PageProps = $props()
 </script>
 
+<svelte:head>
+  <title>{m.nav_communities()} | Spexity</title>
+</svelte:head>
+
 <div class="mb-4 flex flex-row justify-end">
   <a class="btn btn-sm" href={resolve("/communities/new")} data-testid="start-community-button"
     >{m.community_start()}</a

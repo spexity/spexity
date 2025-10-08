@@ -1,6 +1,7 @@
 export interface CommunityPreview {
   id: string
   name: string
+  member: boolean
   postsCount: number
 }
 

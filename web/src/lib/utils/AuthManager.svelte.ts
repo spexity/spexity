@@ -25,6 +25,7 @@ export class AuthManager {
   private readonly currentUserStorage?: CurrentUserStorage
   private readonly authManager?: UserManager
   private ignoreOidcUserLoaded: boolean = false
+  ssrAwareContributorId: string | undefined = $state()
   userAccountState: AuthUserAccountState = $state(AuthUserAccountState.INIT)
   userAccount: CurrentUserAccount | null = $state(null)
   oidcUser: User | null = $state(null)
@@ -110,7 +111,7 @@ export class AuthManager {
     avatarBgColor: string,
     acceptTermsAndConditions: boolean,
   ) {
-    const registerResponse = await auth.httpClient.post<CurrentUserAccount>("/api/current-user", {
+    const registerResponse = await auth.httpClient.post<CurrentUserAccount>("/api/users/current", {
       alias,
       avatarText,
       avatarBgColor,
@@ -121,7 +122,7 @@ export class AuthManager {
   }
 
   async updateUserAccount(alias: string, avatarText: string, avatarBgColor: string) {
-    const updateResponse = await auth.httpClient.put<CurrentUserAccount>("/api/current-user", {
+    const updateResponse = await auth.httpClient.put<CurrentUserAccount>("/api/users/current", {
       alias,
       avatarText,
       avatarBgColor,
@@ -161,7 +162,7 @@ export class AuthManager {
   }
 
   private async getRemoteCurrentUserAccount(oidcUser: User, followState: boolean) {
-    const currentUserResponse = await fetch(`${env.PUBLIC_API_URL}/api/current-user`, {
+    const currentUserResponse = await fetch(`${env.PUBLIC_API_URL}/api/users/current`, {
       headers: { authorization: `Bearer ${oidcUser.access_token}` },
     })
     if (currentUserResponse.status === 200) {
@@ -244,6 +245,7 @@ export class AuthManager {
     this.oidcUser = null
     this.userAccount = null
     this.userAccountState = AuthUserAccountState.NOT_LOGGED_IN
+    this.ssrAwareContributorId = undefined
     document.cookie = `${Cookies.contributorId}=; path=/; max-age=0`
   }
 
@@ -254,12 +256,14 @@ export class AuthManager {
     } else {
       this.userAccountState = AuthUserAccountState.LOGGED_IN
     }
+    this.ssrAwareContributorId = userAccount.contributor.id
     document.cookie = `${Cookies.contributorId}=${userAccount.contributor.id}; path=/; max-age=315360000`
   }
 
   private setUserAccountNotRegistered() {
     this.userAccount = null
     this.userAccountState = AuthUserAccountState.NOT_REGISTERED
+    this.ssrAwareContributorId = undefined
     document.cookie = `${Cookies.contributorId}=; path=/; max-age=0`
   }
 }

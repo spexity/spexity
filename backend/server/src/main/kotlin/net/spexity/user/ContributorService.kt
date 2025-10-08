@@ -1,7 +1,6 @@
 package net.spexity.user
 
 import jakarta.enterprise.context.ApplicationScoped
-import jakarta.ws.rs.NotFoundException
 import net.spexity.data.model.public_.Tables.CONTRIBUTOR
 import net.spexity.data.model.public_.Tables.CONTRIBUTOR_ALIAS_META
 import net.spexity.data.model.public_.routines.PickDiscriminator

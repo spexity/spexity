@@ -32,7 +32,7 @@ class CommunityResourceTest {
         ]
     )
     fun `verified user can create community`() {
-        registerCurrentUser("CommunityTester")
+        registerCurrentUser()
         verifyUser(dslContext, "communityUser")
 
         val rawName = "  My New Community ${UUID.randomUUID()}  "
@@ -75,7 +75,7 @@ class CommunityResourceTest {
         ]
     )
     fun `unverified user cannot create community`() {
-        registerCurrentUser("UnverifiedAlias")
+        registerCurrentUser()
 
         val communityName = "Blocked Community ${UUID.randomUUID()}"
 

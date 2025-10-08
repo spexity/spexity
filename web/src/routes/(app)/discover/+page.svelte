@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>{m.nav_home()} | Spexity</title>
+  <title>{m.nav_discover()} | Spexity</title>
 </svelte:head>
 
 <div class="spx-cards-list" data-testid="posts-list">

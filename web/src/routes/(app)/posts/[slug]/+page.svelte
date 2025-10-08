@@ -5,6 +5,10 @@
   let { data }: PageProps = $props()
 </script>
 
+<svelte:head>
+  <title>{data.post.subject} | Spexity</title>
+</svelte:head>
+
 <PostView
   post={data.post}
   comments={data.comments}

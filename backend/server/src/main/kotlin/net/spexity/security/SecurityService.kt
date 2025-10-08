@@ -6,16 +6,20 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.ws.rs.ForbiddenException
 import net.spexity.data.model.public_.Tables.CONTRIBUTOR
 import org.jooq.DSLContext
-import java.util.UUID
+import java.util.*
 
 @ApplicationScoped
 class SecurityService(private val dslContext: DSLContext) {
 
-    fun validateVerified(authCorrelationId: String) {
-        validateVerifiedGetContributorId(authCorrelationId)
+    fun validateVerifiedGetContributorId(authCorrelationId: String): UUID {
+        return getContributorId(authCorrelationId, true)
     }
 
-    fun validateVerifiedGetContributorId(authCorrelationId: String): UUID {
+    fun getContributorId(authCorrelationId: String): UUID {
+        return getContributorId(authCorrelationId, false)
+    }
+
+    private fun getContributorId(authCorrelationId: String, validateVerified: Boolean): UUID {
         val selected = dslContext
             .select(CONTRIBUTOR.ID, CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN)
             .from(CONTRIBUTOR)
@@ -24,9 +28,11 @@ class SecurityService(private val dslContext: DSLContext) {
         if (selected == null) {
             throw ForbiddenException("User not fully registered")
         }
-        val isVerifiedHuman = selected.get(CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN)
-        if (!isVerifiedHuman) {
-            throw ForbiddenException("User not verified")
+        if (validateVerified) {
+            val isVerifiedHuman = selected.get(CONTRIBUTOR.userAccount().IS_VERIFIED_HUMAN)
+            if (!isVerifiedHuman) {
+                throw ForbiddenException("User not verified")
+            }
         }
         return selected.get(CONTRIBUTOR.ID)
     }

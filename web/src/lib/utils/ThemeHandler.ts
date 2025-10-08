@@ -2,11 +2,11 @@ import { APP_THEME } from "../../app-theme"
 
 export class ThemeHandler {
   static handle() {
-    const currentlyDark =
+    const prefersDark =
       window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
     document.documentElement.setAttribute(
       "data-theme",
-      currentlyDark ? APP_THEME.dark : APP_THEME.light,
+      prefersDark ? APP_THEME.dark : APP_THEME.light,
     )
 
     if (window.matchMedia) {
