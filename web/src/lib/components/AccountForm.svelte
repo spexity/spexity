@@ -151,7 +151,7 @@
       <p class="label">Preview</p>
       <div class="flex items-center gap-2">
         <a
-          href="#"
+          href={resolve("/")}
           onclick={(event) => {
             event.preventDefault()
           }}
