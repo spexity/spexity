@@ -3,12 +3,13 @@
   import { page, updated } from "$app/state"
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
-  import { auth } from "$lib/state"
+  import { auth, prefs } from "$lib/state"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
   import { m } from "$lib/paraglide/messages.js"
   import { type Locale, locales, setLocale } from "$lib/paraglide/runtime"
   import { LOCALES_MAP } from "$lib/locales"
   import { resolve } from "$app/paths"
+  import { type Theme } from "$lib/utils/ThemeHandler"
 
   type MenuItem = "home" | "discover" | "communities"
 
@@ -56,6 +57,11 @@
   const switchLanguage = (event: MouseEvent, locale: Locale) => {
     event.preventDefault()
     setLocale(locale)
+  }
+
+  const switchTheme = (event: MouseEvent, theme: Theme) => {
+    event.preventDefault()
+    prefs.setTheme(theme)
   }
 </script>
 
@@ -153,6 +159,28 @@
               <a href={resolve("/account")}>{m.nav_account_title()}</a>
             </li>
           {/if}
+          <li>
+            <details>
+              <summary>{m.theme()}</summary>
+              <ul>
+                <li>
+                  <a href={resolve("/")} onclick={(e) => switchTheme(e, "light")}>
+                    {m.theme_light()}{prefs.theme === "light" ? " ✓" : ""}
+                  </a>
+                </li>
+                <li>
+                  <a href={resolve("/")} onclick={(e) => switchTheme(e, "system")}>
+                    {m.theme_system()}{prefs.theme === "system" ? " ✓" : ""}
+                  </a>
+                </li>
+                <li>
+                  <a href={resolve("/")} onclick={(e) => switchTheme(e, "dark")}>
+                    {m.theme_dark()}{prefs.theme === "dark" ? " ✓" : ""}
+                  </a>
+                </li>
+              </ul>
+            </details>
+          </li>
           <li>
             <a
               href={resolve("/")}

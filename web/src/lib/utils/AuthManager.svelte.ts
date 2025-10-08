@@ -6,7 +6,7 @@ import { type CurrentUserAccount, CurrentUserStorage } from "$lib/utils/CurrentU
 import { HttpClient } from "$lib/utils/HttpClient"
 import { goto } from "$app/navigation"
 import { auth } from "$lib/state"
-import { Cookies } from "$lib/cookies"
+import { Cookies, CookieUtils } from "$lib/cookies"
 import { resolve } from "$app/paths"
 
 export enum AuthUserAccountState {
@@ -246,7 +246,7 @@ export class AuthManager {
     this.userAccount = null
     this.userAccountState = AuthUserAccountState.NOT_LOGGED_IN
     this.ssrAwareContributorId = undefined
-    document.cookie = `${Cookies.contributorId}=; path=/; max-age=0`
+    CookieUtils.delete(Cookies.contributorId)
   }
 
   private setUserAccountLoggedIn(userAccount: CurrentUserAccount) {
@@ -257,13 +257,13 @@ export class AuthManager {
       this.userAccountState = AuthUserAccountState.LOGGED_IN
     }
     this.ssrAwareContributorId = userAccount.contributor.id
-    document.cookie = `${Cookies.contributorId}=${userAccount.contributor.id}; path=/; max-age=315360000`
+    CookieUtils.set(Cookies.contributorId, userAccount.contributor.id)
   }
 
   private setUserAccountNotRegistered() {
     this.userAccount = null
     this.userAccountState = AuthUserAccountState.NOT_REGISTERED
     this.ssrAwareContributorId = undefined
-    document.cookie = `${Cookies.contributorId}=; path=/; max-age=0`
+    CookieUtils.delete(Cookies.contributorId)
   }
 }

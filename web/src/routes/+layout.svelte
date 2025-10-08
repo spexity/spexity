@@ -14,7 +14,10 @@
 
   onMount(() => {
     ClientEnv.setup()
-    return ThemeHandler.handle()
+  })
+
+  $effect(() => {
+    ThemeHandler.handle(prefs.theme)
   })
 </script>
 
