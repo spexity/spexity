@@ -151,7 +151,7 @@
       <p class="label">Preview</p>
       <div class="flex items-center gap-2">
         <a
-          href="#"
+          href={resolve("/")}
           onclick={(event) => {
             event.preventDefault()
           }}
@@ -190,7 +190,7 @@
       </div>
     {/if}
     {#if errorMessage}
-      <div role="alert" class="alert-soft alert alert-error">
+      <div role="alert" class="alert alert-soft alert-error">
         <span>{errorMessage}</span>
       </div>
     {/if}

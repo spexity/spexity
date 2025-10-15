@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { Post } from "./Post";
 
 export class PostFormPage {
   private readonly page: Page;
@@ -7,7 +8,7 @@ export class PostFormPage {
     this.page = page;
   }
 
-  async waitForPageLoad() {
+  async awaitPageLoad() {
     await expect(this.page.locator("#subject")).toBeVisible();
   }
 
@@ -33,6 +34,9 @@ export class PostFormPage {
     await this.page.keyboard.type(body);
     await this.getTermsCheckbox().check();
     await this.getSubmitButton().click();
-    await this.page.waitForURL("**/posts/*");
+    await this.page.waitForURL("**/posts/*-*");
+    const postPage = new Post(this.page)
+    await postPage.awaitPageLoad()
+    return postPage;
   }
 }

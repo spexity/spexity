@@ -6,7 +6,7 @@ import { type CurrentUserAccount, CurrentUserStorage } from "$lib/utils/CurrentU
 import { HttpClient } from "$lib/utils/HttpClient"
 import { goto } from "$app/navigation"
 import { auth } from "$lib/state"
-import { Cookies } from "$lib/cookies"
+import { Cookies, CookieUtils } from "$lib/cookies"
 import { resolve } from "$app/paths"
 
 export enum AuthUserAccountState {
@@ -25,6 +25,7 @@ export class AuthManager {
   private readonly currentUserStorage?: CurrentUserStorage
   private readonly authManager?: UserManager
   private ignoreOidcUserLoaded: boolean = false
+  ssrAwareContributorId: string | undefined = $state()
   userAccountState: AuthUserAccountState = $state(AuthUserAccountState.INIT)
   userAccount: CurrentUserAccount | null = $state(null)
   oidcUser: User | null = $state(null)
@@ -110,7 +111,7 @@ export class AuthManager {
     avatarBgColor: string,
     acceptTermsAndConditions: boolean,
   ) {
-    const registerResponse = await auth.httpClient.post<CurrentUserAccount>("/api/current-user", {
+    const registerResponse = await auth.httpClient.post<CurrentUserAccount>("/api/users/current", {
       alias,
       avatarText,
       avatarBgColor,
@@ -121,7 +122,7 @@ export class AuthManager {
   }
 
   async updateUserAccount(alias: string, avatarText: string, avatarBgColor: string) {
-    const updateResponse = await auth.httpClient.put<CurrentUserAccount>("/api/current-user", {
+    const updateResponse = await auth.httpClient.put<CurrentUserAccount>("/api/users/current", {
       alias,
       avatarText,
       avatarBgColor,
@@ -161,7 +162,7 @@ export class AuthManager {
   }
 
   private async getRemoteCurrentUserAccount(oidcUser: User, followState: boolean) {
-    const currentUserResponse = await fetch(`${env.PUBLIC_API_URL}/api/current-user`, {
+    const currentUserResponse = await fetch(`${env.PUBLIC_API_URL}/api/users/current`, {
       headers: { authorization: `Bearer ${oidcUser.access_token}` },
     })
     if (currentUserResponse.status === 200) {
@@ -220,6 +221,7 @@ export class AuthManager {
     } catch (err) {
       console.error("Could not silently login user", err)
       this.clearCurrentUserAccount()
+      await this.authManager?.removeUser()
     }
   }
 
@@ -227,16 +229,11 @@ export class AuthManager {
     const now = Math.floor(Date.now() / 1000)
     const expiresAt = user.expires_at ?? now + 15 * 60
     const maxAge = Math.max(0, Math.floor(expiresAt - now))
-    document.cookie =
-      `${Cookies.accessToken}=${encodeURIComponent(user.access_token)}; ` +
-      `path=/; ` +
-      `max-age=${maxAge}; ` +
-      `SameSite=Strict; ` +
-      `Secure`
+    CookieUtils.set(Cookies.accessToken, user.access_token, maxAge)
   }
 
   private clearDocumentAuthCookie() {
-    document.cookie = `${Cookies.accessToken}=; path=/; max-age=0; SameSite=Strict; Secure`
+    CookieUtils.delete(Cookies.accessToken)
   }
 
   //Auth State Manipulation
@@ -244,7 +241,8 @@ export class AuthManager {
     this.oidcUser = null
     this.userAccount = null
     this.userAccountState = AuthUserAccountState.NOT_LOGGED_IN
-    document.cookie = `${Cookies.contributorId}=; path=/; max-age=0`
+    this.ssrAwareContributorId = undefined
+    CookieUtils.delete(Cookies.contributorId)
   }
 
   private setUserAccountLoggedIn(userAccount: CurrentUserAccount) {
@@ -254,12 +252,14 @@ export class AuthManager {
     } else {
       this.userAccountState = AuthUserAccountState.LOGGED_IN
     }
-    document.cookie = `${Cookies.contributorId}=${userAccount.contributor.id}; path=/; max-age=315360000`
+    this.ssrAwareContributorId = userAccount.contributor.id
+    CookieUtils.set(Cookies.contributorId, userAccount.contributor.id)
   }
 
   private setUserAccountNotRegistered() {
     this.userAccount = null
     this.userAccountState = AuthUserAccountState.NOT_REGISTERED
-    document.cookie = `${Cookies.contributorId}=; path=/; max-age=0`
+    this.ssrAwareContributorId = undefined
+    CookieUtils.delete(Cookies.contributorId)
   }
 }

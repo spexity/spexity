@@ -84,6 +84,15 @@ CREATE TABLE community
 );
 CREATE INDEX idx_community_created_at ON community (created_at);
 
+CREATE TABLE contributor_community
+(
+    id             UUID                 DEFAULT uuidv7() PRIMARY KEY,
+    created_at     TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    contributor_id UUID        NOT NULL REFERENCES contributor (id) ON DELETE CASCADE,
+    community_id   UUID        NOT NULL REFERENCES community (id) ON DELETE CASCADE,
+    UNIQUE (contributor_id, community_id)
+);
+
 CREATE TABLE post
 (
     id             UUID                 DEFAULT uuidv7() PRIMARY KEY,

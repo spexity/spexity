@@ -3,14 +3,15 @@
   import { page, updated } from "$app/state"
   import { onMount } from "svelte"
   import { goto } from "$app/navigation"
-  import { auth } from "$lib/state"
+  import { auth, prefs } from "$lib/state"
   import { AuthUserAccountState } from "$lib/utils/AuthManager.svelte"
   import { m } from "$lib/paraglide/messages.js"
-  import { setLocale, locales, type Locale } from "$lib/paraglide/runtime"
+  import { type Locale, locales, setLocale } from "$lib/paraglide/runtime"
   import { LOCALES_MAP } from "$lib/locales"
   import { resolve } from "$app/paths"
+  import { type Theme } from "$lib/utils/ThemeHandler"
 
-  type MenuItem = "home" | "communities"
+  type MenuItem = "home" | "discover" | "communities"
 
   const { children, data } = $props()
   let langModalRef = $state<HTMLDialogElement>()
@@ -18,6 +19,9 @@
   const determineActiveMenuItem = (): MenuItem => {
     if (page.url.pathname.startsWith("/communities") || page.url.pathname.startsWith("/posts")) {
       return "communities"
+    }
+    if (page.url.pathname.startsWith("/discover")) {
+      return "discover"
     }
     return "home"
   }
@@ -53,6 +57,11 @@
   const switchLanguage = (event: MouseEvent, locale: Locale) => {
     event.preventDefault()
     setLocale(locale)
+  }
+
+  const switchTheme = (event: MouseEvent, theme: Theme) => {
+    event.preventDefault()
+    prefs.setTheme(theme)
   }
 </script>
 
@@ -97,6 +106,13 @@
               >{m.nav_home()}</a
             >
           </li>
+          {#if auth.ssrAwareContributorId}
+            <li>
+              <a href={resolve("/discover")} class={["tab", active === "discover" && "tab-active"]}
+                >{m.nav_discover()}</a
+              >
+            </li>
+          {/if}
           <li>
             <a
               href={resolve("/communities")}
@@ -142,6 +158,40 @@
             <li>
               <a href={resolve("/account")}>{m.nav_account_title()}</a>
             </li>
+          {/if}
+          <li>
+            <details>
+              <summary>{m.theme()}</summary>
+              <ul>
+                <li>
+                  <a href={resolve("/")} onclick={(e) => switchTheme(e, "light")}>
+                    {m.theme_light()}{prefs.theme === "light" ? " ✓" : ""}
+                  </a>
+                </li>
+                <li>
+                  <a href={resolve("/")} onclick={(e) => switchTheme(e, "system")}>
+                    {m.theme_system()}{prefs.theme === "system" ? " ✓" : ""}
+                  </a>
+                </li>
+                <li>
+                  <a href={resolve("/")} onclick={(e) => switchTheme(e, "dark")}>
+                    {m.theme_dark()}{prefs.theme === "dark" ? " ✓" : ""}
+                  </a>
+                </li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <a
+              href={resolve("/")}
+              data-testid="account-language-link"
+              onclick={showChangeLanguageModal}
+            >
+              {m.i18n_language()} 🌐
+            </a>
+          </li>
+          <div class="divider m-0"></div>
+          {#if auth.userAccount}
             <li>
               <a href={resolve("/")} data-testid="sign-out-link" onclick={signOut}
                 >{m.auth_signOut()}</a
@@ -154,15 +204,6 @@
               >
             </li>
           {/if}
-          <li>
-            <a
-              href={resolve("/")}
-              data-testid="account-language-link"
-              onclick={showChangeLanguageModal}
-            >
-              {m.i18n_language()} 🌐
-            </a>
-          </li>
         </ul>
       </div>
     </div>

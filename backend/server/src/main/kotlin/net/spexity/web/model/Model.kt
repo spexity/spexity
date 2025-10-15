@@ -3,7 +3,10 @@ package net.spexity.web.model
 import java.time.Instant
 import java.util.*
 
-data class CommunityPreview(val id: UUID, val name: String, val postsCount: Int)
+data class CommunityPreview(
+    val id: UUID, val name: String,
+    val postsCount: Int, val isMember: Boolean
+)
 
 data class PostPreview(
     val id: UUID, val createdAt: Instant, val subject: String, val bodyText: String,

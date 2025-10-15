@@ -5,13 +5,23 @@ export class Post {
   private readonly page: Page
   private readonly id: string
 
-  constructor(page: Page, id: string) {
+  constructor(page: Page, id?: string) {
     this.page = page
-    this.id = id
+    if (id) {
+      this.id = id
+    } else {
+      const url = new URL(page.url());
+      const pathParts = url.pathname.split("/");
+      this.id = pathParts[pathParts.length - 1];
+    }
   }
 
   async go() {
     await this.page.goto(`/posts/${this.id}`)
+    await this.awaitPageLoad()
+  }
+
+  async awaitPageLoad() {
     await expect(this.getPostTitle()).toBeVisible()
     await expect(this.getNewCommentButton()).toBeVisible()
   }

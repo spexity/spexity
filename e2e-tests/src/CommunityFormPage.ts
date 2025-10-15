@@ -1,32 +1,32 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test"
 
 export class CommunityFormPage {
-  private readonly page: Page;
+  private readonly page: Page
 
   constructor(page: Page) {
-    this.page = page;
+    this.page = page
   }
 
-  async waitForPageLoad() {
-    await expect(this.page.locator("#name")).toBeVisible();
+  async awaitPageLoad() {
+    await expect(this.getNameInput()).toBeVisible()
   }
 
   getNameInput() {
-    return this.page.locator("#name");
+    return this.page.locator("#name")
   }
 
   getTermsCheckbox() {
-    return this.page.locator("#acceptTermsAndConditions");
+    return this.page.locator("#acceptTermsAndConditions")
   }
 
   getSubmitButton() {
-    return this.page.getByRole("button", { name: "Start Community" });
+    return this.page.getByRole("button", { name: "Start Community" })
   }
 
   async createCommunity(name: string) {
-    await this.getNameInput().fill(name);
-    await this.getTermsCheckbox().check();
-    await this.getSubmitButton().click();
-    await this.page.waitForURL("**/communities/*");
+    await this.getNameInput().fill(name)
+    await this.getTermsCheckbox().check()
+    await this.getSubmitButton().click()
+    await this.page.waitForURL("**/communities/*-*")
   }
 }

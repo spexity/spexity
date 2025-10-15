@@ -33,7 +33,7 @@
     </div>
   </div>
   <a href={resolve(`/posts/${post.id}`)}>
-    <h2 class="font-medium">{post.subject}</h2>
+    <h2 class="font-medium" data-testid="post-subject">{post.subject}</h2>
     <p class="spx-text-subtle text-sm">{post.bodyText}</p>
   </a>
   <div class="spx-card-footer">

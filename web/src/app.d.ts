@@ -2,6 +2,7 @@
 // for information about these interfaces
 
 import type { OrderPref } from "$lib/model/types"
+import type { Theme } from "$lib/utils/ThemeHandler"
 
 declare global {
   namespace App {
@@ -10,6 +11,7 @@ declare global {
       timezone: string
       locale: string
       commentsOrder: OrderPref
+      theme: Theme
       contributorId?: string
     }
     // interface PageData {}

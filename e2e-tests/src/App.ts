@@ -1,4 +1,4 @@
-import test, { expect, type Page } from "@playwright/test"
+import test, { type Page } from "@playwright/test"
 import { AccountMenu } from "./AccountMenu"
 import { LanguageModal } from "./LanguageModal"
 import { GOD_USER, type UserCredentials } from "./TestData"
@@ -8,6 +8,8 @@ import { CommunitiesPage } from "./CommunitiesPage"
 
 export class App {
   private readonly page: Page
+  public homePage: HomePage
+  public communitiesPage: CommunitiesPage
   public accountMenu: AccountMenu
   public languageModal: LanguageModal
 
@@ -16,12 +18,12 @@ export class App {
     this.page = page
     this.accountMenu = new AccountMenu(page)
     this.languageModal = new LanguageModal(page)
+    this.homePage = new HomePage(page)
+    this.communitiesPage = new CommunitiesPage(page)
   }
 
   async launch() {
-    await this.page.goto("/")
-    await this.awaitAppPage()
-    return new HomePage(this.page)
+    return this.goToHome()
   }
 
   async goToPost(id: string) {
@@ -30,10 +32,14 @@ export class App {
     return post
   }
 
+  async goToHome() {
+    await this.homePage.go()
+    return this.homePage;
+  }
+
   async goToCommunities() {
-    const communitiesPage = new CommunitiesPage(this.page)
-    await communitiesPage.go()
-    return communitiesPage
+    await this.communitiesPage.go()
+    return this.communitiesPage
   }
 
   async signIn(credentials: UserCredentials = GOD_USER) {
@@ -44,7 +50,7 @@ export class App {
       await this.page.getByRole("textbox", { name: "Password" }).fill(credentials.password)
       await this.page.getByRole("checkbox", { name: "Remember me" }).check()
       await this.page.getByRole("button", { name: "Sign In" }).click()
-      await this.awaitAppPage()
+      await this.homePage.awaitPageLoad()
     })
   }
 
@@ -53,21 +59,8 @@ export class App {
       await this.accountMenu.open()
       await this.accountMenu.clickSignOut()
       await this.page.waitForTimeout(250)
-      await this.awaitAppPage()
+      await this.homePage.awaitPageLoad()
     })
-  }
-
-  async awaitAppPage() {
-    await this.getLogo().waitFor({ state: "visible" })
-    await expect(this.getInitDiv()).toHaveCount(0)
-  }
-
-  getLogo() {
-    return this.page.getByTestId("brand-logo")
-  }
-
-  getInitDiv() {
-    return this.page.getByTestId("init-in-progress")
   }
 
   async changeLanguage(locale: "en" | "zh-cn" | "ar") {

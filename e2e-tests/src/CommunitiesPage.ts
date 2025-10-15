@@ -11,8 +11,15 @@ export class CommunitiesPage {
 
   async go() {
     await this.page.goto("/communities")
-    await expect(this.page.getByTestId("communities-list")).toBeVisible()
-    return this
+    await this.awaitPageLoad()
+  }
+
+  async awaitPageLoad() {
+    await expect(this.getCommunitiesList()).toHaveCount(1)
+  }
+
+  private getCommunitiesList() {
+    return this.page.getByTestId("communities-list")
   }
 
   getStartCommunityButton() {
@@ -23,23 +30,13 @@ export class CommunitiesPage {
     await this.getStartCommunityButton().click()
     await this.page.waitForURL("**/communities/new")
     const communityFormPage = new CommunityFormPage(this.page)
-    await communityFormPage.waitForPageLoad()
+    await communityFormPage.awaitPageLoad()
     return communityFormPage
   }
 
-  getCommunitiesList() {
-    return this.page.getByTestId("communities-list")
-  }
-
-  async openFirstCommunity(): Promise<CommunityPage> {
-    const firstCommunityLink = this.getCommunitiesList().locator("a.btn").first()
-    await expect(firstCommunityLink).toBeVisible()
-    const href = await firstCommunityLink.getAttribute("href")
-    if (!href) throw new Error("Could not find community link")
-    await firstCommunityLink.click()
-    await this.page.waitForURL("**/communities/*")
-    const communityPage = new CommunityPage(this.page)
-    await communityPage.waitForPageLoad()
-    return communityPage
+  async createCommunity(communityName: string) {
+    const communityFormPage = await this.clickStartCommunity()
+    await communityFormPage.createCommunity(communityName)
+    return new CommunityPage(this.page)
   }
 }

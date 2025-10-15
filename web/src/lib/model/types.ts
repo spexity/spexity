@@ -1,6 +1,9 @@
+import type { Theme } from "$lib/utils/ThemeHandler"
+
 export interface CommunityPreview {
   id: string
   name: string
+  member: boolean
   postsCount: number
 }
 
@@ -66,4 +69,5 @@ export interface Prefs {
   timezone: string
   locale: string
   commentsOrder: OrderPref
+  theme: Theme
 }

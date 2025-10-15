@@ -5,6 +5,7 @@ import { Cookies } from "$lib/cookies"
 import { LOCALES_MAP } from "$lib/locales"
 
 import type { OrderPref } from "$lib/model/types"
+import type { Theme } from "$lib/utils/ThemeHandler"
 
 const handleParaglide: Handle = ({ event, resolve }) =>
   paraglideMiddleware(event.request, ({ request, locale }) => {
@@ -21,8 +22,15 @@ const handleParaglide: Handle = ({ event, resolve }) =>
 const handleLocals: Handle = ({ event, resolve }) => {
   event.locals.timezone = event.cookies.get(Cookies.timezone) ?? "UTC"
   event.locals.commentsOrder = (event.cookies.get(Cookies.commentsOrder) as OrderPref) ?? "asc"
+  event.locals.theme = (event.cookies.get(Cookies.theme) as Theme) ?? "system"
   event.locals.contributorId = event.cookies.get(Cookies.contributorId)
-  return resolve(event)
+  return resolve(event, {
+    transformPageChunk: ({ html }) =>
+      html.replace(
+        "%spx-theme-attr%",
+        event.locals.theme === "system" ? "" : `data-theme="${event.locals.theme}"`,
+      ),
+  })
 }
 
 const handleSecurityHeaders: Handle = ({ event, resolve }) => {

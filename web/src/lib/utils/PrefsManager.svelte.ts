@@ -1,25 +1,38 @@
 import type { OrderPref, Prefs } from "$lib/model/types"
 import { LOCALES } from "$lib/locales"
-import { Cookies } from "$lib/cookies"
+import { Cookies, CookieUtils } from "$lib/cookies"
+import type { Theme } from "$lib/utils/ThemeHandler"
 
 export class PrefsManager {
   timezone: string = $state("UTC")
   locale: string = $state(LOCALES[0].id)
   commentsOrder: OrderPref = $state("asc")
+  theme: Theme = $state("system")
 
   set(prefs: Prefs) {
     this.timezone = prefs.timezone
     this.locale = prefs.locale
-    this.commentsOrder = prefs.commentsOrder
+    this.setCommentsOrder(prefs.commentsOrder)
+    this.setTheme(prefs.theme)
   }
 
   setCommentsOrder(val: OrderPref) {
     if (val === "desc") {
-      document.cookie = `${Cookies.commentsOrder}=${val}; path=/; max-age=315360000`
+      CookieUtils.set(Cookies.commentsOrder, val)
       this.commentsOrder = "desc"
     } else {
-      document.cookie = `${Cookies.commentsOrder}=; path=/; max-age=0`
+      CookieUtils.delete(Cookies.commentsOrder)
       this.commentsOrder = "asc"
+    }
+  }
+
+  setTheme(val: Theme) {
+    if (val === "system") {
+      CookieUtils.delete(Cookies.theme)
+      this.theme = "system"
+    } else {
+      CookieUtils.set(Cookies.theme, val)
+      this.theme = val
     }
   }
 }

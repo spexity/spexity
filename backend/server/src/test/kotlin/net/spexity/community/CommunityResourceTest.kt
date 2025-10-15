@@ -7,6 +7,7 @@ import io.restassured.RestAssured.given
 import jakarta.inject.Inject
 import jakarta.ws.rs.core.MediaType
 import net.spexity.data.model.public_.Tables.COMMUNITY
+import net.spexity.data.model.public_.Tables.CONTRIBUTOR_COMMUNITY
 import org.jooq.DSLContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -32,7 +33,7 @@ class CommunityResourceTest {
         ]
     )
     fun `verified user can create community`() {
-        registerCurrentUser("CommunityTester")
+        registerCurrentUser()
         verifyUser(dslContext, "communityUser")
 
         val rawName = "  My New Community ${UUID.randomUUID()}  "
@@ -62,6 +63,15 @@ class CommunityResourceTest {
         assertNotNull(record)
         assertEquals(expectedName, record!!.name)
         assertEquals(0, record.postsCount)
+
+        val contributorId = record.createdByContributorId
+        val membershipCount = dslContext.selectCount()
+            .from(CONTRIBUTOR_COMMUNITY)
+            .where(CONTRIBUTOR_COMMUNITY.CONTRIBUTOR_ID.eq(contributorId))
+            .and(CONTRIBUTOR_COMMUNITY.COMMUNITY_ID.eq(communityId))
+            .fetchOne(0, Int::class.java)
+
+        assertEquals(1, membershipCount, "Creator should be automatically added as a member")
     }
 
     @Test
@@ -75,7 +85,7 @@ class CommunityResourceTest {
         ]
     )
     fun `unverified user cannot create community`() {
-        registerCurrentUser("UnverifiedAlias")
+        registerCurrentUser()
 
         val communityName = "Blocked Community ${UUID.randomUUID()}"
 

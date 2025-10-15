@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.Context
 import net.spexity.security.authCorrelationId
 import net.spexity.security.tokenEmail
 
-@Path("/api/current-user")
+@Path("/api/users/current")
 class UserResource(private val userService: UserService) {
 
     @GET

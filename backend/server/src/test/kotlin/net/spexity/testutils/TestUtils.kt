@@ -12,7 +12,7 @@ import org.jooq.JSONB
 import java.util.UUID
 import kotlin.random.Random
 
-fun registerCurrentUser(alias: String) {
+fun registerCurrentUser() {
     given()
         .contentType(MediaType.APPLICATION_JSON)
         .body(
@@ -23,7 +23,7 @@ fun registerCurrentUser(alias: String) {
                 "acceptTermsAndConditions" to true
             )
         )
-        .post("/api/current-user")
+        .post("/api/users/current")
         .then()
         .statusCode(200)
 }

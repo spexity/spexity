@@ -7,6 +7,7 @@
 <svelte:head>
   <title>{m.nav_account_title()} | Spexity</title>
 </svelte:head>
+
 {#if auth.userAccount}
   <div class="flex min-h-[50vh] flex-col items-center justify-center">
     <AccountForm

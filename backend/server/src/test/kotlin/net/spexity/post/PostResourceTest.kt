@@ -37,7 +37,7 @@ class PostResourceTest {
         ]
     )
     fun `verified user can create post`() {
-        registerCurrentUser("PostAlias")
+        registerCurrentUser()
         verifyUser(dslContext, "postUser")
 
         val communityId = insertCommunity(dslContext, "Test Community")
@@ -98,7 +98,7 @@ class PostResourceTest {
         ]
     )
     fun `unverified user cannot create post`() {
-        registerCurrentUser("UnverifiedPoster")
+        registerCurrentUser()
 
         val communityId = insertCommunity(dslContext, "Another Community")
         val subject = "Short note ${UUID.randomUUID()}"

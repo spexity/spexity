@@ -13,6 +13,7 @@ export const load: LayoutServerLoad = async (event) => {
       timezone: event.locals.timezone,
       locale: event.locals.locale,
       commentsOrder: event.locals.commentsOrder,
+      theme: event.locals.theme,
     },
     currentContributorId: event.locals.contributorId,
   } as PageData

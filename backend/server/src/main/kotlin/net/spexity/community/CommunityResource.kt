@@ -8,18 +8,23 @@ import jakarta.validation.constraints.Size
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.core.Context
+import net.spexity.security.SecurityService
 import net.spexity.security.authCorrelationId
 
 @Path("/api/communities")
-class CommunityResource(private val communityService: CommunityService) {
+class CommunityResource(
+    private val communityService: CommunityService,
+    private val securityService: SecurityService
+) {
 
     @POST
     @Authenticated
     fun createCommunity(
         @Valid request: CommunityCreateRequest, @Context securityIdentity: SecurityIdentity
     ): CommunityService.CreateResponse {
+        val contributorId = securityService.validateVerifiedGetContributorId(authCorrelationId(securityIdentity))
         return communityService.create(
-            CommunityService.CreateRequest(authCorrelationId(securityIdentity), request.name)
+            CommunityService.CreateRequest(contributorId, request.name)
         )
     }
 
