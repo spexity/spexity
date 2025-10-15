@@ -190,7 +190,7 @@
       </div>
     {/if}
     {#if errorMessage}
-      <div role="alert" class="alert-soft alert alert-error">
+      <div role="alert" class="alert alert-soft alert-error">
         <span>{errorMessage}</span>
       </div>
     {/if}

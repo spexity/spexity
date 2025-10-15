@@ -99,7 +99,7 @@ body {
 .spx-navbar {
   height: 4rem;
   z-index: 100;
-  @apply fixed top-0 mx-auto navbar bg-base-100 shadow-sm sm:container;
+  @apply navbar fixed top-0 mx-auto bg-base-100 shadow-sm sm:container;
 }
 
 /* Modal */

@@ -221,6 +221,7 @@ export class AuthManager {
     } catch (err) {
       console.error("Could not silently login user", err)
       this.clearCurrentUserAccount()
+      await this.authManager?.removeUser()
     }
   }
 
