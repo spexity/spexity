@@ -174,7 +174,7 @@
     </div>
   </div>
   <div class="mt-4">
-    <h2 class="text-2xl font-medium" data-testid="post-subject">{post.subject}</h2>
+    <h2 class="text-2xl font-medium uppercase" data-testid="post-subject">{post.subject}</h2>
     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     <div class="tiptap my-4">{@html post.bodyHtml}</div>
   </div>

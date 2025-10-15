@@ -9,11 +9,33 @@ export class CommunityPage {
   }
 
   async waitForPageLoad() {
-    await expect(this.page.getByTestId("create-post-button")).toBeVisible();
+    await expect(this.getPostsList()).toBeVisible();
+  }
+
+  async isJoined() {
+    return await this.getLeaveButton().isVisible().catch(() => false)
+  }
+
+  async join() {
+    await expect(this.getJoinButton()).toBeVisible()
+    await this.getJoinButton().click()
+    await expect(this.getLeaveButton()).toBeVisible()
+  }
+
+  getJoinButton() {
+    return this.page.getByTestId("join-community-button");
+  }
+
+  getLeaveButton() {
+    return this.page.getByTestId("leave-community-button");
   }
 
   getCreatePostButton() {
     return this.page.getByTestId("create-post-button");
+  }
+
+  getPostsList() {
+    return this.page.getByTestId("posts-list");
   }
 
   async clickCreatePost(): Promise<PostFormPage> {

@@ -8,6 +8,9 @@ test("create post works", async ({ page }) => {
 
   const communitiesPage = await app.goToCommunities()
   const communityPage = await communitiesPage.openFirstCommunity()
+  if (!(await communityPage.isJoined())) {
+    await communityPage.join()
+  }
 
   const postFormPage = await communityPage.clickCreatePost()
 
