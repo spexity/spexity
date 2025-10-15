@@ -19,7 +19,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.28.1</quarkus.platform.version>
+        <quarkus.platform.version>3.28.3</quarkus.platform.version>
         <org.testcontainers.postgresql.version>1.21.3</org.testcontainers.postgresql.version>
         <flyway.version>11.11.0</flyway.version>
         <quarkus-jooq.version>2.1.0</quarkus-jooq.version>
