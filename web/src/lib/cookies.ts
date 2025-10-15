@@ -8,9 +8,9 @@ export const Cookies = {
 }
 
 export class CookieUtils {
-  static set(name: string, val: string) {
+  static set(name: string, val: string, maxAge?: number) {
     if (typeof document != "undefined") {
-      document.cookie = `${name}=${encodeURIComponent(val)}; path=/; max-age=315360000`
+      document.cookie = `${name}=${encodeURIComponent(val)}; path=/; max-age=${maxAge ?? 315360000}`
     }
   }
 

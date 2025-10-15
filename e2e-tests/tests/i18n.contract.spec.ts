@@ -5,10 +5,10 @@ test.describe("I18n Contract Tests", () => {
 
   test("basic retrieval - English catalog has key", async ({ page }) => {
     const app = new App(page)
-    await app.launch()
+    const homePage = await app.launch()
     await expect(page.getByRole("link", { name: "Home" })).toBeVisible()
     await expect(page.getByRole("link", { name: "Communities" })).toBeVisible()
-    await expect(app.getLogo()).toHaveAttribute("alt", "Spexity logo")
+    await expect(homePage.getLogo()).toHaveAttribute("alt", "Spexity logo")
   })
 
 })
@@ -41,7 +41,7 @@ test.describe("Language Switch Persistence", () => {
     const localeCookie = cookies.find(cookie => cookie.name === "locale")
     expect(localeCookie?.value).toBe("ar")
     await page.reload()
-    await app.awaitAppPage()
+    await app.homePage.awaitPageLoad()
     await expect(page.getByRole("link", { name: "الرئيسية" })).toBeVisible()
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
   })

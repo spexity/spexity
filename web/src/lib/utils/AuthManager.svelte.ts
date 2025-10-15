@@ -229,16 +229,11 @@ export class AuthManager {
     const now = Math.floor(Date.now() / 1000)
     const expiresAt = user.expires_at ?? now + 15 * 60
     const maxAge = Math.max(0, Math.floor(expiresAt - now))
-    document.cookie =
-      `${Cookies.accessToken}=${encodeURIComponent(user.access_token)}; ` +
-      `path=/; ` +
-      `max-age=${maxAge}; ` +
-      `SameSite=Strict; ` +
-      `Secure`
+    CookieUtils.set(Cookies.accessToken, user.access_token, maxAge)
   }
 
   private clearDocumentAuthCookie() {
-    document.cookie = `${Cookies.accessToken}=; path=/; max-age=0; SameSite=Strict; Secure`
+    CookieUtils.delete(Cookies.accessToken)
   }
 
   //Auth State Manipulation

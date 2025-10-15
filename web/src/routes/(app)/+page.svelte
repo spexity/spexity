@@ -3,6 +3,7 @@
   import type { PageProps } from "./$types"
   import PostPreview from "$lib/components/PostPreview.svelte"
   import { resolve } from "$app/paths"
+  import { auth } from "$lib/state"
 
   let { data }: PageProps = $props()
 </script>
@@ -11,7 +12,7 @@
   <title>{m.nav_home()} | Spexity</title>
 </svelte:head>
 
-{#if data.posts.length === 0}
+{#if data.posts.length === 0 && auth.ssrAwareContributorId}
   <div class="spx-empty-message">
     <span>{m.home_timeline_empty_message()}</span>
     <a href={resolve("/discover")} class="btn btn-soft btn-sm btn-primary">{m.nav_discover()}</a>

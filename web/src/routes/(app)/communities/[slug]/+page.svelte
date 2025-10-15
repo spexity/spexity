@@ -72,7 +72,7 @@
     {/if}
   </div>
 </div>
-<div class="spx-cards-list" data-testid="posts-list">
+<div class="spx-cards-list" data-testid="community-posts-list">
   {#each data.posts as post (post.id)}
     <PostPreview {post} />
   {/each}

@@ -2,11 +2,15 @@ package net.spexity.community
 
 import jakarta.enterprise.context.ApplicationScoped
 import net.spexity.data.model.public_.Tables.COMMUNITY
+import net.spexity.user.ContributorCommunityService
 import org.jooq.DSLContext
 import java.util.*
 
 @ApplicationScoped
-class CommunityService(private val dslContext: DSLContext) {
+class CommunityService(
+    private val dslContext: DSLContext,
+    private val contributorCommunityService: ContributorCommunityService
+) {
 
     fun create(request: CreateRequest): CreateResponse {
         val name = request.name.trim().replace("\\s+".toRegex(), " ")
@@ -15,6 +19,7 @@ class CommunityService(private val dslContext: DSLContext) {
             .set(COMMUNITY.CREATED_BY_CONTRIBUTOR_ID, request.contributorId)
             .returning(COMMUNITY.ID)
             .fetchOne()!!.id
+        contributorCommunityService.joinCommunity(request.contributorId, insertedId)
         return CreateResponse(insertedId)
     }
 
