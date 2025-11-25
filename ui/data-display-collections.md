@@ -1,0 +1,14 @@
+# Data Display & Collections
+- Collection view (aka list, grid or masonry gallery, card tiles; supports gestures like swipe actions and pull-to-refresh)
+- Key-value or description list
+- Statistic or metric tile (KPI)
+- Table (aka data grid; sortable/filterable/paginated/virtualized; inline editable rows/cells)
+- Tree view or outline
+- Calendar or agenda view
+- Kanban or board columns
+- Timeline
+- Feed or activity stream
+- Comment thread or replies
+- Chip (compact metadata, optional dismiss)
+- Avatar (user identity)
+- Avatar group with presence/badge

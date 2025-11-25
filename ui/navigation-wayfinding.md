@@ -1,0 +1,11 @@
+# Navigation & Wayfinding
+- Navigation container (aka top navigation bar/app bar, sidebar/rail navigation, bottom tab bar; responsive orientation)
+- Single-choice nav (aka tabs, segmented control, radio-like button set)
+- Breadcrumbs
+- Pagination or pager
+- Stepper or wizard progress indicator
+- Table of contents/in-page anchor navigation
+- Global search bar (entry point to search results)
+- Skip-to-content link/focus jump
+- Contextual or bulk action bar
+- Back-to-top anchor/affix

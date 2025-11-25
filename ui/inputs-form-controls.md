@@ -1,0 +1,17 @@
+# Inputs & Form Controls
+- Button
+- Button group
+- Link
+- Input field (includes password, number with stepper, masked structured input, OTP/PIN; supports adornments/validation)
+- Textarea (multi-line)
+- Toggle (includes checkbox, switch/toggle)
+- Single-choice selector (aka radio group, segmented control/tab-like selection)
+- Select system (aka select dropdown, combobox/autocomplete, multiselect, dual-list/transfer picker, token input, selectable filter chips; single or multi mode)
+- Range slider input
+- Date/time picker (aka date picker, time picker, date range picker)
+- File upload or dropzone (progress/resumable)
+- Rating input (stars or emoji)
+- Color picker
+- Rich text or markdown editor
+- Code editor field
+- Form field wrapper (label, helper, hint, error)
