@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: codex
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/spexity}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jooq:
+    sql-dialect: POSTGRES
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+spexity:
+  rate-limit:
+    excluded-auth-correlation-ids: 3561bd91-89f0-4bb3-bf2f-b745fc415b41
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  flyway:
+    locations: classpath:db/migration,classpath:dev/db-seed
+
+---
+spring:
+  config:
+    activate:
+      on-profile: e2e-tests
+  flyway:
+    locations: classpath:db/migration,classpath:dev/db-seed
