@@ -68,7 +68,7 @@
                 <dependencies>
                     <dependency>
                         <groupId>org.testcontainers</groupId>
-                        <artifactId>postgresql</artifactId>
+                        <artifactId>testcontainers-postgresql</artifactId>
                         <version>${org.testcontainers.postgresql.version}</version>
                     </dependency>
                 </dependencies>
@@ -76,7 +76,7 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>11.11.0</version>
+                <version>${flyway.version}</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
