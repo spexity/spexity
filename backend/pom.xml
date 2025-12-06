@@ -12,17 +12,19 @@
     </modules>
 
     <properties>
-        <kotlin.version>2.2.20</kotlin.version>
-        <compiler-plugin.version>3.14.0</compiler-plugin.version>
+        <kotlin.version>2.2.21</kotlin.version>
+        <compiler-plugin.version>3.14.1</compiler-plugin.version>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus.platform.version>3.28.3</quarkus.platform.version>
-        <org.testcontainers.postgresql.version>1.21.3</org.testcontainers.postgresql.version>
-        <flyway.version>11.11.0</flyway.version>
+        <quarkus.platform.version>3.30.1</quarkus.platform.version>
+        <org.testcontainers.postgresql.version>2.0.2</org.testcontainers.postgresql.version>
+        <!-- To upgrade flyway and jooq versions, check the bom and match versions -->
+        <flyway.version>11.15.0</flyway.version>
         <quarkus-jooq.version>2.1.0</quarkus-jooq.version>
+        <jooq.version>3.19.22</jooq.version>
+        <!-- To upgrade flyway and jooq versions, check the bom and match versions -->
         <owasp-sanitizer.version>20240325.1</owasp-sanitizer.version>
-        <jooq.version>3.19.27</jooq.version>
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
     </properties>
 
